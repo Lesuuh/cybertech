@@ -68,10 +68,10 @@ const BannerCTA = () => {
         ))}
       </div>
 
-      <div className="lg:flex hidden w-full items-stretch justify-between h-full">
+      <div className="lg:flex hidden w-full items-stretch justify-between ">
         <div className="flex-1 flex flex-col h-full">
           {/* Playstation 5 */}
-          <div className="flex flex-row justify-between items-center h-full bg-[#ffffff] ">
+          <div className="flex flex-row justify-between items-center bg-[#ffffff] ">
             <div>
               <Image
                 src={"/images/PlayStation.png"}
@@ -93,12 +93,12 @@ const BannerCTA = () => {
           </div>
 
           {/* Apple Vision Pro - Light background */}
-          <div className="flex items-stretch ">
-            <div className="flex-1 flex flex-row justify-between items-center h-full bg-[#ededed] py-5">
+          <div className="flex items-stretch justify-cent">
+            <div className="flex-1 flex flex-row justify-between items-center  bg-[#ededed] py-5">
               <div>
                 <Image
                   src={"/images/half-air.png"}
-                  width={300}
+                  width={200}
                   height={100}
                   alt="apple vision pro"
                   className="w-full"
@@ -106,7 +106,7 @@ const BannerCTA = () => {
               </div>
               <div className="text-left flex-1 px-4">
                 <h2 className="text-4xl text-black mt-4 font-thin">
-                  Apple <strong>Vision Pro</strong>
+                  Apple Airpod <strong>Pro</strong>
                 </h2>
                 <p className="text-sm leading-7 text-gray-500 mt-3 ">
                   Cutting-edge spatial computing delivering unparalleled
@@ -116,12 +116,12 @@ const BannerCTA = () => {
             </div>
 
             {/* Apple Vision Pro - Dark background */}
-            <div className="flex-1 flex flex-row justify-between items-center h-full bg-[#353535] py-5">
+            <div className="flex-1 flex flex-row justify-between items-center bg-[#353535] py-5">
               <div>
                 <Image
                   src={"/images/image 36.png"}
-                  width={300}
-                  height={100}
+                  width={200}
+                  height={200}
                   alt="apple vision pro"
                   className="w-full"
                 />

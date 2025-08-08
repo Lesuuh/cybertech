@@ -1,5 +1,7 @@
 import BannerCTA from "../components/home/BannerCTA";
+import BrowseCategory from "../components/home/BrowseCategory";
 import Hero from "../components/home/Hero";
+import Products from "../components/home/Products";
 
 const HomePage = () => {
   return (
@@ -8,6 +10,10 @@ const HomePage = () => {
       <Hero />
       {/* Banner section */}
       <BannerCTA />
+      {/* Browse category */}
+      <BrowseCategory />
+      {/* Products */}
+      <Products />
     </main>
   );
 };
