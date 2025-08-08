@@ -4,11 +4,12 @@ import { Heart, Menu, Search, ShoppingCart, User, X } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navbarItems = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/products" },
-  { label: "About Us", href: "/about" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -20,16 +21,21 @@ const navbarIcons = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleMenu = () => {
     setOpen((prev) => !prev);
   };
 
   return (
-    <header className="border-b border-gray-200">
-      <div className="flex items-center justify-between px-4 py-4 max-w-7xl mx-auto">
+    <header className=" px-4 md:px-16 lg:px-28 border-b border-gray-200">
+      <div className="flex items-center gap-5  justify-between px-4 py-4 max-w-[1400px] mx-auto">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold" aria-label="Cyber Home">
+        <Link
+          href="/"
+          className="text-xl md:text-2xl font-bold"
+          aria-label="Cyber Home"
+        >
           Cyber
         </Link>
 
@@ -37,7 +43,7 @@ const Navbar = () => {
         <form
           action="/search"
           method="GET"
-          className="bg-gray-200 rounded-sm flex items-center px-3 w-full max-w-xs"
+          className="bg-gray-200 rounded-sm sm:flex items-center px-3 w-full max-w-xs hidden "
         >
           <label htmlFor="site-search" className="sr-only">
             Search products
@@ -52,16 +58,17 @@ const Navbar = () => {
         </form>
 
         {/* Desktop Navigation */}
-        <nav
-          className="hidden md:flex items-center gap-7"
-          aria-label="Main navigation"
-        >
-          <ul className="flex gap-7">
+        <nav className="flex items-center gap-7" aria-label="Main navigation">
+          <ul className="md:flex gap-7 hidden  items-center ">
             {navbarItems.map((item) => (
               <li key={item.label}>
                 <Link
                   href={item.href}
-                  className="hover:underline focus:outline-none focus:underline"
+                  className={`hover:underline focus:outline-none focus:underline ${
+                    pathname === item.href
+                      ? "text-gray-900 font-semibold"
+                      : "text-gray-600"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -69,7 +76,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <ul className="flex gap-5">
+          <ul className="flex gap-7">
             {navbarIcons.map(({ name, href, icon: Icon }) => (
               <li key={name}>
                 <Link
@@ -105,7 +112,7 @@ const Navbar = () => {
       {open && (
         <nav
           id="mobile-menu"
-          className="md:hidden px-4 pb-4"
+          className="md:hidden px-5 pb-5"
           aria-label="Mobile navigation"
         >
           <ul className="flex flex-col gap-4">
@@ -116,20 +123,6 @@ const Navbar = () => {
                   className="block hover:underline focus:outline-none focus:underline"
                 >
                   {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <ul className="flex gap-5 mt-4">
-            {navbarIcons.map(({ name, href, icon: Icon }) => (
-              <li key={name}>
-                <Link
-                  href={href}
-                  className="hover:text-black text-gray-600 transition"
-                  aria-label={name}
-                >
-                  <Icon className="w-6 h-6" aria-hidden="true" />
                 </Link>
               </li>
             ))}

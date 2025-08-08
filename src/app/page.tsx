@@ -1,9 +1,11 @@
 import Navbar from "./components/layouts/Navbar";
+import HomePage from "./home/page";
 
 export default function Home() {
   return (
-    <div className="px-4 md:px-28">
+    <div className="">
       <Navbar />
+      <HomePage />
     </div>
   );
 }
