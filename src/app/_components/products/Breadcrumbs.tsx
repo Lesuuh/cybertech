@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SlashIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import {
   Breadcrumb,
@@ -20,18 +20,18 @@ export function BreadcrumbWithCustomSeparator() {
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
-          <SlashIcon />
+          <ArrowRight />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/components">Components</Link>
+            <Link href="/components">Catalog</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
-          <SlashIcon />
+          <ArrowRight />
         </BreadcrumbSeparator>
         <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+          <BreadcrumbPage>SmartPhones</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
