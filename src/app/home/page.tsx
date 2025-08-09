@@ -5,7 +5,7 @@ import Products from "../components/home/Products";
 
 const HomePage = () => {
   return (
-    <main className="mx-auto">
+    <main className="mx-auto ">
       {/* Hero Section */}
       <Hero />
       {/* Banner section */}

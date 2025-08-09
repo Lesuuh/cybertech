@@ -4,7 +4,7 @@ import Image from "next/image";
 const Hero = () => {
   return (
     <section className="bg-[#211C24] text-white min-h-[80dvh] flex items-center justify-center">
-      <div className="w-full max-w-[1500px] px-4 ">
+      <div className="w-full max-w-[1500px] px-4 md:px-16 lg:px-28">
         <div className="flex flex-col lg:flex-row  mt-40 lg:mt-0 justify-between items-center gap-7 mx-auto">
           {/* Text */}
           <div className="text-center lg:text-left space-y-5 w-full">
