@@ -1,10 +1,10 @@
-import Banner2 from "../components/home/Banner2";
-import BannerCTA from "../components/home/BannerCTA";
-import BrowseCategory from "../components/home/BrowseCategory";
-import Discount from "../components/home/Discount";
-import Hero from "../components/home/Hero";
-import Products from "../components/home/Products";
-import Footer from "../components/layouts/Footer";
+import Banner2 from "../_components/home/Banner2";
+import BannerCTA from "../_components/home/BannerCTA";
+import BrowseCategory from "../_components/home/BrowseCategory";
+import Discount from "../_components/home/Discount";
+import Hero from "../_components/home/Hero";
+import Products from "../_components/home/Products";
+import Footer from "../_components/layouts/Footer";
 
 const HomePage = () => {
   return (
