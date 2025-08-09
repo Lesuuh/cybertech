@@ -7,6 +7,7 @@ import { products } from "../data/data";
 import { Product } from "../types";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import { PaginationDemo } from "../_components/products/Pagination";
 
 const Products = () => {
   const filteredProducts = products;
@@ -58,6 +59,10 @@ const Products = () => {
               />
             ))}
           </div>
+        </div>
+
+        <div className="mt-5">
+          <PaginationDemo />
         </div>
       </section>
     </main>

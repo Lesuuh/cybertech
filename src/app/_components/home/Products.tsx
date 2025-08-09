@@ -10,7 +10,7 @@ const Products = () => {
     { slug: "all", label: "Products" },
     { slug: "new", label: "New Arrivals" },
     { slug: "bestseller", label: "Best Seller" },
-    { slug: "featured", label: "Featured Products" },
+    { slug: "featured", label: "Featured" },
   ];
 
   const [activeTab, setActiveTab] = useState("all");
