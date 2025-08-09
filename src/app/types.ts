@@ -3,6 +3,9 @@ export type ProductCardProps = {
   imageSrc: string;
   name: string;
   price: number;
+  discount?: number;
+  isFeatured?: boolean;
+  isBestSeller?: boolean;
   onBuy: () => void;
   onSave: () => void;
   save: boolean;

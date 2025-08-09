@@ -7,12 +7,21 @@ import { Product } from "@/app/types";
 
 const Products = () => {
   const tabs = [
+    { slug: "all", label: "Products" },
     { slug: "new", label: "New Arrivals" },
     { slug: "bestseller", label: "Best Seller" },
     { slug: "featured", label: "Featured Products" },
   ];
 
-  const [activeTab, setActiveTab] = useState("new");
+  const [activeTab, setActiveTab] = useState("all");
+
+  // Filtering products
+  const filteredProducts = products.filter((product) => {
+    if (activeTab === "new") return product.isNewArrival;
+    if (activeTab === "featured") return product.isFeatured;
+    if (activeTab === "bestseller") return product.isBestSeller;
+    return true;
+  });
 
   const [save, setSave] = useState<{ [key: number]: boolean }>({});
 
@@ -46,13 +55,16 @@ const Products = () => {
         ))}
       </div>
       <div className="grid mt-10  w-full  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {filteredProducts.slice(0, 8).map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
             imageSrc={product.imageSrc}
             name={product.name}
             price={product.price}
+            discount={product.discount || 0}
+            isFeatured={product.isFeatured || false}
+            isBestSeller={product.isBestSeller || false}
             onBuy={() => alert(`Purchased ${product.name}!`)}
             onSave={() => onSave(product)}
             save={!!save[product.id]}

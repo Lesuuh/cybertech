@@ -8,6 +8,7 @@ export const products = [
     discount: 10, // 10% off
     isNewArrival: false,
     isFeatured: true,
+    isBestSeller: true,
     stock: 25,
     description:
       "High-fidelity audio and active noise cancellation with spatial audio support.",
@@ -21,8 +22,10 @@ export const products = [
     discount: 0,
     isNewArrival: true,
     isFeatured: true,
+    isBestSeller: true,
     stock: 10,
-    description: "Powerful M2 Pro chip with brilliant Liquid Retina XDR display.",
+    description:
+      "Powerful M2 Pro chip with brilliant Liquid Retina XDR display.",
   },
   {
     id: 3,
@@ -33,8 +36,10 @@ export const products = [
     discount: 5,
     isNewArrival: false,
     isFeatured: false,
+    isBestSeller: true,
     stock: 0, // sold out
-    description: "Next-gen gaming console with immersive 3D audio and ray tracing.",
+    description:
+      "Next-gen gaming console with immersive 3D audio and ray tracing.",
   },
   {
     id: 4,
@@ -45,8 +50,10 @@ export const products = [
     discount: 0,
     isNewArrival: true,
     isFeatured: false,
+    isBestSeller: false,
     stock: 30,
-    description: "Smartwatch with fitness tracking, AMOLED display, and long battery life.",
+    description:
+      "Smartwatch with fitness tracking, AMOLED display, and long battery life.",
   },
   {
     id: 5,
@@ -57,8 +64,10 @@ export const products = [
     discount: 15,
     isNewArrival: false,
     isFeatured: true,
+    isBestSeller: true,
     stock: 40,
-    description: "True wireless earbuds with crystal clear sound and noise isolation.",
+    description:
+      "True wireless earbuds with crystal clear sound and noise isolation.",
   },
   {
     id: 6,
@@ -69,8 +78,10 @@ export const products = [
     discount: 0,
     isNewArrival: false,
     isFeatured: false,
+    isBestSeller: false,
     stock: 5,
-    description: "Professional cinema camera with 6K resolution and wide dynamic range.",
+    description:
+      "Professional cinema camera with 6K resolution and wide dynamic range.",
   },
   {
     id: 7,
@@ -81,8 +92,10 @@ export const products = [
     discount: 20,
     isNewArrival: true,
     isFeatured: true,
+    isBestSeller: false,
     stock: 18,
-    description: "Versatile Android tablet with vibrant display and smooth multitasking.",
+    description:
+      "Versatile Android tablet with vibrant display and smooth multitasking.",
   },
   {
     id: 8,
@@ -93,8 +106,10 @@ export const products = [
     discount: 0,
     isNewArrival: false,
     isFeatured: false,
+    isBestSeller: false,
     stock: 22,
-    description: "Health and fitness-focused smartwatch with always-on Retina display.",
+    description:
+      "Health and fitness-focused smartwatch with always-on Retina display.",
   },
   {
     id: 9,
@@ -105,8 +120,10 @@ export const products = [
     discount: 10,
     isNewArrival: true,
     isFeatured: true,
+    isBestSeller: true,
     stock: 12,
-    description: "Mixed reality headset delivering immersive spatial experiences.",
+    description:
+      "Mixed reality headset delivering immersive spatial experiences.",
   },
   {
     id: 10,
@@ -117,11 +134,12 @@ export const products = [
     discount: 0,
     isNewArrival: false,
     isFeatured: true,
+    isBestSeller: true,
     stock: 8,
-    description: "Flagship smartphone with A16 Bionic chip and advanced camera system.",
+    description:
+      "Flagship smartphone with A16 Bionic chip and advanced camera system.",
   },
 ];
-
 
 export const categories = [
   { id: 1, name: "Headphones", slug: "headphones" },
