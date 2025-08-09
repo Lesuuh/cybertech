@@ -1,3 +1,4 @@
+import Banner2 from "../components/home/Banner2";
 import BannerCTA from "../components/home/BannerCTA";
 import BrowseCategory from "../components/home/BrowseCategory";
 import Hero from "../components/home/Hero";
@@ -14,6 +15,8 @@ const HomePage = () => {
       <BrowseCategory />
       {/* Products */}
       <Products />
+      {/* Banner 2 */}
+      <Banner2 />
     </main>
   );
 };
