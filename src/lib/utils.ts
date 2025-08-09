@@ -17,3 +17,13 @@ export function truncateText(text: string, maxLenght: number) {
 
   return truncatedText.slice(0, maxLenght) + "...";
 }
+
+export function getDiscountedPrice(product) {
+  if (product.discount && product.discount > 0) {
+    return (product.price * (100 - product.discount)) / 100;
+  }
+  return product.price;
+}
+
+// const newArrivals = products.filter((p) => p.isNewArrival);
+// const featuredProducts = products.filter((p) => p.isFeatured);

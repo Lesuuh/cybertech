@@ -39,7 +39,7 @@ const BannerCTA = () => {
 
   return (
     <section className="bg-white max-w-[2000px]  w-full mx-auto ">
-      <div className="flex lg:hidden flex-col ">
+      <div className="grid lg:hidden grid-cols-2 ">
         {bannerItems.map((item, idx) => (
           <div
             key={idx}

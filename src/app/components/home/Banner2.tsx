@@ -46,7 +46,7 @@ function getColor(id:number) {
 
 const Banner2 = () => {
   return (
-    <section className="flex w-full max-w-[2000px] my-20 mx-auto">
+    <section className="grid w-full max-w-[2000px] my-20 mx-auto grid-cols-2 md:grid-cols-4">
       {bannerItems.map((item, idx) => (
         <div
           key={idx}

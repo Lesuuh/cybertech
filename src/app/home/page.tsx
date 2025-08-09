@@ -1,6 +1,7 @@
 import Banner2 from "../components/home/Banner2";
 import BannerCTA from "../components/home/BannerCTA";
 import BrowseCategory from "../components/home/BrowseCategory";
+import Discount from "../components/home/Discount";
 import Hero from "../components/home/Hero";
 import Products from "../components/home/Products";
 
@@ -17,6 +18,9 @@ const HomePage = () => {
       <Products />
       {/* Banner 2 */}
       <Banner2 />
+
+      {/* Discounts */}
+      <Discount />
     </main>
   );
 };
