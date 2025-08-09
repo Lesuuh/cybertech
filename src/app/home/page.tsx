@@ -4,6 +4,7 @@ import BrowseCategory from "../components/home/BrowseCategory";
 import Discount from "../components/home/Discount";
 import Hero from "../components/home/Hero";
 import Products from "../components/home/Products";
+import Footer from "../components/layouts/Footer";
 
 const HomePage = () => {
   return (
@@ -21,6 +22,10 @@ const HomePage = () => {
 
       {/* Discounts */}
       <Discount />
+      {/* Banner 3 */}
+      {/* <Banner3 /> */}
+      {/* Footer */}
+      <Footer />
     </main>
   );
 };
