@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BreadcrumbWithCustomSeparator } from "../_components/products/Breadcrumbs";
+import { Breadcrumbs } from "../_components/products/Breadcrumbs";
 import ProductCard from "../_components/products/ProductCard";
 import { products } from "../data/data";
 import { Product } from "../types";
@@ -19,6 +19,11 @@ const Products = () => {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const pageProduct = products.slice(startIndex, endIndex);
+
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/products" },
+  ];
 
   const [save, setSave] = useState<{ [key: number]: boolean }>(() => {
     if (typeof window !== "undefined") {
@@ -44,7 +49,7 @@ const Products = () => {
     <main>
       <section className="max-w-[1500px]  px-4  mx-auto w-full my-10 ">
         <div className="hidden lg:flex">
-          <BreadcrumbWithCustomSeparator />
+          <Breadcrumbs items={breadcrumbItems} />
         </div>
 
         <div className="flex lg:hidden w-full items-center gap-6">

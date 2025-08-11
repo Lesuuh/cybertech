@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
 import RelatedProducts from "@/app/_components/products/RelatedProducts";
 import Reviews from "@/app/_components/products/Reviews";
@@ -27,6 +28,12 @@ interface ProductPageProps {
 const Product = async ({ params }: ProductPageProps) => {
   const { productId } = await params;
   const product = products.find((p) => p.id === Number(productId));
+
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/products" },
+    { label: product?.name },
+  ];
 
   if (!product) {
     return (
@@ -81,7 +88,10 @@ const Product = async ({ params }: ProductPageProps) => {
   console.log(filteredImportantDetails);
 
   return (
-    <section className="max-w-[1500px] bg-white mx-auto px-4 my-20">
+    <section className="max-w-[1500px] bg-white mx-auto px-4 my-10">
+      <div className="hidden lg:flex mb-10">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
       <div className="grid grid-cols-1 bg-gray-50 lg:grid-cols-2 gap-12 items-center p-10">
         {/* Image */}
         <div className="w-full max-w-md mx-auto">

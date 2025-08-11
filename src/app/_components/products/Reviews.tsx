@@ -39,7 +39,7 @@ const Reviews = ({ productId }: { productId: number }) => {
   };
 
   return (
-    <div className="mt-10 px-4 sm:px-6 md:px-10 lg:px-20 xl:px-32 w-full max-w-screen-xl mx-auto rounded-sm">
+    <div className="mt-10 px-4 sm:px-6 md:px-10 lg:px-20 w-full max-w-[1500px] mx-auto rounded-sm">
       <h2 className="mb-10 text-xl font-semibold">Reviews</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-x-8 w-full">

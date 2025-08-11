@@ -13,6 +13,7 @@ const Products = () => {
     { slug: "featured", label: "Featured" },
   ];
 
+
   const [activeTab, setActiveTab] = useState("all");
 
   // Filtering products
