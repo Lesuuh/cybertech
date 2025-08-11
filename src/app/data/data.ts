@@ -702,4 +702,42 @@ export const carts = [
       { productId: 8, quantity: 3 },
     ],
   },
+  {
+    userId: 2,
+    items: [
+      { productId: 2, quantity: 1 },
+      { productId: 7, quantity: 2 },
+      { productId: 10, quantity: 1 },
+    ],
+  },
+  {
+    userId: 3,
+    items: [
+      { productId: 1, quantity: 2 },
+      { productId: 6, quantity: 1 },
+    ],
+  },
+  {
+    userId: 4,
+    items: [
+      { productId: 3, quantity: 1 },
+      { productId: 4, quantity: 2 },
+      { productId: 9, quantity: 1 },
+    ],
+  },
+  {
+    userId: 5,
+    items: [
+      { productId: 8, quantity: 1 },
+      { productId: 2, quantity: 1 },
+      { productId: 5, quantity: 2 },
+    ],
+  },
+  {
+    userId: 6,
+    items: [
+      { productId: 7, quantity: 1 },
+      { productId: 3, quantity: 1 },
+    ],
+  },
 ];
