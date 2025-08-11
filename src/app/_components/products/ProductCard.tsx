@@ -101,7 +101,7 @@ const ProductCard = ({
         <p className="text-lg md:text-xl font-bold text-gray-800">
           ${price.toFixed(2)}
         </p>
-        <Link href={`/products/${id}`} passHref legacyBehavior>
+        <Link href={`/products/${id}`} passHref>
           <Button className="bg-black mt-3 md:mt-4 border rounded-sm py-5 md:py-6 px-8 md:px-10 cursor-pointer hover:bg-white hover:text-black transition duration-300 ease-in-out text-sm md:text-base">
             Shop Now
           </Button>

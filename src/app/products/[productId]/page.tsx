@@ -1,4 +1,5 @@
 import MoreDetails from "@/app/_components/products/MoreDetails";
+import RelatedProducts from "@/app/_components/products/RelatedProducts";
 import Reviews from "@/app/_components/products/Reviews";
 import { products } from "@/app/data/data";
 import { Button } from "@/components/ui/button";
@@ -175,7 +176,7 @@ const Product = async ({ params }: ProductPageProps) => {
 
           <div className="grid grid-cols-3  sm:grid-cols-3 gap-4 mt-6">
             <div className="flex items-center gap-2">
-              <div className="bg-gray-100 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
+              <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
                 <Truck className="w-6 h-6 text-gray-600" />
               </div>
               <div>
@@ -187,7 +188,7 @@ const Product = async ({ params }: ProductPageProps) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="bg-gray-100 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
+              <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
                 <Box className="w-6 h-6 text-gray-600" />
               </div>
               <div>
@@ -199,7 +200,7 @@ const Product = async ({ params }: ProductPageProps) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="bg-gray-100 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
+              <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
                 <ShieldCheck className="w-6 h-6 text-gray-600" />
               </div>
               <div>
@@ -219,6 +220,9 @@ const Product = async ({ params }: ProductPageProps) => {
 
       {/* Reviews */}
       <Reviews productId={product.id} />
+
+      {/* Related Products */}
+      <RelatedProducts product={product} />
     </section>
   );
 };

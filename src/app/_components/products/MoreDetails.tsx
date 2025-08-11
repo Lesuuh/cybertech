@@ -2,7 +2,7 @@ import { Product } from "@/app/types";
 
 const MoreDetails = ({ product }: { product: Product }) => {
   return (
-    <div className="mt-10 bg-gray-50 p-10 rounded-sm">
+    <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-20 ">
       <h1 className="text-xl mb-5">Details</h1>
       <div>
         <p className="text-gray-600 leading-relaxed">{product.details}</p>
@@ -87,7 +87,7 @@ const MoreDetails = ({ product }: { product: Product }) => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 
