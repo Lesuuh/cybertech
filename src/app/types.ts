@@ -18,11 +18,39 @@ export interface Product {
   imageSrc: string;
   name: string;
   price: number;
-  discount: number; // percentage discount, e.g. 10 means 10%
+  discount?: number;
   isNewArrival: boolean;
   isFeatured: boolean;
-  stock: number; // inventory count
-  description?: string; // optional detailed description
+  isBestSeller: boolean;
+  stock: number;
+  description: string;
+
+  // Optional enriched fields:
+  deliveryDays?: number;
+  warrantyYears?: number; // warranty period in years
+  cpuCores?: number | null;
+  batteryCapacity?: string | null;
+  screenSize?: number | null; // inches
+  memorySpace?: string | null; // RAM + storage info
+  cameraFront?: string | null;
+  cameraBack?: string | null;
+  microphone?: string | null;
+  connectivity?: string | null;
+  noiseCancellation?: string | null;
+  frequencyResponse?: string | null;
+  ports?: string | null;
+  network?: string | null;
+  sensors?: string[] | null;
+  screenResolution?: string | null;
+  screenRefreshRate?: string | number | null;
+  screenType?: string | null;
+  pixelDensity?: number | null;
+  waterResistance?: string | null;
+  controllersIncluded?: number | null;
+  operatingSystem?: string | null;
+  storageSpace?: string | null;
+  relatedProducts?: number[]; // array of related product IDs
+  details?: string[]; // array of additional details/specifications
 }
 
 // Category type

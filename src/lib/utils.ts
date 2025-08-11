@@ -1,3 +1,4 @@
+import { Product } from "@/app/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -18,10 +19,9 @@ export function truncateText(text: string, maxLenght: number) {
   return truncatedText.slice(0, maxLenght) + "...";
 }
 
-// export function getDiscountedPrice(product) {
-//   if (product.discount && product.discount > 0) {
-//     return (product.price * (100 - product.discount)) / 100;
-//   }
-//   return product.price;
-// }
-
+export function getDiscountedPrice(product: Product) {
+  if (product.discount && product.discount > 0) {
+    return (product.price * (100 - product.discount)) / 100;
+  }
+  return product.price;
+}

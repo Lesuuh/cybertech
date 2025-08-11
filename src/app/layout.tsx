@@ -21,11 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
-      />
-      <body className={`${inter.variable} antialiased`}>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
+        />
+      </head>
+      <body className={`${inter.variable} antialiased bg-gray-900`}>
         <Navbar />
         {children}
         <Footer />

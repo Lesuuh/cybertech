@@ -42,7 +42,7 @@ const Products = () => {
 
   return (
     <main>
-      <section className="max-w-[1500px] px-4  mx-auto w-full my-10 ">
+      <section className="max-w-[1500px]  px-4  mx-auto w-full my-10 ">
         <div className="hidden lg:flex">
           <BreadcrumbWithCustomSeparator />
         </div>
