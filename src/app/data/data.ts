@@ -14,7 +14,7 @@ export const products = [
       "High-fidelity audio and active noise cancellation with spatial audio support.",
     deliveryDays: 3,
     warrantyYears: 1,
-    cpuCores: null, 
+    cpuCores: null,
     batteryCapacity: "20 hours",
     screenSize: null,
     memorySpace: null,
@@ -43,7 +43,8 @@ export const products = [
     isFeatured: true,
     isBestSeller: true,
     stock: 10,
-    description: "Powerful M2 Pro chip with brilliant Liquid Retina XDR display.",
+    description:
+      "Powerful M2 Pro chip with brilliant Liquid Retina XDR display.",
     deliveryDays: 5,
     warrantyYears: 1,
     cpuCores: 10,
@@ -337,7 +338,7 @@ export const products = [
     connectivity: "5G, Wi-Fi 6, Bluetooth 5.3",
     relatedProducts: [2, 9],
     details: [
-  "Just as a book is judged by its cover, the first thing you notice when you pick up a modern smartphone is the display. Nothing surprising, because advanced technologies allow you to practically level the display frames and cutouts for the front camera and speaker, leaving no room for bold design solutions. And how good that in such realities Apple everything is fine with displays. Both critics and mass consumers always praise the quality of the picture provided by the products of the Californian brand. And last year's 6.7-inch Retina panels, which had ProMotion, caused real admiration for many."
+      "Just as a book is judged by its cover, the first thing you notice when you pick up a modern smartphone is the display. Nothing surprising, because advanced technologies allow you to practically level the display frames and cutouts for the front camera and speaker, leaving no room for bold design solutions. And how good that in such realities Apple everything is fine with displays. Both critics and mass consumers always praise the quality of the picture provided by the products of the Californian brand. And last year's 6.7-inch Retina panels, which had ProMotion, caused real admiration for many.",
     ],
   },
 ];
@@ -357,13 +358,142 @@ export const users = [
     id: 1,
     name: "Jane Doe",
     email: "jane@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
     isAdmin: false,
   },
   {
     id: 2,
+    name: "John Smith",
+    email: "john@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 3,
     name: "Admin User",
     email: "admin@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/3.jpg",
     isAdmin: true,
+  },
+  {
+    id: 4,
+    name: "Alice Johnson",
+    email: "alice@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 5,
+    name: "Michael Brown",
+    email: "michael@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/5.jpg",
+    isAdmin: false,
+  },
+
+  {
+    id: 6,
+    name: "Emily Davis",
+    email: "emily@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/6.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 7,
+    name: "David Wilson",
+    email: "david@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/7.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 8,
+    name: "Sophia Martinez",
+    email: "sophia@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/8.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 9,
+    name: "James Anderson",
+    email: "james@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/9.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 10,
+    name: "Olivia Thomas",
+    email: "olivia@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/10.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 11,
+    name: "Matthew Taylor",
+    email: "matthew@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/11.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 12,
+    name: "Isabella Moore",
+    email: "isabella@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/12.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 13,
+    name: "Daniel Jackson",
+    email: "daniel@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/13.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 14,
+    name: "Mia White",
+    email: "mia@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/14.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 15,
+    name: "Joseph Harris",
+    email: "joseph@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/15.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 16,
+    name: "Charlotte Martin",
+    email: "charlotte@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/16.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 17,
+    name: "Andrew Lee",
+    email: "andrew@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/17.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 18,
+    name: "Amelia Perez",
+    email: "amelia@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/18.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 19,
+    name: "Joshua Clark",
+    email: "joshua@example.com",
+    avatar: "https://randomuser.me/api/portraits/men/19.jpg",
+    isAdmin: false,
+  },
+  {
+    id: 20,
+    name: "Evelyn Rodriguez",
+    email: "evelyn@example.com",
+    avatar: "https://randomuser.me/api/portraits/women/20.jpg",
+    isAdmin: false,
   },
 ];
 
@@ -387,7 +517,8 @@ export const reviews = [
     productId: 1,
     userId: 1,
     rating: 5,
-    comment: "Amazing sound quality and very comfortable!",
+    comment:
+      "I was a bit nervous about buying a secondhand phone from Amazon, but I couldn’t be happier with my purchase! The phone arrived exactly as described, in excellent condition. Setting it up was super easy and the performance exceeded my expectations. The battery life is solid, and I had zero issues connecting to my prepaid data plan even though it doesn’t have a physical SIM tray anymore. Highly recommend this if you want a great phone at a good price!",
     createdAt: "2025-07-30T08:00:00Z",
   },
   {
@@ -395,8 +526,171 @@ export const reviews = [
     productId: 10,
     userId: 2,
     rating: 4,
-    comment: "Great phone but battery life could be better.",
+    comment:
+      "Overall a really great phone. The design is sleek and the display is vibrant and clear. I love the camera features, but the battery life leaves a bit to be desired — it doesn’t quite last me through the whole day when I use it heavily. Still, it’s a solid device for the price and works well for daily tasks.",
     createdAt: "2025-08-01T14:30:00Z",
+  },
+  {
+    id: 3,
+    productId: 3,
+    userId: 3,
+    rating: 3,
+    comment:
+      "The phone has average performance for the price range. It handles basic apps well but struggles with more intensive tasks. The screen quality is okay but not as sharp or vibrant as I expected. If you’re looking for a budget phone, this could work, but don’t expect premium features.",
+    createdAt: "2025-08-03T10:15:00Z",
+  },
+  {
+    id: 4,
+    productId: 5,
+    userId: 4,
+    rating: 5,
+    comment:
+      "The camera on this phone is absolutely amazing! It captures stunning photos even in low light conditions, and the colors come out vibrant and natural. I’ve been using it extensively for my photography hobby and I couldn’t be happier with the results. Definitely worth the investment if you care about picture quality.",
+    createdAt: "2025-08-05T12:45:00Z",
+  },
+  {
+    id: 5,
+    productId: 2,
+    userId: 5,
+    rating: 2,
+    comment:
+      "I was really disappointed with the battery life on this phone. It drains way too fast, especially when using apps or browsing the web. For anyone who uses their phone heavily, this could be a dealbreaker. Other than that, the phone’s performance is okay but nothing special.",
+    createdAt: "2025-08-06T09:00:00Z",
+  },
+  {
+    id: 6,
+    productId: 1,
+    userId: 6,
+    rating: 4,
+    comment:
+      "Good value for money. The phone runs fast and reliably, and I’ve had no major issues since buying it. The user interface is smooth and intuitive. The only downside is the somewhat average camera, but for the price, I’m very satisfied.",
+    createdAt: "2025-08-07T11:20:00Z",
+  },
+  {
+    id: 7,
+    productId: 7,
+    userId: 7,
+    rating: 5,
+    comment:
+      "I absolutely love the design of this phone. It’s sleek, modern, and comfortable to hold. The user interface is very intuitive and easy to navigate. Battery life is great, and the overall performance is smooth. Highly recommend it if you want a stylish and functional device.",
+    createdAt: "2025-08-08T13:35:00Z",
+  },
+  {
+    id: 8,
+    productId: 6,
+    userId: 8,
+    rating: 1,
+    comment:
+      "Unfortunately, this phone stopped working after just a week of use. I experienced multiple issues including frequent crashes and the screen freezing. I tried troubleshooting but nothing helped. I’m very disappointed with the quality and would not recommend this model.",
+    createdAt: "2025-08-09T16:50:00Z",
+  },
+  {
+    id: 9,
+    productId: 4,
+    userId: 9,
+    rating: 4,
+    comment:
+      "This is a good phone for the price. It offers decent features and solid build quality. I like the battery life, which easily lasts a full day of moderate use. However, it lacks some of the advanced features found in higher-end models, so it depends on what you’re looking for.",
+    createdAt: "2025-08-10T08:25:00Z",
+  },
+  {
+    id: 10,
+    productId: 8,
+    userId: 10,
+    rating: 3,
+    comment:
+      "Performance is mediocre, but the battery life is decent. It’s a budget phone and feels like one in terms of speed and responsiveness. Great if you don’t want to spend too much and don’t need heavy multitasking.",
+    createdAt: "2025-08-11T15:00:00Z",
+  },
+  {
+    id: 11,
+    productId: 9,
+    userId: 11,
+    rating: 5,
+    comment:
+      "I’m really impressed with the screen resolution and color accuracy on this phone. Watching videos and playing games is a joy with such a crisp display. The device feels premium and performs smoothly with no lag.",
+    createdAt: "2025-08-12T17:40:00Z",
+  },
+  {
+    id: 12,
+    productId: 10,
+    userId: 12,
+    rating: 4,
+    comment:
+      "A solid phone overall. It runs smoothly, and the battery lasts well. My only gripe is that it’s a bit heavier than I expected, which sometimes makes it uncomfortable to hold for long periods. Otherwise, it’s a great device.",
+    createdAt: "2025-08-13T10:10:00Z",
+  },
+  {
+    id: 13,
+    productId: 3,
+    userId: 13,
+    rating: 2,
+    comment:
+      "The software feels sluggish and unpolished. I faced occasional freezes and slow app launches. For the price, I expected better performance. If you’re patient and use basic apps, it might be okay, but I was left wanting more.",
+    createdAt: "2025-08-14T12:00:00Z",
+  },
+  {
+    id: 14,
+    productId: 1,
+    userId: 14,
+    rating: 5,
+    comment:
+      "Perfect phone for daily use. It’s fast, responsive, and the battery easily lasts all day. I use it for everything from streaming to gaming, and it handles it all without issues. Highly recommend for anyone looking for a reliable daily driver.",
+    createdAt: "2025-08-15T09:30:00Z",
+  },
+  {
+    id: 15,
+    productId: 4,
+    userId: 15,
+    rating: 3,
+    comment:
+      "The camera is average but the battery life is excellent. If you prioritize long battery life over camera performance, this phone is a good pick. It runs well and looks nice, but the photos could be sharper.",
+    createdAt: "2025-08-16T14:20:00Z",
+  },
+  {
+    id: 16,
+    productId: 5,
+    userId: 16,
+    rating: 4,
+    comment:
+      "Really like the build quality and features of this phone. It feels solid in the hand and performs well under multitasking. The screen is bright and easy to read outdoors. Definitely a good choice in its category.",
+    createdAt: "2025-08-17T11:55:00Z",
+  },
+  {
+    id: 17,
+    productId: 6,
+    userId: 17,
+    rating: 1,
+    comment:
+      "Had multiple connectivity issues including dropping Wi-Fi and slow data speeds. Tried resetting but didn’t help. Very frustrating experience overall, would avoid buying this model if connectivity is important to you.",
+    createdAt: "2025-08-18T13:45:00Z",
+  },
+  {
+    id: 18,
+    productId: 7,
+    userId: 18,
+    rating: 5,
+    comment:
+      "Excellent value for the price. The phone runs smoothly, has great battery life, and the display looks fantastic. Perfect for anyone who wants a reliable device without breaking the bank.",
+    createdAt: "2025-08-19T15:25:00Z",
+  },
+  {
+    id: 19,
+    productId: 8,
+    userId: 19,
+    rating: 4,
+    comment:
+      "Nice phone overall, though I wish the speakers were louder. The sound quality is clear but a bit soft. The performance and battery life are solid, and it looks great with a sleek design.",
+    createdAt: "2025-08-20T08:15:00Z",
+  },
+  {
+    id: 20,
+    productId: 9,
+    userId: 20,
+    rating: 3,
+    comment:
+      "Decent phone but sometimes lags when playing games or using heavy apps. The display is good and the battery lasts well enough for everyday use. Not the best choice for gamers, but okay otherwise.",
+    createdAt: "2025-08-21T10:05:00Z",
   },
 ];
 

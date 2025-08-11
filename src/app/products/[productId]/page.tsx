@@ -218,7 +218,7 @@ const Product = async ({ params }: ProductPageProps) => {
       <MoreDetails product={product} />
 
       {/* Reviews */}
-      <Reviews />
+      <Reviews productId={product.id} />
     </section>
   );
 };
