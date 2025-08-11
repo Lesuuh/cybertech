@@ -6,6 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+//truncate text
 export function truncateText(text: string, maxLenght: number) {
   if (text.length <= maxLenght) return text;
 
@@ -19,9 +20,11 @@ export function truncateText(text: string, maxLenght: number) {
   return truncatedText.slice(0, maxLenght) + "...";
 }
 
+// get discounted price
 export function getDiscountedPrice(product: Product) {
   if (product.discount && product.discount > 0) {
     return (product.price * (100 - product.discount)) / 100;
   }
   return product.price;
 }
+

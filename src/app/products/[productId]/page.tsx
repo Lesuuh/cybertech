@@ -1,4 +1,5 @@
 import MoreDetails from "@/app/_components/products/MoreDetails";
+import Reviews from "@/app/_components/products/Reviews";
 import { products } from "@/app/data/data";
 import { Button } from "@/components/ui/button";
 import { getDiscountedPrice } from "@/lib/utils";
@@ -215,6 +216,9 @@ const Product = async ({ params }: ProductPageProps) => {
 
       {/* details */}
       <MoreDetails product={product} />
+
+      {/* Reviews */}
+      <Reviews />
     </section>
   );
 };
