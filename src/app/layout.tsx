@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./_components/layouts/Navbar";
 import Footer from "./_components/layouts/Footer";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,9 +29,28 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} antialiased bg-gray-900`}>
-        <Navbar />
         {children}
-        <Footer />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={8} // Space between toasts
+          containerClassName=""
+          containerStyle={{}}
+          toastOptions={{
+            // Default options for all toasts
+            duration: 3000,
+            style: {
+              background: "#222",
+              color: "#eee",
+            },
+            success: {
+              iconTheme: {
+                primary: "green",
+                secondary: "white",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

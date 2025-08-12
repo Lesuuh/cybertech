@@ -1,10 +1,12 @@
 "use client";
 
 import { X } from "lucide-react";
-import { carts, products, users } from "../data/data"; // assuming you also have users
+import { carts, products, users } from "../../data/data"; // assuming you also have users
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useCartStore } from "@/store/cartStore";
+import { toast } from "sonner";
 
 const ShoppingCart = () => {
   const userId = 2;
@@ -16,6 +18,20 @@ const ShoppingCart = () => {
   const estimatedTax = 20.0;
   const shippingHandling = 15.0;
   const total = subTotal + estimatedTax + shippingHandling;
+
+  const removeItem = useCartStore((state) => state.removeItem);
+  const cartItems = useCartStore((state) => state.items);
+
+  //   0: Object { productId: 5, quantity: 4 }
+  // ​
+  // 1: Object { productId: 10, quantity: 1 }
+  // ​
+  // 2: Object { productId: 3, quantity: 1 }
+
+  const handleRemoveItem = (product) => {
+    removeItem(product.id);
+    toast.success(`${product.name} removed from cart`);
+  };
 
   // Map cart items to detailed info
   const cartDetailedItems = userCart
@@ -101,7 +117,7 @@ const ShoppingCart = () => {
                     size="icon"
                     className="text-gray-400 hover:text-gray-600"
                     aria-label="Remove item"
-                    onClick={() => handleRemoveItem(item.productId)}
+                    onClick={() => handleRemoveItem(item)}
                   >
                     <X className="h-5 w-5" />
                   </Button>

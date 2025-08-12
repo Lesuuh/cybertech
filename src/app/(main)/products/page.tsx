@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Breadcrumbs } from "../_components/products/Breadcrumbs";
-import ProductCard from "../_components/products/ProductCard";
-import { products } from "../data/data";
-import { Product } from "../types";
+import { Breadcrumbs } from "../../_components/products/Breadcrumbs";
+import ProductCard from "../../_components/products/ProductCard";
+import { products } from "../../data/data";
+import { Product } from "../../types";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
-import { PaginationDemo } from "../_components/products/Pagination";
-import Sidebar from "../_components/products/Sidebar";
+import { PaginationDemo } from "../../_components/products/Pagination";
+import Sidebar from "../../_components/products/Sidebar";
 
 const Products = () => {
   const filteredProducts = products;

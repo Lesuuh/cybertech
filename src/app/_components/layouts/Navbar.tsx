@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCartStore } from "@/store/cartStore";
 
 const navbarItems = [
   { label: "Home", href: "/" },
@@ -22,6 +23,9 @@ const navbarIcons = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const cartItems = useCartStore((state) => state.items);
+  console.log(cartItems);
 
   const handleMenu = () => {
     setOpen((prev) => !prev);
@@ -78,12 +82,17 @@ const Navbar = () => {
 
           <ul className="flex gap-7">
             {navbarIcons.map(({ name, href, icon: Icon }) => (
-              <li key={name}>
+              <li key={name} className="relative">
                 <Link
                   href={href}
-                  className="hover:text-black text-gray-600 transition"
+                  className="hover:text-black text-gray-600 transition relative"
                   aria-label={name}
                 >
+                  {name === "Cart" && cartItems.length > 0 && (
+                    <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                      {cartItems.length}
+                    </span>
+                  )}
                   <Icon className="w-6 h-6" aria-hidden="true" />
                 </Link>
               </li>
