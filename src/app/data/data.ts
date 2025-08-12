@@ -505,6 +505,15 @@ export const orders = [
       { productId: 2, quantity: 1 },
       { productId: 7, quantity: 2 },
     ],
+    address: {
+      fullName: "John Doe",
+      phone: "+2348012345678",
+      street: "123 Main Street",
+      city: "Lagos",
+      state: "Lagos State",
+      postalCode: "100001",
+      country: "Nigeria",
+    },
     totalPrice: 2697, // sum of products * quantity
     status: "Processing", // Pending, Shipped, Delivered, Cancelled
     createdAt: "2025-08-08T12:00:00Z",
