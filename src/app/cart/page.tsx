@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const ShoppingCart = () => {
-  const userId = 5;
+  const userId = 2;
 
   // Find the cart for this user
   const userCart = carts.find((cart) => cart.userId === userId);
