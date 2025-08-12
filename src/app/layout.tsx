@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./_components/layouts/Navbar";
-import Footer from "./_components/layouts/Footer";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -32,22 +30,11 @@ export default function RootLayout({
         {children}
         <Toaster
           position="top-center"
-          reverseOrder={false}
-          gutter={8} // Space between toasts
-          containerClassName=""
-          containerStyle={{}}
           toastOptions={{
-            // Default options for all toasts
             duration: 3000,
             style: {
               background: "#222",
               color: "#eee",
-            },
-            success: {
-              iconTheme: {
-                primary: "green",
-                secondary: "white",
-              },
             },
           }}
         />
