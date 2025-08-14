@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import {
   Zap,
   Eye,
@@ -26,52 +26,80 @@ import {
   Chrome,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { useUserStore } from "@/store/userStore";
+import {  useRouter } from "next/router";
+
+type RegisterProps = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: number;
+  confirmPassword: string;
+  agree: boolean;
+  newsletter: boolean;
+};
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    agreeToTerms: false,
-    subscribeNewsletter: false,
-  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const router = useRouter()
+  const registerUser = useUserStore((state) => state.register);
+  const [authError, setAuthError] = useState<string | null>(null);
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Password Mismatch", {
-        description: "Passwords do not match. Please try again.",
-      });
-      return;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterProps>({ mode: "onBlur" });
+
+  const onSubmit = async (data: RegisterProps) => {
+    setAuthError(null);
+
+    const {
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      phoneNumber,
+      agree,
+      newsletter,
+    } = data;
+
+    try {
+      if (password !== confirmPassword) {
+        setAuthError("Password must match");
+        return;
+      }
+
+      await registerUser(
+        email,
+        password,
+        firstName,
+        lastName,
+        phoneNumber,
+        agree,
+        newsletter
+      );
+      toast.success("Your registration was successful");
+      router.push("/login")
+    } catch (err: any) {
+      console.error(err);
+      const errorMessage =
+        err.message ||
+        "Something went wrong with registration, please try again later";
+      setAuthError(errorMessage);
     }
-
-    if (!formData.agreeToTerms) {
-      toast.error("Terms Required", {
-        description: "Please agree to the terms and conditions.",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Account Created Successfully", {
-        description:
-          "Welcome to TechHub! Please check your email to verify your account.",
-      });
-    }, 2000);
   };
 
+  const password = watch("password");
+
+  // Google Sign in
   const handleGoogleSignup = async () => {
     setIsGoogleLoading(true);
 
@@ -85,23 +113,14 @@ export default function RegisterPage() {
     }, 2000);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
             <Zap className="h-8 w-8 text-black" />
-            <span className="text-2xl font-bold text-black">TechHub</span>
+            <span className="text-2xl font-bold text-black">Cyber</span>
           </Link>
-          <h1 className="text-3xl font-bold text-black mb-2">Join TechHub</h1>
-          <p className="text-gray-600">
-            Create your account to start shopping for the latest tech
-          </p>
         </div>
 
         <Card className="bg-white border-gray-200 shadow-lg">
@@ -140,105 +159,143 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
               <div className="grid grid-cols-2 gap-4">
+                {/* First Name */}
                 <div className="space-y-2">
                   <Label htmlFor="firstName" className="text-black">
                     First Name
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                    <User className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                     <Input
                       id="firstName"
-                      name="firstName"
                       type="text"
                       placeholder="John"
-                      value={formData.firstName}
-                      onChange={handleInputChange}
-                      className="pl-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                      required
+                      {...register("firstName", {
+                        required: "First name is required",
+                        minLength: {
+                          value: 3,
+                          message: "Name must be at least 3 characters",
+                        },
+                      })}
+                      className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                     />
                   </div>
+                  {errors.firstName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.firstName.message}
+                    </p>
+                  )}
                 </div>
 
+                {/* Last Name */}
                 <div className="space-y-2">
                   <Label htmlFor="lastName" className="text-black">
                     Last Name
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                    <User className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                     <Input
                       id="lastName"
-                      name="lastName"
                       type="text"
                       placeholder="Doe"
-                      value={formData.lastName}
-                      onChange={handleInputChange}
-                      className="pl-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                      required
+                      {...register("lastName")}
+                      className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                     />
                   </div>
+                  {errors.lastName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.lastName.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-black">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Mail className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="email"
-                    name="email"
                     type="email"
                     placeholder="john@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="pl-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                    required
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Enter a valid email address",
+                      },
+                    })}
+                    className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                 </div>
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                )}
               </div>
 
+              {/* Phone */}
               <div className="space-y-2">
                 <Label htmlFor="phone" className="text-black">
                   Phone Number
                 </Label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Phone className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="phone"
-                    name="phone"
                     type="tel"
                     placeholder="+1 (555) 123-4567"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="pl-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                    required
+                    {...register("phoneNumber", {
+                      required: "Phone Number is required",
+                      pattern: {
+                        value: /^\+?[1-9]\d{7,14}$/,
+                        message: "Enter a valid phone number",
+                      },
+                    })}
+                    className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                 </div>
+                {errors.phoneNumber && (
+                  <p className="text-red-500 text-sm">
+                    {errors.phoneNumber.message}
+                  </p>
+                )}
               </div>
 
+              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-black">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Lock className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a strong password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="pl-10 pr-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                    required
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 8,
+                        message: "Password must be at least 8 characters",
+                      },
+                      pattern: {
+                        value:
+                          /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\w\s]).+$/,
+                        message:
+                          "Password must include uppercase, lowercase, number, and special character",
+                      },
+                    })}
+                    className="pl-10 pr-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-500 hover:text-black"
+                    className="absolute right-3 top-4 text-gray-500 hover:text-black"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -247,28 +304,35 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
+              {/* Confirm Password */}
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword" className="text-black">
                   Confirm Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Lock className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="confirmPassword"
-                    name="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
-                    value={formData.confirmPassword}
-                    onChange={handleInputChange}
-                    className="pl-10 pr-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                    required
+                    {...register("confirmPassword", {
+                      required: "Confirm Password is required",
+                      validate: (value) =>
+                        value === password || "Passwords do not match",
+                    })}
+                    className="pl-10 pr-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-gray-500 hover:text-black"
+                    className="absolute right-3 top-4 text-gray-500 hover:text-black"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -277,19 +341,22 @@ export default function RegisterPage() {
                     )}
                   </button>
                 </div>
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
+              {/* Checkboxes */}
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <Checkbox
+                  <input
                     id="terms"
-                    checked={formData.agreeToTerms}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        agreeToTerms: checked as boolean,
-                      }))
-                    }
+                    type="checkbox"
+                    {...register("agree", {
+                      required: "You must agree before continuing",
+                    })}
                     className="border-gray-300 data-[state=checked]:bg-black"
                   />
                   <Label htmlFor="terms" className="text-sm text-gray-600">
@@ -309,17 +376,15 @@ export default function RegisterPage() {
                     </Link>
                   </Label>
                 </div>
+                {errors.agree && (
+                  <p className="text-red-500 text-sm">{errors.agree.message}</p>
+                )}
 
                 <div className="flex items-center space-x-2">
-                  <Checkbox
+                  <input
                     id="newsletter"
-                    checked={formData.subscribeNewsletter}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        subscribeNewsletter: checked as boolean,
-                      }))
-                    }
+                    type="checkbox"
+                    {...register("newsletter")}
                     className="border-gray-300 data-[state=checked]:bg-black"
                   />
                   <Label htmlFor="newsletter" className="text-sm text-gray-600">
@@ -328,12 +393,19 @@ export default function RegisterPage() {
                 </div>
               </div>
 
+              {authError && (
+                <p className="text-red-500 text-sm text-center w-full bg-red-100 border border-red-100 py-2 rounded-sm">
+                  {authError}
+                </p>
+              )}
+
+              {/* Submit Button */}
               <Button
                 type="submit"
-                className="w-full bg-black hover:bg-gray-800 text-white"
-                disabled={isLoading}
+                className="w-full py-6 bg-black hover:bg-gray-800 text-white"
+                disabled={isSubmitting}
               >
-                {isLoading ? "Creating Account..." : "Create Account"}
+                {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 

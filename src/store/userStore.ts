@@ -6,7 +6,15 @@ interface AuthState {
   loading: boolean;
   setUser: (user: any) => void;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: number,
+    agree: boolean,
+    newsletter: boolean
+  ) => Promise<void>;
   logOut: () => Promise<void>;
   fetchUser: () => Promise<void>;
 }
@@ -17,13 +25,40 @@ export const useUserStore = create<AuthState>((set) => ({
 
   setUser: (user: any) => set({ user }),
 
-  register: async (email: string, password: string) => {
+  register: async (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: number,
+    agree: boolean,
+    newsletter: boolean
+  ) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (data) {
       set({ user: data.user });
     }
     if (error) {
       throw error;
+    }
+
+    const userId = data?.user?.id;
+
+    if (userId) {
+      const { error } = await supabase.from("profiles").insert([
+        {
+          id: userId,
+          email: email,
+          first_name: firstName,
+          last_name: lastName,
+          phone_number: phoneNumber,
+          newsletter,
+          agree_to_terms: agree,
+        },
+      ]);
+      if (error) {
+        throw error;
+      }
     }
   },
 
@@ -32,12 +67,11 @@ export const useUserStore = create<AuthState>((set) => ({
       email,
       password,
     });
-    if (data) {
-      set({ user: data.user });
-    }
     if (error) {
       throw error;
     }
+
+    set({ user: data.user });
   },
 
   logOut: async () => {
