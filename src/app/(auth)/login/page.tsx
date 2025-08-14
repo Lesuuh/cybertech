@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,30 +18,38 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Zap, Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 import { toast } from "sonner";
+import { useUserStore } from "@/store/userStore";
 
+type LoginProps = {
+  email: string;
+  password: string;
+};
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
+  const [authError, setAuthError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginProps>();
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Login Successful", {
-        description: "Welcome back to TechHub!",
-      });
-    }, 1500);
+  const login = useUserStore((state) => state.login);
+
+  const onSubmit = async (data: LoginProps) => {
+    const { email, password } = data;
+    try {
+      await login(email, password);
+      toast.success("Login was successful");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message || "Something went wrong during login");
+      setAuthError(error.message || "Something went wrong during login");
+    }
   };
 
+  // Google login
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
 
@@ -51,11 +60,6 @@ export default function LoginPage() {
         description: "Welcome back to TechHub!",
       });
     }, 2000);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -108,24 +112,24 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-black">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Mail className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="email"
-                    name="email"
                     type="email"
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="pl-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
-                    required
+                    placeholder="janedoe@yourmail.com"
+                    {...register("email", { required: "Email is required" })}
+                    className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                 </div>
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -133,21 +137,20 @@ export default function LoginPage() {
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                  <Lock className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="pl-10 pr-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
+                    {...(register("password"),
+                    { required: "Password is required" })}
+                    className="pl-10 py-6 pr-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-500 hover:text-black"
+                    className="absolute right-3 top-4 text-gray-500 hover:text-black"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -156,19 +159,22 @@ export default function LoginPage() {
                     )}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="remember"
-                    checked={formData.rememberMe}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        rememberMe: checked as boolean,
-                      }))
-                    }
+                    // checked={formData.rememberMe}
+                    // onCheckedChange={(checked) =>
+                    //   setFormData((prev) => ({
+                    //     ...prev,
+                    //     rememberMe: checked as boolean,
+                    //   }))
+                    // }
                     className="border-gray-300 data-[state=checked]:bg-black"
                   />
                   <Label htmlFor="remember" className="text-sm text-gray-600">
@@ -183,12 +189,17 @@ export default function LoginPage() {
                 </Link>
               </div>
 
+              {authError && (
+                <p className="text-red-500 text-sm text-center w-full bg-red-100 border border-red-100 py-2 rounded-sm">
+                  {authError}
+                </p>
+              )}
               <Button
                 type="submit"
-                className="w-full bg-black hover:bg-gray-800 text-white"
-                disabled={isLoading}
+                className="w-full py-6 bg-black hover:bg-gray-800 text-white"
+                disabled={isSubmitting}
               >
-                {isLoading ? "Signing In..." : "Sign In"}
+                {isSubmitting ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 
