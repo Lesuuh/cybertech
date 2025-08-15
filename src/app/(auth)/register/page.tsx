@@ -28,7 +28,7 @@ import {
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/store/userStore";
-import {  useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 type RegisterProps = {
   email: string;
@@ -46,7 +46,7 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
   const registerUser = useUserStore((state) => state.register);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -87,7 +87,7 @@ export default function RegisterPage() {
         newsletter
       );
       toast.success("Your registration was successful");
-      router.push("/login")
+      router.push("/login");
     } catch (err: any) {
       console.error(err);
       const errorMessage =
@@ -252,7 +252,7 @@ export default function RegisterPage() {
                     {...register("phoneNumber", {
                       required: "Phone Number is required",
                       pattern: {
-                        value: /^\+?[1-9]\d{7,14}$/,
+                        value: /^\+?[0-9]\d{7,14}$/,
                         message: "Enter a valid phone number",
                       },
                     })}

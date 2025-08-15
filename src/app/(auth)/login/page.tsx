@@ -19,6 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Zap, Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 import { toast } from "sonner";
 import { useUserStore } from "@/store/userStore";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type LoginProps = {
   email: string;
@@ -37,15 +38,22 @@ export default function LoginPage() {
 
   const login = useUserStore((state) => state.login);
 
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
+  const router = useRouter();
+
   const onSubmit = async (data: LoginProps) => {
     const { email, password } = data;
+    console.log(email, password);
     try {
       await login(email, password);
+
       toast.success("Login was successful");
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message || "Something went wrong during login");
-      setAuthError(error.message || "Something went wrong during login");
+      router.push(redirect);
+    } catch (error: any) {
+      const message = error?.message || "Something went wrong during login";
+      toast.error(message);
+      setAuthError(message);
     }
   };
 
@@ -68,7 +76,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
             <Zap className="h-8 w-8 text-black" />
-            <span className="text-2xl font-bold text-black">TechHub</span>
+            <span className="text-2xl font-bold text-black">Cyber</span>
           </Link>
           <h1 className="text-3xl font-bold text-black mb-2">Welcome Back</h1>
           <p className="text-gray-600">
@@ -142,8 +150,9 @@ export default function LoginPage() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
-                    {...(register("password"),
-                    { required: "Password is required" })}
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
                     className="pl-10 py-6 pr-10 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                     required
                   />
