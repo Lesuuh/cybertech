@@ -1,3 +1,4 @@
+// import AuthGuard from "../_components/auth/AuthGuard";
 import Footer from "../_components/layouts/Footer";
 import Navbar from "../_components/layouts/Navbar";
 
@@ -8,9 +9,11 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <Navbar />
-      <main>{children}</main>
-      <Footer />
+      {/* <AuthGuard> */}
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
+      {/* </AuthGuard> */}
     </>
   );
 }

@@ -17,7 +17,7 @@ const navbarItems = [
 const navbarIcons = [
   { name: "Cart", href: "/cart", icon: ShoppingCart },
   { name: "Wishlist", href: "/wishlist", icon: Heart },
-  { name: "Account", href: "/account", icon: User },
+  { name: "Account", href: "/dashboard", icon: User },
 ];
 
 const Navbar = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const cartItems = useCartStore((state) => state.items);
-  console.log(cartItems);
+  // console.log(cartItems);
 
   const handleMenu = () => {
     setOpen((prev) => !prev);

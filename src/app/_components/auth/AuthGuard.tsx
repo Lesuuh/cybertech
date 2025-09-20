@@ -2,27 +2,26 @@
 
 import { useUserStore } from "@/store/userStore";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
 
-export default function RequireAuth({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const user = useUserStore((state) => state.user);
+export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (!user) {
-      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
-    }
-  }, [user, pathname, router]);
+  const user = useUserStore((state) => state.user);
+  const loading = useUserStore((state) => state.loading);
 
-  return <>{user && children}</>;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center text-gray-600">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+    return null;
+  }
+
+  return <>{children}</>;
 }
-
-
-
-
-// then wrap the protected routes around it

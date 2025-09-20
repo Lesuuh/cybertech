@@ -29,6 +29,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
+import { createProfile } from "@/services/profiles";
 
 type RegisterProps = {
   email: string;
@@ -77,15 +78,18 @@ export default function RegisterPage() {
         return;
       }
 
-      await registerUser(
-        email,
-        password,
-        firstName,
-        lastName,
-        phoneNumber,
-        agree,
-        newsletter
-      );
+      const user = await registerUser(email, password);
+      if (user) {
+        await createProfile(
+          user.id,
+          email,
+          firstName,
+          lastName,
+          phoneNumber,
+          agree,
+          newsletter
+        );
+      }
       toast.success("Your registration was successful");
       router.push("/login");
     } catch (err: any) {

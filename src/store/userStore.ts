@@ -4,36 +4,20 @@ import { create } from "zustand";
 interface AuthState {
   user: any;
   loading: boolean;
-  setUser: (user: any) => void;
+  setUser: (user: any, loading: boolean) => void;
   login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: number,
-    agree: boolean,
-    newsletter: boolean
-  ) => Promise<void>;
+  register: (email: string, password: string) => Promise<any>;
   logOut: () => Promise<void>;
-  fetchUser: () => Promise<void>;
+  fetchUser: () => Promise<any>;
 }
 
 export const useUserStore = create<AuthState>((set) => ({
   user: null,
   loading: true,
 
-  setUser: (user: any) => set({ user }),
+  setUser: (user: any) => set({ user, loading: false }),
 
-  register: async (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: number,
-    agree: boolean,
-    newsletter: boolean
-  ) => {
+  register: async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({ email, password });
     if (data) {
       set({ user: data.user });
@@ -41,25 +25,7 @@ export const useUserStore = create<AuthState>((set) => ({
     if (error) {
       throw error;
     }
-
-    const userId = data?.user?.id;
-
-    if (userId) {
-      const { error } = await supabase.from("profiles").insert([
-        {
-          id: userId,
-          email: email,
-          first_name: firstName,
-          last_name: lastName,
-          phone_number: phoneNumber,
-          newsletter,
-          agree_to_terms: agree,
-        },
-      ]);
-      if (error) {
-        throw error;
-      }
-    }
+    return data.user;
   },
 
   login: async (email: string, password: string) => {
@@ -85,5 +51,6 @@ export const useUserStore = create<AuthState>((set) => ({
     if (error) {
       throw error;
     }
+    return data.user;
   },
 }));

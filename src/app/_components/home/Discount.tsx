@@ -7,7 +7,7 @@ import { Product } from "@/app/types";
 
 const Discount = () => {
   const discountedProducts = products.filter((product) => product.discount > 0);
-  console.log(discountedProducts);
+  // console.log(discountedProducts);
 
   const [save, setSave] = useState<{ [key: number]: boolean }>({});
 

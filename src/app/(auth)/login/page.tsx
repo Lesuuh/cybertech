@@ -39,8 +39,11 @@ export default function LoginPage() {
   const login = useUserStore((state) => state.login);
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams.get("redirect") || "/dashboard";
   const router = useRouter();
+
+  const user = useUserStore((state) => state.user);
+  console.log(user);
 
   const onSubmit = async (data: LoginProps) => {
     const { email, password } = data;
