@@ -1,13 +1,92 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { getUserById } from "@/services/profiles";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  newsletter: boolean;
+  agree_to_terms: boolean;
+  avatar?: string; // optional, can generate dynamically
+  joined?: string; // optional
+  orders?: Array<{
+    id: string;
+    item: string;
+    status: "Delivered" | "Shipped" | "Pending";
+    date: string;
+  }>;
+}
 
 export default function ProfilePage() {
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logOut);
   const router = useRouter();
+
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    async function fetchProfile() {
+      try {
+        const data = await getUserById(user.id);
+        if (data) {
+          // Optional: generate avatar if not present
+          if (!data.avatar) {
+            data.avatar = `https://ui-avatars.com/api/?name=${data.first_name}+${data.last_name}&background=0D8ABC&color=fff`;
+          }
+
+          // Optional: generate joined date if not present
+          if (!data.joined) {
+            data.joined = new Date().toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            });
+          }
+
+          // Optional: sample orders
+          if (!data.orders) {
+            data.orders = [
+              {
+                id: "ORD123",
+                item: "iPhone 15 Pro",
+                status: "Delivered",
+                date: "Aug 15, 2025",
+              },
+              {
+                id: "ORD124",
+                item: "Samsung Galaxy Buds 3",
+                status: "Shipped",
+                date: "Sept 1, 2025",
+              },
+            ];
+          }
+          setProfile(data);
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load profile");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, [user]);
+
+  if (!user || loading) {
+    return (
+      <p className="text-center mt-20 text-gray-500">Loading profile...</p>
+    );
+  }
 
   const handleLogout = async () => {
     await logout();
@@ -15,48 +94,24 @@ export default function ProfilePage() {
     router.replace("/login");
   };
 
-  if (!user) return <p>Loading profile...</p>;
-
-  // Sample profile data (replace with actual Supabase profile fields if needed)
-  const profile = {
-    name: user?.user_metadata?.full_name || "John Doe",
-    email: user?.email,
-    phone: "+234 801 234 5678",
-    address: "23 Lekki Phase 1, Lagos, Nigeria",
-    avatar:
-      "https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff",
-    joined: "January 2025",
-    orders: [
-      {
-        id: "ORD123",
-        item: "iPhone 15 Pro",
-        status: "Delivered",
-        date: "Aug 15, 2025",
-      },
-      {
-        id: "ORD124",
-        item: "Samsung Galaxy Buds 3",
-        status: "Shipped",
-        date: "Sept 1, 2025",
-      },
-    ],
-  };
-
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
       {/* Profile Header */}
       <div className="flex flex-col sm:flex-row items-center gap-6 bg-white p-6 rounded-2xl shadow">
         <img
-          src={profile.avatar}
-          alt={profile.name}
+          src={profile?.avatar}
+          alt={`${profile?.first_name} ${profile?.last_name}`}
           className="w-24 h-24 rounded-full border-4 border-blue-500"
         />
         <div className="text-center sm:text-left">
-          <h2 className="text-2xl font-bold">{profile.name}</h2>
-          <p className="text-gray-500">{profile.email}</p>
-          <p className="text-gray-500">{profile.phone}</p>
-          <p className="text-gray-500">{profile.address}</p>
-          <span className="text-sm text-gray-400">Joined {profile.joined}</span>
+          <h2 className="text-2xl font-bold">
+            {profile?.first_name} {profile?.last_name}
+          </h2>
+          <p className="text-gray-500">{profile?.email}</p>
+          <p className="text-gray-500">{profile?.phone_number}</p>
+          <span className="text-sm text-gray-400">
+            Joined {profile?.joined}
+          </span>
         </div>
       </div>
 
@@ -92,7 +147,7 @@ export default function ProfilePage() {
             </tr>
           </thead>
           <tbody>
-            {profile.orders.map((order) => (
+            {profile?.orders?.map((order) => (
               <tr key={order.id} className="border-t">
                 <td className="p-3">{order.id}</td>
                 <td className="p-3">{order.item}</td>

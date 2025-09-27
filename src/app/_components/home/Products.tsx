@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import ProductCard from "../products/ProductCard";
-import { products } from "@/app/data/data";
 import { Product } from "@/app/types";
+import { useProducts } from "@/services/useProducts";
 
 const Products = () => {
   const tabs = [
@@ -13,11 +13,12 @@ const Products = () => {
     { slug: "featured", label: "Featured" },
   ];
 
-
   const [activeTab, setActiveTab] = useState("all");
 
+  const { data: products, isLoading, error } = useProducts();
+
   // Filtering products
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products?.filter((product) => {
     if (activeTab === "new") return product.isNewArrival;
     if (activeTab === "featured") return product.isFeatured;
     if (activeTab === "bestseller") return product.isBestSeller;
@@ -37,6 +38,15 @@ const Products = () => {
   const setTab = (slug: string) => {
     setActiveTab(slug);
   };
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center flex-col  items-center py-10">
+        <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent border-solid rounded-full animate-spin pb-6"></div>
+        <p className="mt-5">Loading...</p>
+      </div>
+    );
+  if (error) return <p>Error loading products</p>;
 
   return (
     <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-20 ">
