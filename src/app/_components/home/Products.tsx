@@ -66,7 +66,7 @@ const Products = () => {
         ))}
       </div>
       <div className="grid mt-10  w-full  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.slice(0, 8).map((product) => (
+        {filteredProducts?.slice(0, 8).map((product) => (
           <ProductCard
             key={product.id}
             id={product.id}
