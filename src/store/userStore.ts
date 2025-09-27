@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthState {
   user: any;
@@ -11,46 +12,48 @@ interface AuthState {
   fetchUser: () => Promise<any>;
 }
 
-export const useUserStore = create<AuthState>((set) => ({
-  user: null,
-  loading: true,
+export const useUserStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      loading: true,
 
-  setUser: (user: any) => set({ user, loading: false }),
+      setUser: (user: any, loading: boolean) => set({ user, loading }),
 
-  register: async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (data) {
-      set({ user: data.user });
+      register: async (email: string, password: string) => {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+
+        set({ user: data.user, loading: false });
+        return data.user;
+      },
+
+      login: async (email: string, password: string) => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+
+        set({ user: data.user, loading: false });
+      },
+
+      logOut: async () => {
+        await supabase.auth.signOut();
+        set({ user: null, loading: false });
+      },
+
+      fetchUser: async () => {
+        const { data, error } = await supabase.auth.getUser();
+        if (error) throw error;
+
+        set({ user: data.user, loading: false });
+        return data.user;
+      },
+    }),
+    {
+      name: "auth-store", // key in localStorage
+      partialize: (state) => ({ user: state.user }), // only persist user, not loading
     }
-    if (error) {
-      throw error;
-    }
-    return data.user;
-  },
-
-  login: async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      throw error;
-    }
-
-    set({ user: data.user });
-  },
-
-  logOut: async () => {
-    await supabase.auth.signOut();
-    set({ user: null });
-  },
-
-  fetchUser: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    set({ user: data.user, loading: false });
-    if (error) {
-      throw error;
-    }
-    return data.user;
-  },
-}));
+  )
+);

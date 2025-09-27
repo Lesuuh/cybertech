@@ -1,20 +1,14 @@
+"use client";
+
 import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
 import ProductDetailsClient from "@/app/_components/products/ProductDetailsClient";
-import RelatedProducts from "@/app/_components/products/RelatedProducts";
+// import RelatedProducts from "@/app/_components/products/RelatedProducts";
 import Reviews from "@/app/_components/products/Reviews";
-import { products } from "@/app/data/data";
-import { getDiscountedPrice } from "@/lib/utils";
+import Spinner from "@/components/ui/Spinner";
 
-import {
-  BatteryCharging,
-  Camera,
-  Monitor,
-  Database,
-  Cpu,
-  Droplet,
-  Wifi,
-} from "lucide-react";
+import { getDiscountedPrice } from "@/lib/utils";
+import { useProducts } from "@/services/useProducts";
 
 interface ProductPageProps {
   params: {
@@ -22,15 +16,16 @@ interface ProductPageProps {
   };
 }
 
-const Product = async ({ params }: ProductPageProps) => {
-  const { productId } = await params;
-  const product = products.find((p) => p.id === Number(productId));
+const Product = ({ params }: ProductPageProps) => {
+  const { data: products, isLoading, error } = useProducts();
 
-  const breadcrumbItems = [
-    { label: "Home", href: "/" },
-    { label: "Shop", href: "/products" },
-    { label: product?.name },
-  ];
+  const { productId } = params;
+  const product = products?.find((p) => p.id === Number(productId));
+  console.log(product);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   if (!product) {
     return (
@@ -39,6 +34,16 @@ const Product = async ({ params }: ProductPageProps) => {
       </div>
     );
   }
+
+  if (error) {
+    return <p>Cannot fetch data</p>;
+  }
+
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Shop", href: "/products" },
+    { label: product?.name },
+  ];
 
   const discountPrice = getDiscountedPrice(product);
   const colors = [
@@ -50,38 +55,59 @@ const Product = async ({ params }: ProductPageProps) => {
   ];
 
   // Example memory options from data or fallback:
-  const memoryOptions = product.memorySpace?.split(",").map((s) => s.trim());
+  const memoryOptions =
+    product.metadata.memorySpace?.split(",").map((s) => s.trim()) || null;
 
   const importantDetails = [
     {
       label: "Battery Capacity",
-      value: product.batteryCapacity,
+      value: product.metadata.batteryCapacity,
       iconName: "BatteryCharging",
     },
-    { label: "Back Camera", value: product.cameraBack, iconName: "Camera" },
-    { label: "Front Camera", value: product.cameraFront, iconName: "Camera" },
-    { label: "Screen Size", value: product.screenSize, iconName: "Monitor" },
+    {
+      label: "Back Camera",
+      value: product.metadata.cameraBack,
+      iconName: "Camera",
+    },
+    {
+      label: "Front Camera",
+      value: product.metadata.cameraFront,
+      iconName: "Camera",
+    },
+    {
+      label: "Screen Size",
+      value: product.metadata.screenSize,
+      iconName: "Monitor",
+    },
     {
       label: "Storage Space",
-      value: product.storageSpace,
+      value: product.metadata.storageSpace,
       iconName: "Database",
     },
     {
       label: "Operating System",
-      value: product.operatingSystem,
+      value: product.metadata.operatingSystem,
       iconName: "Cpu",
     },
-    { label: "Memory Space", value: product.memorySpace, iconName: "Database" },
+    {
+      label: "Memory Space",
+      value: product.metadata.memorySpace,
+      iconName: "Database",
+    },
     {
       label: "Water Resistance",
-      value: product.waterResistance,
+      value: product.metadata.waterResistance,
       iconName: "Droplet",
     },
-    { label: "Screen Type", value: product.screenType, iconName: "Monitor" },
-    { label: "Network", value: product.network, iconName: "Wifi" },
+    {
+      label: "Screen Type",
+      value: product.metadata.screenType,
+      iconName: "Monitor",
+    },
+    { label: "Network", value: product.metadata.network, iconName: "Wifi" },
     {
       label: "Screen Resolution",
-      value: product.screenResolution,
+      value: product.metadata.screenResolution,
       iconName: "Monitor",
     },
   ];
@@ -113,7 +139,7 @@ const Product = async ({ params }: ProductPageProps) => {
       <Reviews productId={product.id} />
 
       {/* Related Products */}
-      <RelatedProducts product={product} />
+      {/* <RelatedProducts product={product} /> */}
     </section>
   );
 };

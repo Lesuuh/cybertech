@@ -4,6 +4,7 @@ import { useState } from "react";
 import ProductCard from "../products/ProductCard";
 import { Product } from "@/app/types";
 import { useProducts } from "@/services/useProducts";
+import Spinner from "@/components/ui/Spinner";
 
 const Products = () => {
   const tabs = [
@@ -39,13 +40,7 @@ const Products = () => {
     setActiveTab(slug);
   };
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center flex-col  items-center py-10">
-        <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent border-solid rounded-full animate-spin pb-6"></div>
-        <p className="mt-5">Loading...</p>
-      </div>
-    );
+  if (isLoading) return <Spinner />;
   if (error) return <p>Error loading products</p>;
 
   return (

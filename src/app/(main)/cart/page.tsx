@@ -1,18 +1,42 @@
 "use client";
 
 import { X } from "lucide-react";
-import { carts, products, users } from "../../data/data"; // assuming you also have users
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
+import { deleteItem, fetchCart } from "@/services/useCart";
+import { useUserStore } from "@/store/userStore";
+import { useEffect, useState } from "react";
+import { useProducts } from "@/services/useProducts";
 
 const ShoppingCart = () => {
-  const userId = 2;
+  const user = useUserStore((state) => state.user);
+  const { data: products } = useProducts();
 
-  // Find the cart for this user
-  const userCart = carts.find((cart) => cart.userId === userId);
+  console.log(products);
+
+  const [userCart, setUserCart] = useState<any | null>(null);
+  console.log(userCart);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const loadCart = async () => {
+      try {
+        const cart = await fetchCart(user.id);
+        setUserCart(cart);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCart();
+  }, [user?.id]);
 
   const subTotal = 250.0;
   const estimatedTax = 20.0;
@@ -20,53 +44,40 @@ const ShoppingCart = () => {
   const total = subTotal + estimatedTax + shippingHandling;
 
   const removeItem = useCartStore((state) => state.removeItem);
-  const cartItems = useCartStore((state) => state.items);
-
-  //   0: Object { productId: 5, quantity: 4 }
-  // ​
-  // 1: Object { productId: 10, quantity: 1 }
-  // ​
-  // 2: Object { productId: 3, quantity: 1 }
 
   const handleRemoveItem = (product) => {
+    deleteItem(product.id);
     removeItem(product.id);
-    toast.success(`${product.name} removed from cart`);
+    toast.success(`${product?.productName} removed from cart`);
   };
 
-  // Map cart items to detailed info
-  const cartDetailedItems = userCart
-    ? userCart.items.map((cartItem) => {
-        const product = products.find(
-          (product) => product.id === cartItem.productId
-        );
+  const cartDetailedItems = userCart?.cart_items.map((cartItem) => {
+    const product = products?.find((p) => p.id === cartItem.product_id);
 
-        return {
-          ...cartItem,
-          productName: product?.name || "Unknown Product",
-          productPrice: product?.price || 0,
-          totalPrice: (product?.price || 0) * cartItem.quantity,
-          imageSrc: product?.imageSrc || "/placeholder.svg", // Add this
-        };
-      })
-    : [];
+    return {
+      ...cartItem,
+      productName: product?.name || "Unknown Product",
+      productPrice: product?.price || 0,
+      totalPrice: (product?.price || 0) * cartItem.quantity,
+      imageSrc: product?.imageSrc || "/placeholder.svg",
+    };
+  });
 
-  // Optionally, get user info for display (assuming you have a users array)
-  const user = users.find((user) => user.id === userId);
+  console.log(cartDetailedItems);
 
-  if (!userCart) {
-    console.log("No cart found for this user");
-  }
+  if (loading) return <p>Loading cart...</p>;
+  if (!userCart) return <p>No cart found for this user</p>;
 
   return (
     <section className="max-w-[1500px] bg-white mx-auto px-4 my-20">
       <h2 className="text-2xl font-semibold mb-6">Shopping Cart</h2>
 
       <div className="grid grid-cols-1 items-start h-auto md:grid-cols-2 w-full gap-8">
-        {cartDetailedItems.length === 0 ? (
+        {cartDetailedItems?.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {cartDetailedItems.map((item) => (
+            {cartDetailedItems?.map((item) => (
               <div
                 key={item.productId}
                 className="flex flex-col sm:flex-row gap-4 pb-6 mb-6 border-b items-center sm:items-start bg-white"

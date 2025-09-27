@@ -4,6 +4,7 @@ import ProductCard from "../products/ProductCard";
 import { useState } from "react";
 import { Product } from "@/app/types";
 import { useProducts } from "@/services/useProducts";
+import Spinner from "@/components/ui/Spinner";
 
 const Discount = () => {
   const { data: products, isLoading, error } = useProducts();
@@ -22,13 +23,10 @@ const Discount = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center flex-col py-10">
-        <div className="w-10 h-10 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
-        <p className="mt-5">Loading...</p>
-      </div>
-    );
+    return <Spinner />;
   }
+
+  if (error) return <p>Error loading products</p>;
   return (
     <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-20 ">
       <h2 className="text-2xl">Discounts up to -50%</h2>

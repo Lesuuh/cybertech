@@ -15,6 +15,8 @@ import {
   Droplet,
   Wifi,
 } from "lucide-react";
+import { addToCart } from "@/services/useCart";
+import { useUserStore } from "@/store/userStore";
 
 const iconMap = {
   BatteryCharging,
@@ -37,12 +39,14 @@ const ProductDetailsClient = ({
   importantDetails,
 }) => {
   const addItem = useCartStore((state) => state.addItem);
+  const user = useUserStore((state) => state.user);
 
   const handleAddToCart = (product) => {
     if (!product?.name) {
       console.error("Product or product.name is undefined");
       return;
     }
+    addToCart(product.id, 1, user.id);
     addItem(product.id, 1);
     toast.success(`${product.name} added to cart`);
   };
@@ -88,20 +92,23 @@ const ProductDetailsClient = ({
         </div>
 
         {/* Memory */}
-        <div>
-          <p className="font-medium mb-2">Memory Options:</p>
-          <div className="flex gap-4 flex-wrap">
-            {memoryOptions?.map((mem, idx) => (
-              <Button
-                key={idx}
-                variant="outline"
-                className="w-24 py-3 text-gray-700 rounded-sm"
-              >
-                {mem}
-              </Button>
-            ))}
+
+        {memoryOptions?.length > 0 && (
+          <div className="w-full">
+            <p className="font-medium mb-2">Memory Options:</p>
+            <div className="flex gap-4 flex-row flex-wrap">
+              {memoryOptions.map((mem, idx) => (
+                <Button
+                  key={idx}
+                  variant="outline"
+                  className="py-3 text-gray-700 rounded-sm"
+                >
+                  {mem}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Important details */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
