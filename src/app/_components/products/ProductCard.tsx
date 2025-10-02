@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ProductCardProps } from "@/app/types";
+import type { ProductCardProps } from "@/app/types";
 import { truncateText } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -35,63 +35,74 @@ const ProductCard = ({
   else if (windowWidth < 1020) maxLength = 40;
 
   return (
-    <div className="relative bg-white/80 backdrop-blur-sm p-4 md:p-5 rounded-xl flex flex-col justify-between h-[360px] md:h-[420px] shadow-md hover:shadow-xl transition-all duration-300 ease-in-out border border-gray-100/50 hover:scale-[1.02]">
-      {/* Top-left badges */}
-      <div className="absolute top-3 left-3 flex flex-col space-y-1.5 z-10">
+    <div className="group relative bg-white rounded-sm flex flex-col h-[380px] md:h-[440px] shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-200 overflow-hidden">
+      {/* Top badges container */}
+      <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
         {discount > 0 && (
-          <span className="bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
-            -{discount}%
+          <span className="bg-red-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md backdrop-blur-sm">
+            -{discount}% OFF
           </span>
         )}
         {isFeatured && (
-          <span className="bg-yellow-400 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
-            Featured
+          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">
+            ⭐ Featured
           </span>
         )}
         {isBestSeller && (
-          <span className="bg-gray-800 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
-            Best Seller
+          <span className="bg-gradient-to-r from-gray-800 to-gray-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">
+            🔥 Best Seller
           </span>
         )}
       </div>
 
-      {/* Heart icon top-right */}
+      {/* Heart icon - redesigned with better hover effect */}
       <button
         onClick={onSave}
         aria-label="Add to favorites"
-        className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-all duration-200 z-10"
+        className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white hover:scale-110 transition-all duration-200"
       >
         <Heart
-          size={22}
+          size={20}
           className={`${
-            save ? "text-red-500 fill-red-500" : "fill-transparent"
+            save ? "text-red-500 fill-red-500" : "text-gray-600"
           } transition-all duration-200`}
         />
       </button>
 
-      {/* Product Image */}
-      <div className="relative w-full h-[160px] md:h-[200px] mb-4 overflow-hidden rounded-lg group">
+      {/* Product Image - redesigned with better container */}
+      <div className="relative w-full h-[200px] md:h-[240px] bg-gray-50 overflow-hidden">
         <Image
-          src={imageSrc}
+          src={imageSrc || "/placeholder.svg"}
           alt={name}
           fill
           style={{ objectFit: "contain" }}
-          className="rounded-lg transition-transform duration-500 group-hover:scale-105"
+          className="p-6 transition-transform duration-500 group-hover:scale-110"
           priority
         />
       </div>
 
-      {/* Product details */}
-      <div className="px-3 flex flex-col items-center space-y-3 text-center">
-        <h3 className="text-base md:text-lg font-medium text-gray-900 tracking-tight">
-          {hasMounted ? truncateText(name, maxLength) : name}
-        </h3>
-        <p className="text-lg md:text-xl font-semibold text-gray-800">
-          ${price.toFixed(2)}
-        </p>
-        <Link href={`/products/${id}`} passHref>
-          <Button className="bg-gray-900 text-white mt-4 py-2.5 px-8 hover:bg-gray-700 transition-all duration-300 text-sm md:text-base font-medium shadow-sm">
-            Shop Now
+      {/* Product details - redesigned with better spacing and typography */}
+      <div className="flex flex-col flex-1 p-5 bg-white">
+        <div className="flex-1">
+          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
+            {hasMounted ? truncateText(name, maxLength) : name}
+          </h3>
+          <div className="flex items-baseline gap-2">
+            <p className="text-2xl md:text-3xl font-bold text-gray-900">
+              ${price.toFixed(2)}
+            </p>
+            {discount > 0 && (
+              <p className="text-sm text-gray-400 line-through">
+                ${(price / (1 - discount / 100)).toFixed(2)}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Button - redesigned with better styling */}
+        <Link href={`/products/${id}`} passHref className="mt-4">
+          <Button className="w-full bg-gray-900 text-white py-6 hover:bg-gray-800 transition-all duration-300 text-sm font-semibold rounded-sm shadow-sm hover:shadow-md group-hover:bg-gray-800">
+            View Details
           </Button>
         </Link>
       </div>

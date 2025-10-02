@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -26,11 +25,17 @@ import {
   Mail,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useCartStore } from "@/store/cartStore";
+import { useProducts } from "@/services/useProducts";
+import { fetchCart } from "@/services/useCart";
+import { useUserStore } from "@/store/userStore";
+import Spinner from "@/components/ui/Spinner";
 
 export default function CheckoutPage() {
+  const user = useUserStore((state) => state.user);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [selectedAddress, setSelectedAddress] = useState("");
-  const [showNewAddress, setShowNewAddress] = useState(true);
+  const [showNewAddress, setShowNewAddress] = useState(false);
   const [newAddress, setNewAddress] = useState({
     fullName: "",
     address: "",
@@ -46,11 +51,13 @@ export default function CheckoutPage() {
     paymentMethod: string;
     estimatedDelivery: string;
   } | null>(null);
+  const [localCart, setLocalCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const savedAddresses = [
     {
       id: "1",
-      name: "Home",
+
       fullName: "John Doe",
       email: "john@example.com",
       address: "123 Main Street",
@@ -60,7 +67,7 @@ export default function CheckoutPage() {
     },
     {
       id: "2",
-      name: "Office",
+
       fullName: "John Doe",
       email: "john.work@company.com",
       address: "456 Business Ave, Suite 200",
@@ -78,56 +85,47 @@ export default function CheckoutPage() {
     swiftCode: "FNBKUS33",
     reference: `ORDER-${Date.now()}`,
   };
+  useEffect(() => {
+    if (!user?.id) return;
 
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Wireless Bluetooth Headphones",
-      price: 79.99,
-      quantity: 1,
-      image: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      quantity: 2,
-      image: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: 3,
-      name: "Portable Phone Charger",
-      price: 29.99,
-      quantity: 1,
-      image: "/placeholder.svg?height=80&width=80",
-    },
-  ]);
+    const loadCart = async () => {
+      try {
+        const cart = await fetchCart(user.id);
+        console.log(cart.cart_items);
+        setLocalCart(cart.cart_items);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   const updateQuantity = (id: number, change: number) => {
-  //     setCartItems((items) =>
-  //       items
-  //         .map((item) =>
-  //           item.id === id
-  //             ? { ...item, quantity: Math.max(0, item.quantity + change) }
-  //             : item
-  //         )
-  //         .filter((item) => item.quantity > 0)
-  //     );
-  //   };
+    loadCart();
+  }, [user?.id, setLocalCart]);
+
+  console.log(localCart);
+
+  const userCart = useCartStore((state) => state.items);
+  const { data: products } = useProducts();
+  if (!Array.isArray(localCart)) return <p>No cart found for this user</p>;
+
+  const cartDetailedItems = localCart.map((cartItem) => {
+    const product = products?.find((p) => p.id === cartItem.product_id);
+    return {
+      ...cartItem,
+      productName: product?.name || "Unknown Product",
+      productPrice: product?.price || 0,
+      totalPrice: (product?.price || 0) * cartItem.quantity,
+      imageSrc: product?.imageSrc || "/placeholder.svg",
+    };
+  });
+  console.log(cartDetailedItems);
 
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
     setTimeout(() => setCopiedField(""), 2000);
   };
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-  const shipping = 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
 
   const handleContinue = () => {
     if (!paymentMethod) {
@@ -221,10 +219,9 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="font-medium text-gray-900">
-                                {address.name}
+                                {address.fullName}
                               </div>
                               <div className="text-sm text-gray-600 mt-1">
-                                <div>{address.fullName}</div>
                                 <div>{address.address}</div>
                                 <div>
                                   {address.city}, {address.state} {address.zip}
@@ -237,19 +234,18 @@ export default function CheckoutPage() {
                     ))}
 
                     <div className="flex items-start space-x-3">
-                      <label
-                        htmlFor="address-new"
-                        className="flex-1 cursor-pointer p-4 border border-gray-200 rounded-lg hover:border-green-300 hover:bg-green-50 transition-colors"
+                      <button
+                        type="button"
+                        onClick={() => setShowNewAddress((prev) => !prev)}
+                        className="flex-1 p-4 border border-gray-200 rounded-lg hover:border-black hover:bg-gray-50 transition-colors flex items-center gap-3"
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="p-1 bg-green-100 rounded">
-                            <Plus className="h-4 w-4 text-green-600" />
-                          </div>
-                          <span className="font-medium text-green-700">
-                            Add New Address
-                          </span>
+                        <div className="p-1 bg-gray-100 rounded">
+                          <Plus className="h-4 w-4 text-black" />
                         </div>
-                      </label>
+                        <span className="font-medium text-black">
+                          Add New Address
+                        </span>
+                      </button>
                     </div>
                   </div>
 
@@ -290,6 +286,7 @@ export default function CheckoutPage() {
                             required
                           />
                         </div>
+
                         <div className="md:col-span-2">
                           <Label
                             htmlFor="address"
@@ -553,7 +550,7 @@ export default function CheckoutPage() {
                       <ol className="text-sm text-amber-800 space-y-1 list-decimal list-inside">
                         <li>
                           Transfer the exact amount of{" "}
-                          <strong>${total.toFixed(2)}</strong> to the above
+                          {/* <strong>${total.toFixed(2)}</strong> to the above */}
                           account
                         </li>
                         <li>
@@ -605,30 +602,6 @@ export default function CheckoutPage() {
           {/* Right Column - Order Summary */}
           <div className="space-y-6">
             {/* Cart Items */}
-            <div className="p-6 rounded-sm border bg-white">
-              <div>
-                <h2 className="text-xl font-semibold  mb-4">Your Order</h2>
-              </div>
-              <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4">
-                    <img
-                      src={item.image || "/placeholder.svg"}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-md"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-gray-900 truncate">
-                        {item.name}
-                      </h4>
-                      <p className="text-sm text-gray-500">
-                        ${item.price.toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
             {/* Order Summary */}
             <div className="border p-6 bg-white rounded-sm">
@@ -636,26 +609,50 @@ export default function CheckoutPage() {
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
               </div>
               <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span>
-                    Subtotal (
-                    {cartItems.reduce((sum, item) => sum + item.quantity, 0)}{" "}
-                    items)
-                  </span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Shipping</span>
-                  <span>${shipping.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                <div className="p">
+                  <div className="space-y-4">
+                    {loading ? (
+                      <div className="flex justify-center items-center py-10">
+                        <Spinner />
+                      </div>
+                    ) : cartDetailedItems.length === 0 ? (
+                      <p className="text-gray-500 text-sm">
+                        Your cart is empty.
+                      </p>
+                    ) : (
+                      cartDetailedItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center space-x-4"
+                        >
+                          <div className="relative inline-block">
+                            <img
+                              src={item.imageSrc || "/placeholder.svg"}
+                              alt={item.productName}
+                              className="w-16 h-16 object-cover rounded-md"
+                            />
+                            <span className="absolute -top-2 -right-2 bg-black text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">
+                              {item.quantity}
+                            </span>
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-medium text-gray-900 truncate">
+                              {item.productName}
+                            </h4>
+                            <p className="text-sm text-gray-500">
+                              ${item.productPrice.toFixed(2)} each
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-semibold text-lg">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  {/* <span>${total.toFixed(2)}</span> */}
                 </div>
 
                 <div className="mt-4 space-y-2">
@@ -740,7 +737,7 @@ export default function CheckoutPage() {
                     Total Amount:
                   </span>
                   <span className="text-sm font-semibold text-gray-900">
-                    ${total.toFixed(2)}
+                    {/* ${total.toFixed(2)} */}
                   </span>
                 </div>
 
@@ -764,7 +761,7 @@ export default function CheckoutPage() {
                       </h4>
                       <ul className="text-xs text-amber-800 mt-2 space-y-1">
                         <li>
-                          • Transfer ${total.toFixed(2)} to the provided bank
+                          {/* • Transfer ${total.toFixed(2)} to the provided bank */}
                           account
                         </li>
                         <li>• Use reference: {bankDetails.reference}</li>
@@ -787,7 +784,7 @@ export default function CheckoutPage() {
                         Cash on Delivery
                       </h4>
                       <p className="text-xs text-blue-800 mt-1">
-                        Have ${total.toFixed(2)} ready when your order arrives.
+                        {/* Have ${total.toFixed(2)} ready when your order arrives. */}
                         You can pay with cash or card.
                       </p>
                     </div>

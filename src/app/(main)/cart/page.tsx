@@ -1,8 +1,11 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, Minus, Plus, Tag, ShoppingBag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
@@ -11,6 +14,7 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
+import { useRouter } from "next/navigation";
 
 const ShoppingCart = () => {
   const user = useUserStore((state) => state.user);
@@ -20,6 +24,19 @@ const ShoppingCart = () => {
   const setCart = useCartStore((state) => state.setCart);
   const [loading, setLoading] = useState(true);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const [discountCode, setDiscountCode] = useState("");
+  const discountCodes: Record<
+    string,
+    { type: "flat" | "percent"; value: number }
+  > = {
+    SAVE10: { type: "flat", value: 10 },
+    OFF20: { type: "percent", value: 20 },
+  };
+
+  const [appliedCode, setAppliedCode] = useState("");
+  const [discountMessage, setDiscountMessage] = useState("");
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!user?.id) return;
@@ -38,11 +55,6 @@ const ShoppingCart = () => {
 
     loadCart();
   }, [user?.id, setCart]);
-
-  const subTotal = 250.0;
-  const estimatedTax = 20.0;
-  const shippingHandling = 15.0;
-  const total = subTotal + estimatedTax + shippingHandling;
 
   const handleRemoveItem = (product) => {
     deleteItem(product.product_id);
@@ -71,146 +83,270 @@ const ShoppingCart = () => {
     }
   };
 
+  console.log(cartDetailedItems);
+
+  const calculateCheckout = (
+    cartItems: any[],
+    {
+      taxRate = 0.05,
+      shippingRate = 0.05,
+      discountCode,
+    }: { taxRate?: number; shippingRate?: number; discountCode?: string | null }
+  ) => {
+    const subTotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    const tax = subTotal * taxRate;
+
+    let discount = 0;
+    if (discountCode && discountCodes[discountCode]) {
+      const { type, value } = discountCodes[discountCode];
+      discount = type === "flat" ? value : subTotal * (value / 100);
+    }
+
+    const shippingFee = subTotal * shippingRate;
+
+    const grandTotal = subTotal + tax + shippingFee - discount;
+
+    return { grandTotal, subTotal, tax, discount, shippingFee };
+  };
+
+  const { grandTotal, subTotal, tax, discount, shippingFee } =
+    calculateCheckout(cartDetailedItems, {
+      discountCode: appliedCode || null,
+    });
+
+  const applyDiscount = () => {
+    if (!discountCode.trim()) {
+      setDiscountMessage("Please enter a code to apply discount");
+      return;
+    }
+
+    if (discountCodes[discountCode.trim()]) {
+      setAppliedCode(discountCode.trim());
+      setDiscountMessage("Discount code applied");
+      toast.success("Discount code applied successfully!");
+    } else {
+      setAppliedCode("");
+      setDiscountMessage("Invalid discount code");
+      toast.error("Invalid discount code");
+    }
+  };
+
   if (loading) return <Spinner />;
   if (!userCart) return <p>No cart found for this user</p>;
 
   return (
-    <section className="max-w-[1500px] bg-white mx-auto px-4 my-20">
-      <h2 className="text-2xl font-semibold mb-6">Shopping Cart</h2>
+    <div className="min-h-screen bg-muted/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <ShoppingBag className="h-8 w-8" />
+            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">
+              Shopping Cart
+            </h1>
+          </div>
+          <p className="text-muted-foreground">
+            {cartDetailedItems.length}{" "}
+            {cartDetailedItems.length === 1 ? "item" : "items"} in your cart
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 items-start h-auto md:grid-cols-2 w-full gap-8">
-        {cartDetailedItems?.length === 0 ? (
-          <p>Your cart is empty.</p>
+        {cartDetailedItems.length === 0 ? (
+          <Card className="p-12 text-center">
+            <ShoppingBag className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+            <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
+            <p className="text-muted-foreground mb-6">
+              Add some items to get started
+            </p>
+            <Button size="lg">Continue Shopping</Button>
+          </Card>
         ) : (
-          <div className="grid grid-cols-1 gap-6">
-            {cartDetailedItems?.map((item) => (
-              <div
-                key={item.product_id}
-                className="flex flex-col sm:flex-row gap-4 pb-6 mb-6 border-b items-center sm:items-start bg-white"
-              >
-                <Image
-                  src={item.imageSrc}
-                  alt={item.productName}
-                  width={96} // Equivalent to w-24
-                  height={96} // Equivalent to h-24
-                  className="w-24 h-24 object-contain rounded-md flex-shrink-0"
-                />
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-4">
+              {cartDetailedItems.map((item) => (
+                <Card
+                  key={item.product_id}
+                  className="p-4 sm:p-6 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex gap-4 sm:gap-6">
+                    {/* Product Image */}
+                    <div className="relative flex-shrink-0">
+                      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-muted border">
+                        <Image
+                          src={item.imageSrc || "/placeholder.svg"}
+                          alt={item.productName}
+                          width={112}
+                          height={112}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </div>
 
-                <div className="flex-1 grid gap-2 text-center sm:text-left">
-                  <h3 className="font-semibold text-lg">{item.productName}</h3>
-                  <p className="text-gray-600">
-                    ${item.productPrice.toFixed(2)} each
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 mt-2 sm:mt-0">
-                  <div className="inline-flex items-center overflow-hidden">
+                    {/* Product Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between gap-4 mb-3">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg mb-1 line-clamp-2">
+                            {item.productName}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            ${item.productPrice.toFixed(2)} each
+                          </p>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
+                          onClick={() => handleRemoveItem(item)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      {/* Quantity and Price */}
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center border rounded-lg overflow-hidden">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-none hover:bg-muted"
+                            onClick={() =>
+                              handleQuantityChange(item, "decrease")
+                            }
+                            disabled={item.quantity <= 1}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <div className="w-12 text-center font-medium text-sm">
+                            {item.quantity}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-none hover:bg-muted"
+                            onClick={() =>
+                              handleQuantityChange(item, "increase")
+                            }
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-lg font-bold">
+                            ${item.totalPrice.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <Card className="p-6 sticky top-4">
+                <h2 className="text-xl font-bold">Order Summary</h2>
+
+                {/* Discount Code Section */}
+                <div className="">
+                  <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                    <Tag className="h-4 w-4" />
+                    Promo Code
+                  </label>
+                  <div className="flex gap-2 mt-2">
+                    <Input
+                      placeholder="Enter code"
+                      value={discountCode}
+                      onChange={(e) => {
+                        setDiscountCode(e.target.value);
+                        setDiscountMessage("");
+                      }}
+                      className="flex-1"
+                    />
                     <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 rounded-none"
-                      aria-label="Decrease quantity"
-                      onClick={() => handleQuantityChange(item, "decrease")}
+                      onClick={applyDiscount}
+                      variant="secondary"
+                      className="px-6"
                     >
-                      -
-                    </Button>
-                    <span className="px-3 py-1 bg-gray-50 text-center font-medium min-w-[2rem]">
-                      {item.quantity}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 rounded-none"
-                      aria-label="Increase quantity"
-                      onClick={() => handleQuantityChange(item, "increase")}
-                    >
-                      +
+                      Apply
                     </Button>
                   </div>
-                  <p className="font-bold text-lg whitespace-nowrap">
-                    ${item.totalPrice.toFixed(2)}
-                  </p>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-400 hover:text-gray-600"
-                    aria-label="Remove item"
-                    onClick={() => handleRemoveItem(item)}
-                  >
-                    <X className="h-5 w-5" />
-                  </Button>
+                  {discountMessage && (
+                    <div className="mt-2">
+                      {discountMessage.includes("applied") ? (
+                        <Badge variant="default" className="bg-green-600">
+                          {discountMessage}
+                        </Badge>
+                      ) : (
+                        <p className="text-sm text-destructive">
+                          {discountMessage}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+
+                <Separator className="" />
+
+                {/* Price Breakdown */}
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="font-medium">${subTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Shipping</span>
+                    <span className="font-medium">
+                      ${shippingFee.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Tax</span>
+                    <span className="font-medium">${tax.toFixed(2)}</span>
+                  </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-green-600 font-medium">
+                        Discount
+                      </span>
+                      <span className="text-green-600 font-medium">
+                        -${discount.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <Separator className="" />
+
+                {/* Total */}
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-bold">Total</span>
+                  <span className="text-2xl font-bold">
+                    ${grandTotal.toFixed(2)}
+                  </span>
+                </div>
+
+                {/* Checkout Button */}
+                <Button
+                  onClick={() => router.push("/checkout")}
+                  className="w-full h-12 text-base font-semibold"
+                  size="lg"
+                >
+                  Proceed to Checkout
+                </Button>
+
+                <p className="text-xs text-muted-foreground text-center ">
+                  Taxes and shipping calculated at checkout
+                </p>
+              </Card>
+            </div>
           </div>
         )}
-
-        <div className="border p-8 rounded-sm w-full  md:max-w-md mx-auto my-10 bg-white shadow">
-          <h2 className="font-semibold text-xl mb-6">Order Summary</h2>
-
-          <div className="space-y-6">
-            {/* Single Input without button (optional) */}
-            <div>
-              <label htmlFor="code1" className="block text-sm font-medium mb-2">
-                Discount code / Promo code
-              </label>
-              <Input
-                id="code1"
-                placeholder="Enter code"
-                className="w-full py-6"
-              />
-            </div>
-
-            {/* Input with Apply button */}
-            <div>
-              <label htmlFor="code2" className="block text-sm font-medium mb-2">
-                Discount code / Promo code
-              </label>
-              <div className="relative">
-                <Input
-                  id="code2"
-                  placeholder="Enter code"
-                  className="pr-28 py-6 w-full"
-                />
-                <Button
-                  variant="outline"
-                  className="absolute top-1/2 right-1 text-black outline-black -translate-y-1/2 px-6"
-                >
-                  Apply
-                </Button>
-              </div>
-            </div>
-
-            {/* Price summary */}
-            <div className="border-t pt-6 space-y-3 text-gray-700">
-              <div className="flex justify-between">
-                <span>Sub Total</span>
-                <span>${subTotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Estimated Tax</span>
-                <span>${estimatedTax.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Shipping & Handling</span>
-                <span>${shippingHandling.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between font-semibold text-lg mt-4">
-                <span>Total</span>
-                <span>${total.toFixed(2)}</span>
-              </div>
-            </div>
-
-            {/* Checkout button */}
-            <Button
-              className="w-full py-6 cursor-pointer md:py-6 text-lg mt-6"
-              size="lg"
-            >
-              Checkout
-            </Button>
-          </div>
-        </div>
       </div>
-    </section>
+    </div>
   );
 };
 
