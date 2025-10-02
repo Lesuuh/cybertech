@@ -6,13 +6,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -74,68 +67,33 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen w-full flex items-center justify-between ">
+      <div className="w-4xl px-16 text-white bg-blue-900 h-screen  flex flex-col items-center justify-center text-center">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <Zap className="h-8 w-8 text-black" />
-            <span className="text-2xl font-bold text-black">Cyber</span>
-          </Link>
-          <h1 className="text-3xl font-bold text-black mb-2">Welcome Back</h1>
-          <p className="text-gray-600">
-            Sign in to your account to continue shopping
+          <h1 className="text-3xl font-bold  mb-2">Login</h1>
+          <p className="text-gray-100">
+            Sign in to your account to continue shopping with cybertech shop
           </p>
         </div>
 
-        <Card className="bg-white border-gray-200 shadow-lg">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center text-black">
-              Sign In
-            </CardTitle>
-            <CardDescription className="text-center text-gray-600">
-              Enter your credentials to access your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full bg-white hover:bg-gray-50 text-black border-gray-300 font-medium"
-                onClick={handleGoogleLogin}
-                disabled={isGoogleLoading}
-              >
-                <Chrome className="mr-2 h-4 w-4" />
-                {isGoogleLoading
-                  ? "Signing in with Google..."
-                  : "Continue with Google"}
-              </Button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-gray-300" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-gray-500">
-                    Or continue with email
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
+        <div className="w-full ">
+          <div>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4 w-full mt-6"
+            >
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-black">
+                <Label htmlFor="email" className="">
                   Email
                 </Label>
-                <div className="relative">
+                <div className="relative w-full">
                   <Mail className="absolute left-3 top-4 h-4 w-4 text-gray-500" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="janedoe@yourmail.com"
                     {...register("email", { required: "Email is required" })}
-                    className="pl-10 py-6 bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
+                    className="pl-10 py-6 w-full bg-white border-gray-300 text-black placeholder:text-gray-400 focus:border-black"
                   />
                 </div>
                 {errors.email && (
@@ -144,7 +102,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-black">
+                <Label htmlFor="password" className="">
                   Password
                 </Label>
                 <div className="relative">
@@ -189,13 +147,13 @@ export default function LoginPage() {
                     // }
                     className="border-gray-300 data-[state=checked]:bg-black"
                   />
-                  <Label htmlFor="remember" className="text-sm text-gray-600">
+                  <Label htmlFor="remember" className="text-sm ">
                     Remember me
                   </Label>
                 </div>
                 <Link
                   href="/forgot-password"
-                  className="text-sm text-black hover:text-gray-600"
+                  className="text-sm  hover:text-gray-100"
                 >
                   Forgot password?
                 </Link>
@@ -216,18 +174,21 @@ export default function LoginPage() {
             </form>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600">
+              <p className="text-gray-300">
                 Don&apos;t have an account?{" "}
                 <Link
                   href="/register"
-                  className="text-black hover:text-gray-600 font-medium"
+                  className="text-white hover:text-gray-100 font-medium"
                 >
                   Create one now
                 </Link>
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+      </div>
+      <div className="w-full bg-white">
+        {/* <img src="/login_image.jpeg" alt="" className="" /> */}
       </div>
     </div>
   );

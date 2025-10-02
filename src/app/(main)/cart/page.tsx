@@ -10,16 +10,16 @@ import { deleteItem, fetchCart } from "@/services/useCart";
 import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
 import { useProducts } from "@/services/useProducts";
+import Spinner from "@/components/ui/Spinner";
 
 const ShoppingCart = () => {
   const user = useUserStore((state) => state.user);
   const { data: products } = useProducts();
-
-  console.log(products);
-
-  const [userCart, setUserCart] = useState<any | null>(null);
-  console.log(userCart);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const userCart = useCartStore((state) => state.items);
+  const setCart = useCartStore((state) => state.setCart);
   const [loading, setLoading] = useState(true);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -27,7 +27,8 @@ const ShoppingCart = () => {
     const loadCart = async () => {
       try {
         const cart = await fetchCart(user.id);
-        setUserCart(cart);
+        console.log(cart.cart_items);
+        setCart(cart.cart_items);
       } catch (error) {
         console.error("Error fetching cart:", error);
       } finally {
@@ -36,24 +37,23 @@ const ShoppingCart = () => {
     };
 
     loadCart();
-  }, [user?.id]);
+  }, [user?.id, setCart]);
 
   const subTotal = 250.0;
   const estimatedTax = 20.0;
   const shippingHandling = 15.0;
   const total = subTotal + estimatedTax + shippingHandling;
 
-  const removeItem = useCartStore((state) => state.removeItem);
-
   const handleRemoveItem = (product) => {
-    deleteItem(product.id);
-    removeItem(product.id);
+    deleteItem(product.product_id);
+    removeItem(product.product_id);
     toast.success(`${product?.productName} removed from cart`);
   };
 
-  const cartDetailedItems = userCart?.cart_items.map((cartItem) => {
-    const product = products?.find((p) => p.id === cartItem.product_id);
+  if (!Array.isArray(userCart)) return <p>No cart found for this user</p>;
 
+  const cartDetailedItems = userCart.map((cartItem) => {
+    const product = products?.find((p) => p.id === cartItem.product_id);
     return {
       ...cartItem,
       productName: product?.name || "Unknown Product",
@@ -63,9 +63,15 @@ const ShoppingCart = () => {
     };
   });
 
-  console.log(cartDetailedItems);
+  const handleQuantityChange = (product, action) => {
+    if (action === "increase") {
+      updateQuantity(product.product_id, product.quantity + 1);
+    } else if (action === "decrease" && product.quantity > 1) {
+      updateQuantity(product.product_id, product.quantity - 1);
+    }
+  };
 
-  if (loading) return <p>Loading cart...</p>;
+  if (loading) return <Spinner />;
   if (!userCart) return <p>No cart found for this user</p>;
 
   return (
@@ -79,7 +85,7 @@ const ShoppingCart = () => {
           <div className="grid grid-cols-1 gap-6">
             {cartDetailedItems?.map((item) => (
               <div
-                key={item.productId}
+                key={item.product_id}
                 className="flex flex-col sm:flex-row gap-4 pb-6 mb-6 border-b items-center sm:items-start bg-white"
               >
                 <Image
@@ -103,7 +109,7 @@ const ShoppingCart = () => {
                       size="icon"
                       className="h-8 w-8 rounded-none"
                       aria-label="Decrease quantity"
-                      onClick={() => handleQuantityChange(item.productId, -1)}
+                      onClick={() => handleQuantityChange(item, "decrease")}
                     >
                       -
                     </Button>
@@ -115,7 +121,7 @@ const ShoppingCart = () => {
                       size="icon"
                       className="h-8 w-8 rounded-none"
                       aria-label="Increase quantity"
-                      onClick={() => handleQuantityChange(item.productId, 1)}
+                      onClick={() => handleQuantityChange(item, "increase")}
                     >
                       +
                     </Button>
