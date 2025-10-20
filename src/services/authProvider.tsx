@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useUserStore } from "@/store/userStore";
+import { fetchProfile } from "./profileService";
 
 export default function AuthProvider({
   children,
@@ -12,16 +13,35 @@ export default function AuthProvider({
   const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
-    // 1. Get current session from Supabase
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null, false);
+    // 1️⃣ On mount: get current session
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const user = session?.user ?? null;
+      setUser(user, false);
+
+      // 👇 Fetch profile if user exists
+      if (user) {
+        await fetchProfile(user.id);
+      }
     });
 
-    // 2. Listen for auth state changes
+    // 2️⃣ Listen for auth state changes
     const { data: subscription } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null, false);
-        console.log(_event);
+      async (_event, session) => {
+        const user = session?.user ?? null;
+        setUser(user, false);
+
+        // 👇 Also refetch when logged in/out
+        if (user) {
+          await fetchProfile(user.id);
+        } else {
+          // Clear profile if logged out
+          const { setProfile } = (
+            await import("@/store/profileStore")
+          ).useProfileStore.getState();
+          setProfile(null);
+        }
+
+        console.log("Auth event:", _event);
       }
     );
 

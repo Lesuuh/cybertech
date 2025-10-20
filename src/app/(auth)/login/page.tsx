@@ -13,6 +13,7 @@ import { Zap, Eye, EyeOff, Mail, Lock, Chrome } from "lucide-react";
 import { toast } from "sonner";
 import { useUserStore } from "@/store/userStore";
 import { useRouter, useSearchParams } from "next/navigation";
+import { fetchProfile } from "@/services/profileService";
 
 type LoginProps = {
   email: string;
@@ -30,13 +31,11 @@ export default function LoginPage() {
   } = useForm<LoginProps>();
 
   const login = useUserStore((state) => state.login);
+  const user = useUserStore((state) => state.user);
 
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/dashboard";
   const router = useRouter();
-
-  const user = useUserStore((state) => state.user);
-  console.log(user);
 
   const onSubmit = async (data: LoginProps) => {
     const { email, password } = data;
@@ -45,6 +44,9 @@ export default function LoginPage() {
       await login(email, password);
 
       toast.success("Login was successful");
+      if (user) {
+        await fetchProfile(user.id);
+      }
       router.push(redirect);
     } catch (error: any) {
       const message = error?.message || "Something went wrong during login";

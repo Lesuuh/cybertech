@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getUserById } from "@/services/profiles";
+import { fetchProfile } from "@/services/profileService";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -37,7 +37,7 @@ export default function ProfilePage() {
 
     async function fetchProfile() {
       try {
-        const data = await getUserById(user.id);
+        const data = await fetchProfile(user.id);
         if (data) {
           // Optional: generate avatar if not present
           if (!data.avatar) {

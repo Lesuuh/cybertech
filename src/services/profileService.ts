@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { useProfileStore } from "@/store/profileStore";
 
 export const createProfile = async (
   userId: string,
@@ -23,7 +24,7 @@ export const createProfile = async (
   if (error) throw error;
 };
 
-export const getUserById = async (userId: string) => {
+export const fetchProfile = async (userId: string) => {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
@@ -35,5 +36,6 @@ export const getUserById = async (userId: string) => {
     return null;
   }
 
-  return data;
+  const { setProfile } = useProfileStore.getState();
+  setProfile(data);
 };

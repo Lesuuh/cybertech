@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/store/userStore";
 import { useRouter } from "next/navigation";
-import { createProfile } from "@/services/profiles";
+import { createProfile } from "@/services/profileService";
 
 type RegisterProps = {
   email: string;

@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Minus,
   Plus,
   CreditCard,
   Truck,
@@ -25,7 +19,6 @@ import {
   Mail,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useCartStore } from "@/store/cartStore";
 import { useProducts } from "@/services/useProducts";
 import { fetchCart } from "@/services/useCart";
 import { useUserStore } from "@/store/userStore";
@@ -37,12 +30,10 @@ export default function CheckoutPage() {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [newAddress, setNewAddress] = useState({
-    fullName: "",
-    address: "",
+    label: "",
     city: "",
     state: "",
-    zip: "",
-    phone: "",
+    street: "",
   });
   const [copiedField, setCopiedField] = useState("");
   const [showOrderModal, setShowOrderModal] = useState(false);
@@ -53,29 +44,26 @@ export default function CheckoutPage() {
   } | null>(null);
   const [localCart, setLocalCart] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const savedAddresses = [
     {
-      id: "1",
-
-      fullName: "John Doe",
-      email: "john@example.com",
-      address: "123 Main Street",
-      city: "New York",
-      state: "NY",
-      zip: "10001",
+      // id:
+      label: "Home",
+      street: "23 Oke Street",
+      city: "Lagos",
+      state: "Lagos State",
     },
     {
-      id: "2",
-
-      fullName: "John Doe",
-      email: "john.work@company.com",
-      address: "456 Business Ave, Suite 200",
-      city: "New York",
-      state: "NY",
-      zip: "10002",
+      label: "Office",
+      street: "12 Airport Road",
+      city: "Port Harcourt",
+      state: "Rivers State",
     },
   ];
+
+  // Generate bank reference once on client side
+  const bankReference = useMemo(() => `ORDER-${Date.now()}`, []);
 
   const bankDetails = {
     bankName: "First National Bank",
@@ -83,43 +71,54 @@ export default function CheckoutPage() {
     accountNumber: "1234567890",
     routingNumber: "021000021",
     swiftCode: "FNBKUS33",
-    reference: `ORDER-${Date.now()}`,
+    reference: bankReference,
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   useEffect(() => {
     if (!user?.id) return;
 
     const loadCart = async () => {
       try {
         const cart = await fetchCart(user.id);
-        console.log(cart.cart_items);
-        setLocalCart(cart.cart_items);
+        setLocalCart(cart.cart_items || []);
       } catch (error) {
         console.error("Error fetching cart:", error);
+        setLocalCart([]);
       } finally {
         setLoading(false);
       }
     };
 
     loadCart();
-  }, [user?.id, setLocalCart]);
+  }, [user?.id]);
 
-  console.log(localCart);
-
-  const userCart = useCartStore((state) => state.items);
   const { data: products } = useProducts();
-  if (!Array.isArray(localCart)) return <p>No cart found for this user</p>;
 
-  const cartDetailedItems = localCart.map((cartItem) => {
-    const product = products?.find((p) => p.id === cartItem.product_id);
-    return {
-      ...cartItem,
-      productName: product?.name || "Unknown Product",
-      productPrice: product?.price || 0,
-      totalPrice: (product?.price || 0) * cartItem.quantity,
-      imageSrc: product?.imageSrc || "/placeholder.svg",
-    };
-  });
-  console.log(cartDetailedItems);
+  const cartDetailedItems = useMemo(() => {
+    if (!Array.isArray(localCart) || !products) return [];
+
+    return localCart.map((cartItem) => {
+      const product = products.find((p) => p.id === cartItem.product_id);
+      return {
+        ...cartItem,
+        productName: product?.name || "Unknown Product",
+        productPrice: product?.price || 0,
+        totalPrice: (product?.price || 0) * cartItem.quantity,
+        imageSrc: product?.imageSrc || "/placeholder.svg",
+      };
+    });
+  }, [localCart, products]);
+
+  const grandTotal = useMemo(() => {
+    return cartDetailedItems.reduce(
+      (acc, item) => acc + item.quantity * item.productPrice,
+      0
+    );
+  }, [cartDetailedItems]);
 
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
@@ -130,6 +129,11 @@ export default function CheckoutPage() {
   const handleContinue = () => {
     if (!paymentMethod) {
       alert("Please select a payment method.");
+      return;
+    }
+
+    if (!selectedAddress && savedAddresses.length > 0) {
+      alert("Please select a delivery address.");
       return;
     }
 
@@ -166,6 +170,45 @@ export default function CheckoutPage() {
         return method;
     }
   };
+
+  const handleAddressChange = (addressId: string) => {
+    setSelectedAddress(addressId);
+  };
+
+  const handleNewAddressChange = (field: string, value: string) => {
+    setNewAddress((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSaveAddress = () => {
+    // Validate new address
+    if (
+      !newAddress.city ||
+      !newAddress.state ||
+      !newAddress.label ||
+      !newAddress.street
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    // In a real app, you would save this to your backend
+    alert("Address saved successfully!");
+    setShowNewAddress(false);
+    // Reset form
+    setNewAddress({
+      label: "",
+      city: "",
+      state: "",
+      street: "",
+    });
+  };
+
+  // Show loading state while mounting to prevent hydration errors
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -207,6 +250,8 @@ export default function CheckoutPage() {
                           id={`address-${address.id}`}
                           name="deliveryAddress"
                           value={address.id}
+                          checked={selectedAddress === address.id}
+                          onChange={(e) => handleAddressChange(e.target.value)}
                           className="mt-1 h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                         />
                         <label
@@ -224,7 +269,7 @@ export default function CheckoutPage() {
                               <div className="text-sm text-gray-600 mt-1">
                                 <div>{address.address}</div>
                                 <div>
-                                  {address.city}, {address.state} {address.zip}
+                                  {address.city}, {address.state}
                                 </div>
                               </div>
                             </div>
@@ -266,6 +311,9 @@ export default function CheckoutPage() {
                             id="fullName"
                             type="text"
                             value={newAddress.fullName}
+                            onChange={(e) =>
+                              handleNewAddressChange("fullName", e.target.value)
+                            }
                             placeholder="Enter your full name"
                             className="mt-1 py-6"
                             required
@@ -281,6 +329,10 @@ export default function CheckoutPage() {
                           <Input
                             id="phone"
                             type="tel"
+                            value={newAddress.phone}
+                            onChange={(e) =>
+                              handleNewAddressChange("phone", e.target.value)
+                            }
                             placeholder="Enter your phone number"
                             className="mt-1 py-6"
                             required
@@ -299,6 +351,9 @@ export default function CheckoutPage() {
                             id="address"
                             type="text"
                             value={newAddress.address}
+                            onChange={(e) =>
+                              handleNewAddressChange("address", e.target.value)
+                            }
                             placeholder="Enter your street address"
                             className="mt-1 py-6"
                             required
@@ -314,6 +369,10 @@ export default function CheckoutPage() {
                           <Input
                             id="city"
                             type="text"
+                            value={newAddress.city}
+                            onChange={(e) =>
+                              handleNewAddressChange("city", e.target.value)
+                            }
                             placeholder="Enter your city"
                             className="mt-1 py-6"
                             required
@@ -330,6 +389,9 @@ export default function CheckoutPage() {
                             id="state"
                             type="text"
                             value={newAddress.state}
+                            onChange={(e) =>
+                              handleNewAddressChange("state", e.target.value)
+                            }
                             placeholder="Enter your state"
                             className="mt-1 py-6"
                             required
@@ -341,10 +403,15 @@ export default function CheckoutPage() {
                           type="button"
                           variant="outline"
                           className="py-6 px-8"
+                          onClick={() => setShowNewAddress(false)}
                         >
                           Cancel
                         </Button>
-                        <Button type="button" className="py-6 px-8">
+                        <Button
+                          type="button"
+                          className="py-6 px-8"
+                          onClick={handleSaveAddress}
+                        >
                           Save Address
                         </Button>
                       </div>
@@ -550,7 +617,7 @@ export default function CheckoutPage() {
                       <ol className="text-sm text-amber-800 space-y-1 list-decimal list-inside">
                         <li>
                           Transfer the exact amount of{" "}
-                          {/* <strong>${total.toFixed(2)}</strong> to the above */}
+                          <strong>${grandTotal.toFixed(2)}</strong> to the above
                           account
                         </li>
                         <li>
@@ -601,26 +668,23 @@ export default function CheckoutPage() {
 
           {/* Right Column - Order Summary */}
           <div className="space-y-6">
-            {/* Cart Items */}
-
             {/* Order Summary */}
             <div className="border p-6 bg-white rounded-sm">
               <div>
                 <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
               </div>
-              <div className="space-y-3">
-                <div className="p">
-                  <div className="space-y-4">
-                    {loading ? (
-                      <div className="flex justify-center items-center py-10">
-                        <Spinner />
-                      </div>
-                    ) : cartDetailedItems.length === 0 ? (
-                      <p className="text-gray-500 text-sm">
-                        Your cart is empty.
-                      </p>
-                    ) : (
-                      cartDetailedItems.map((item) => (
+
+              <div className="space-y-4">
+                {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner />
+                  </div>
+                ) : cartDetailedItems.length === 0 ? (
+                  <p className="text-gray-500 text-sm">Your cart is empty.</p>
+                ) : (
+                  <>
+                    <div className="space-y-4">
+                      {cartDetailedItems.map((item) => (
                         <div
                           key={item.id}
                           className="flex items-center space-x-4"
@@ -644,61 +708,62 @@ export default function CheckoutPage() {
                               ${item.productPrice.toFixed(2)} each
                             </p>
                           </div>
+
+                          <div className="text-right">
+                            <p className="text-sm font-semibold text-gray-900">
+                              ${(item.quantity * item.productPrice).toFixed(2)}
+                            </p>
+                          </div>
                         </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-                <Separator />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total</span>
-                  {/* <span>${total.toFixed(2)}</span> */}
-                </div>
+                      ))}
+                    </div>
 
-                <div className="mt-4 space-y-2">
-                  <Badge
-                    variant="secondary"
-                    className="w-full justify-center py-2"
-                  >
-                    Free returns within 30 days
-                  </Badge>
-                  <Badge
-                    variant="outline"
-                    className="w-full justify-center py-2"
-                  >
-                    Secure checkout with SSL encryption
-                  </Badge>
-                </div>
+                    <Separator />
 
-                <Button
-                  onClick={handleContinue}
-                  className="w-full mt-6 py-6"
-                  size="lg"
-                  disabled={!paymentMethod}
-                >
-                  {paymentMethod
-                    ? paymentMethod === "cod"
-                      ? "Place Order"
-                      : paymentMethod === "bank"
-                      ? "Confirm Bank Transfer"
-                      : "Proceed to Payment"
-                    : "Select Payment Method"}
-                </Button>
+                    {/* Grand total */}
+                    <div className="flex justify-between font-bold text-lg pt-2">
+                      <span>Grand Total</span>
+                      <span>${grandTotal.toFixed(2)}</span>
+                    </div>
+                  </>
+                )}
               </div>
+
+              {/* Badges */}
+              <div className="mt-6 space-y-2">
+                <Badge
+                  variant="secondary"
+                  className="w-full justify-center py-2"
+                >
+                  Free returns within 30 days
+                </Badge>
+                <Badge variant="outline" className="w-full justify-center py-2">
+                  Secure checkout with SSL encryption
+                </Badge>
+              </div>
+
+              {/* Continue / Payment button */}
+              <Button
+                onClick={handleContinue}
+                className="w-full mt-6 py-4"
+                size="lg"
+                disabled={!paymentMethod || cartDetailedItems.length === 0}
+              >
+                {paymentMethod
+                  ? paymentMethod === "cod"
+                    ? "Place Order"
+                    : paymentMethod === "bank"
+                    ? "Confirm Bank Transfer"
+                    : "Proceed to Payment"
+                  : "Select Payment Method"}
+              </Button>
             </div>
           </div>
         </div>
 
         {/* Order Confirmation Modal */}
         <Dialog open={showOrderModal} onOpenChange={setShowOrderModal}>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-green-600">
-                <CheckCircle className="h-6 w-6" />
-                Order Placed Successfully!
-              </DialogTitle>
-            </DialogHeader>
-
+          <DialogContent className=" ">
             <div className="space-y-4 py-4">
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -737,7 +802,7 @@ export default function CheckoutPage() {
                     Total Amount:
                   </span>
                   <span className="text-sm font-semibold text-gray-900">
-                    {/* ${total.toFixed(2)} */}
+                    ${grandTotal.toFixed(2)}
                   </span>
                 </div>
 
@@ -761,8 +826,8 @@ export default function CheckoutPage() {
                       </h4>
                       <ul className="text-xs text-amber-800 mt-2 space-y-1">
                         <li>
-                          {/* • Transfer ${total.toFixed(2)} to the provided bank */}
-                          account
+                          • Transfer ${grandTotal.toFixed(2)} to the provided
+                          bank account
                         </li>
                         <li>• Use reference: {bankDetails.reference}</li>
                         <li>• Email receipt to orders@techstore.com</li>
@@ -784,8 +849,8 @@ export default function CheckoutPage() {
                         Cash on Delivery
                       </h4>
                       <p className="text-xs text-blue-800 mt-1">
-                        {/* Have ${total.toFixed(2)} ready when your order arrives. */}
-                        You can pay with cash or card.
+                        Have ${grandTotal.toFixed(2)} ready when your order
+                        arrives. You can pay with cash or card.
                       </p>
                     </div>
                   </div>
