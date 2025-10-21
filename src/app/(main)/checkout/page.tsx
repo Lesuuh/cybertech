@@ -23,6 +23,7 @@ import { useProducts } from "@/services/useProducts";
 import { fetchCart } from "@/services/useCart";
 import { useUserStore } from "@/store/userStore";
 import Spinner from "@/components/ui/Spinner";
+import { useProfileStore } from "@/store/profileStore";
 
 export default function CheckoutPage() {
   const user = useUserStore((state) => state.user);
@@ -45,22 +46,8 @@ export default function CheckoutPage() {
   const [localCart, setLocalCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-
-  const savedAddresses = [
-    {
-      // id:
-      label: "Home",
-      street: "23 Oke Street",
-      city: "Lagos",
-      state: "Lagos State",
-    },
-    {
-      label: "Office",
-      street: "12 Airport Road",
-      city: "Port Harcourt",
-      state: "Rivers State",
-    },
-  ];
+  const profile = useProfileStore((state) => state.profile);
+  console.log("profile", profile);
 
   // Generate bank reference once on client side
   const bankReference = useMemo(() => `ORDER-${Date.now()}`, []);
@@ -132,7 +119,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!selectedAddress && savedAddresses.length > 0) {
+    if (!selectedAddress) {
       alert("Please select a delivery address.");
       return;
     }
@@ -240,7 +227,7 @@ export default function CheckoutPage() {
                   </h3>
 
                   <div className="space-y-3">
-                    {savedAddresses.map((address) => (
+                    {profile?.addresses.map((address) => (
                       <div
                         key={address.id}
                         className="flex items-start space-x-3"
@@ -264,10 +251,10 @@ export default function CheckoutPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="font-medium text-gray-900">
-                                {address.fullName}
+                                {address.label}
                               </div>
                               <div className="text-sm text-gray-600 mt-1">
-                                <div>{address.address}</div>
+                                <div>{address.street}</div>
                                 <div>
                                   {address.city}, {address.state}
                                 </div>
@@ -299,66 +286,53 @@ export default function CheckoutPage() {
                       <h3 className="text-lg font-medium text-gray-900 mb-4">
                         Add New Address
                       </h3>
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Address Label */}
                         <div>
                           <Label
-                            htmlFor="fullName"
+                            htmlFor="label"
                             className="text-sm font-medium text-gray-700"
                           >
-                            Full Name <span className="text-red-500">*</span>
+                            Address Label{" "}
+                            <span className="text-red-500">*</span>
                           </Label>
                           <Input
-                            id="fullName"
+                            id="label"
                             type="text"
-                            value={newAddress.fullName}
+                            value={newAddress.label}
                             onChange={(e) =>
-                              handleNewAddressChange("fullName", e.target.value)
+                              handleNewAddressChange("label", e.target.value)
                             }
-                            placeholder="Enter your full name"
-                            className="mt-1 py-6"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <Label
-                            htmlFor="phone"
-                            className="text-sm font-medium text-gray-700"
-                          >
-                            Phone Number <span className="text-red-500">*</span>
-                          </Label>
-                          <Input
-                            id="phone"
-                            type="tel"
-                            value={newAddress.phone}
-                            onChange={(e) =>
-                              handleNewAddressChange("phone", e.target.value)
-                            }
-                            placeholder="Enter your phone number"
+                            placeholder="e.g., Home, Office, Parent’s house"
                             className="mt-1 py-6"
                             required
                           />
                         </div>
 
+                        {/* Street */}
                         <div className="md:col-span-2">
                           <Label
-                            htmlFor="address"
+                            htmlFor="street"
                             className="text-sm font-medium text-gray-700"
                           >
                             Street Address{" "}
                             <span className="text-red-500">*</span>
                           </Label>
                           <Input
-                            id="address"
+                            id="street"
                             type="text"
-                            value={newAddress.address}
+                            value={newAddress.street}
                             onChange={(e) =>
-                              handleNewAddressChange("address", e.target.value)
+                              handleNewAddressChange("street", e.target.value)
                             }
                             placeholder="Enter your street address"
                             className="mt-1 py-6"
                             required
                           />
                         </div>
+
+                        {/* City */}
                         <div>
                           <Label
                             htmlFor="city"
@@ -378,6 +352,8 @@ export default function CheckoutPage() {
                             required
                           />
                         </div>
+
+                        {/* State */}
                         <div>
                           <Label
                             htmlFor="state"
@@ -398,6 +374,8 @@ export default function CheckoutPage() {
                           />
                         </div>
                       </div>
+
+                      {/* Buttons */}
                       <div className="mt-4 flex gap-3">
                         <Button
                           type="button"
