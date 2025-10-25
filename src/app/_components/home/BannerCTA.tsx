@@ -159,7 +159,7 @@ const BannerCTA = () => {
                 The new 15‑inch MacBook Air makes room for more of what you love
                 with a spacious Liquid Retina display.
               </p>
-              <Button className="bg-black mt-4 border rounded-sm py-6 px-10 cursor-pointer hover:bg-white  hover:text-black transition duration-300 ease-in-out">
+              <Button className="bg-black text-white py-5 px-12 rounded-md font-semibold shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out w-max mx-auto lg:mx-0">
                 Shop Now
               </Button>
             </div>

@@ -1,11 +1,13 @@
 "use client";
+
 import Image from "next/image";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { ProductCardProps } from "@/app/types";
-import { truncateText } from "@/lib/utils";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { truncateText } from "@/lib/utils";
+import type { ProductCardProps } from "@/app/types";
+import { motion } from "framer-motion";
 
 const ProductCard = ({
   imageSrc,
@@ -35,78 +37,86 @@ const ProductCard = ({
   else if (windowWidth < 1020) maxLength = 40;
 
   return (
-    <div className="group relative bg-white rounded-sm flex flex-col h-[380px] md:h-[440px] shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-200 overflow-hidden">
-      {/* Top badges container */}
-      <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
-        {discount > 0 && (
-          <span className="bg-red-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md backdrop-blur-sm">
-            -{discount}% OFF
-          </span>
-        )}
-        {isFeatured && (
-          <span className="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">
-            ⭐ Featured
-          </span>
-        )}
-        {isBestSeller && (
-          <span className="bg-gradient-to-r from-gray-800 to-gray-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md">
-            🔥 Best Seller
-          </span>
-        )}
-      </div>
-
-      {/* Heart icon - redesigned with better hover effect */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      whileHover={{ scale: 1.03, boxShadow: "0 12px 20px rgba(0,0,0,0.15)" }}
+      className="group relative bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300"
+    >
+      {/* Save button */}
       <button
         onClick={onSave}
         aria-label="Add to favorites"
-        className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white hover:scale-110 transition-all duration-200"
+        className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition-all duration-200"
       >
         <Heart
-          size={20}
+          size={18}
           className={`${
-            save ? "text-red-500 fill-red-500" : "text-gray-600"
+            save ? "text-red-500 fill-red-500" : "text-gray-500"
           } transition-all duration-200`}
         />
       </button>
 
-      {/* Product Image - redesigned with better container */}
-      <div className="relative w-full h-[200px] md:h-[240px] bg-gray-50 overflow-hidden">
+      {/* Image */}
+      <motion.div
+        className="relative w-full h-[220px] bg-gray-50"
+        whileHover={{
+          rotate: [0, 2, -2, 1, 0], // small wobble rotation
+          skewX: [0, 2, -2, 1, 0], // subtle skew
+          skewY: [0, 1, -1, 0.5, 0], // subtle skew
+          scale: 1.05, // slight zoom
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
         <Image
           src={imageSrc || "/placeholder.svg"}
           alt={name}
           fill
-          style={{ objectFit: "contain" }}
-          className="p-6 transition-transform duration-500 group-hover:scale-110"
+          className="object-contain p-6"
           priority
         />
-      </div>
+        {discount > 0 && (
+          <span className="absolute top-3 left-3 text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-md">
+            -{discount}%
+          </span>
+        )}
+      </motion.div>
 
-      {/* Product details - redesigned with better spacing and typography */}
-      <div className="flex flex-col flex-1 p-5 bg-white">
-        <div className="flex-1">
-          <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">
-            {hasMounted ? truncateText(name, maxLength) : name}
-          </h3>
-          <div className="flex items-baseline gap-2">
-            <p className="text-2xl md:text-3xl font-bold text-gray-900">
-              ${price.toFixed(2)}
+      {/* Content */}
+      <div className="flex flex-col flex-1 p-4">
+        <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug">
+          {hasMounted ? truncateText(name, maxLength) : name}
+        </h3>
+        <div className="flex items-center gap-2 mb-4">
+          <p className="text-lg md:text-xl font-semibold text-gray-900">
+            ${price.toFixed(2)}
+          </p>
+          {discount > 0 && (
+            <p className="text-xs text-gray-400 line-through">
+              ${(price / (1 - discount / 100)).toFixed(2)}
             </p>
-            {discount > 0 && (
-              <p className="text-sm text-gray-400 line-through">
-                ${(price / (1 - discount / 100)).toFixed(2)}
-              </p>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* Button - redesigned with better styling */}
-        <Link href={`/products/${id}`} passHref className="mt-4">
-          <Button className="w-full bg-gray-900 text-white py-6 hover:bg-gray-800 transition-all duration-300 text-sm font-semibold rounded-sm shadow-sm hover:shadow-md group-hover:bg-gray-800">
+        <Link href={`/products/${id}`} passHref>
+          <Button
+            variant="outline"
+            className="w-full text-gray-700 border-gray-300 hover:bg-gray-100 transition-all duration-200 text-sm font-medium rounded-lg"
+          >
             View Details
           </Button>
         </Link>
       </div>
-    </div>
+
+      {/* Featured / Best Seller subtle tag */}
+      {(isFeatured || isBestSeller) && (
+        <div className="absolute bottom-3 left-3 text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+          {isFeatured ? "Featured" : isBestSeller ? "Best Seller" : ""}
+        </div>
+      )}
+    </motion.div>
   );
 };
 
