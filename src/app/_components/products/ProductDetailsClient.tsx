@@ -3,9 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
 import { Box, ShieldCheck, Truck } from "lucide-react";
-import React from "react";
 import { toast } from "sonner";
-
 import {
   BatteryCharging,
   Camera,
@@ -42,66 +40,63 @@ const ProductDetailsClient = ({
   const user = useUserStore((state) => state.user);
 
   const handleAddToCart = (product) => {
-    if (!product?.name) {
-      console.error("Product or product.name is undefined");
-      return;
-    }
+    if (!product?.name) return;
     addToCart(product.id, 1, user.id);
     addItem(product.id, 1);
     toast.success(`${product.name} added to cart`);
   };
 
   return (
-    <div className="grid grid-cols-1 bg-gray-50 lg:grid-cols-2 gap-12 items-center p-10">
-      {/* Image */}
-      <div className="w-full max-w-md mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 lg:p-16 bg-white">
+      {/* Product Image */}
+      <div className="flex justify-center items-center">
         <img
           src={product.imageSrc}
           alt={product.name}
-          className="object-contain w-full rounded-md"
+          className="w-full max-w-md rounded-xl object-contain shadow-md hover:scale-105 transition-transform duration-300"
         />
       </div>
 
-      {/* Details */}
-      <div className="flex flex-col space-y-6">
-        <h1 className="text-4xl font-extrabold">{product.name}</h1>
-
+      {/* Product Details */}
+      <div className="flex flex-col gap-6">
+        {/* Title & Price */}
+        <h1 className="text-4xl font-extrabold text-gray-900">
+          {product.name}
+        </h1>
         <div className="flex items-center gap-4 text-3xl font-semibold">
-          <span>${discountPrice.toFixed(2)}</span>
-          {/* {product.discount > 0 && ( */}
-          <del className="text-gray-500 text-2xl">
+          <span className="text-black">${discountPrice.toFixed(2)}</span>
+          <del className="text-gray-400 text-xl">
             ${product.price.toFixed(2)}
           </del>
-          {/* )} */}
         </div>
 
-        {/* Colors */}
-        <div>
-          <p className="font-medium mb-2">Available Colors:</p>
-          <div className="flex gap-4">
-            {colors.map((color, idx) => (
-              <button
-                key={idx}
-                title={color}
-                aria-label={`Select color ${color}`}
-                style={{ backgroundColor: color }}
-                className="w-10 h-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500"
-              />
-            ))}
+        {/* Color Selection */}
+        {colors?.length > 0 && (
+          <div>
+            <p className="font-medium mb-2 text-gray-700">Available Colors:</p>
+            <div className="flex gap-3">
+              {colors.map((color, idx) => (
+                <button
+                  key={idx}
+                  style={{ backgroundColor: color }}
+                  title={color}
+                  className="w-10 h-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500 hover:scale-110 transition-transform"
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Memory */}
-
+        {/* Memory Options */}
         {memoryOptions?.length > 0 && (
-          <div className="w-full">
-            <p className="font-medium mb-2">Memory Options:</p>
-            <div className="flex gap-4 flex-row flex-wrap">
+          <div>
+            <p className="font-medium mb-2 text-gray-700">Memory Options:</p>
+            <div className="flex gap-3 flex-wrap">
               {memoryOptions.map((mem, idx) => (
                 <Button
                   key={idx}
                   variant="outline"
-                  className="py-3 text-gray-700 rounded-sm"
+                  className="py-2 px-4 rounded-md text-gray-700 hover:bg-gray-100"
                 >
                   {mem}
                 </Button>
@@ -110,76 +105,75 @@ const ProductDetailsClient = ({
           </div>
         )}
 
-        {/* Important details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {importantDetails.map(({ label, value, iconName }, idx) => {
-            const Icon = iconMap[iconName];
-            return (
-              <div key={idx} className="...">
-                {Icon && <Icon className="w-5 h-5 text-gray-600" />}
-                <div>
-                  <p className="text-gray-400 text-xs">{label}</p>
-                  <p className="text-gray-800 text-sm font-semibold">{value}</p>
+        {/* Important Details */}
+        {importantDetails?.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {importantDetails.map(({ label, value, iconName }, idx) => {
+              const Icon = iconMap[iconName];
+              return (
+                <div
+                  key={idx}
+                  className="flex items-center gap-3 p-3 border rounded-md bg-gray-50"
+                >
+                  {Icon && <Icon className="w-5 h-5 text-indigo-500" />}
+                  <div>
+                    <p className="text-gray-400 text-xs">{label}</p>
+                    <p className="text-gray-900 text-sm font-semibold">
+                      {value}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-        {/* Description */}
-        <div>
-          <p className="text-gray-600 leading-relaxed">{product.description}</p>
-        </div>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Add to Cart / Wishlist */}
-        <div className="flex flex-col md:flex-row gap-4 mt-8">
+        {/* Description */}
+        <p className="text-gray-600 leading-relaxed">{product.description}</p>
+
+        {/* Actions */}
+        <div className="flex flex-col md:flex-row gap-4 mt-6">
           <Button
             variant="outline"
-            className="flex-1 py-4 md:py-6 rounded-sm border border-gray-700"
+            className="flex-1 py-3 rounded-md border border-gray-700 hover:bg-gray-100"
           >
             Add to Wishlist
           </Button>
           <Button
             onClick={() => handleAddToCart(product)}
-            className="flex-1 py-4 md:py-6 rounded-sm bg-black text-white hover:bg-gray-900 transition"
+            className="flex-1 py-3 rounded-md bg-black text-white hover:bg-gray-900 transition"
           >
             Add to Cart
           </Button>
         </div>
 
         {/* Delivery, Stock, Warranty */}
-
-        <div className="grid grid-cols-3  sm:grid-cols-3 gap-4 mt-6">
-          <div className="flex items-center gap-2">
-            <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
-              <Truck className="w-6 h-6 text-gray-600" />
-            </div>
+        <div className="grid grid-cols-3 gap-4 mt-6">
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
+            <Truck className="w-6 h-6 text-indigo-500" />
             <div>
               <p className="text-gray-400 text-xs">Delivery</p>
-              <p className="text-gray-800 text-sm font-semibold">
+              <p className="text-gray-900 text-sm font-semibold">
                 {product.deliveryDays} days
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
-              <Box className="w-6 h-6 text-gray-600" />
-            </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
+            <Box className="w-6 h-6 text-indigo-500" />
             <div>
               <p className="text-gray-400 text-xs">In Stock</p>
-              <p className="text-gray-800 text-sm font-semibold">
+              <p className="text-gray-900 text-sm font-semibold">
                 {product.stock} items
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="bg-gray-200 rounded-sm w-13 h-13 justify-center flex gap-2 items-center">
-              <ShieldCheck className="w-6 h-6 text-gray-600" />
-            </div>
+          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-md">
+            <ShieldCheck className="w-6 h-6 text-indigo-500" />
             <div>
               <p className="text-gray-400 text-xs">Warranty</p>
-              <p className="text-gray-800 text-sm font-semibold">
+              <p className="text-gray-900 text-sm font-semibold">
                 {product.warrantyYears} year
                 {product.warrantyYears > 1 ? "s" : ""}
               </p>
