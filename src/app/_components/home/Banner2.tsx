@@ -61,19 +61,9 @@ const Banner2 = () => {
               {item.desc}
             </p>
             {item.id === 4 && (
-              // <Button
-              //   variant={item.id === 4 ? "secondary" : "outline"}
-              //   className={`mt-4 px-6 py-5 rounded-lg text-sm font-medium transition-all duration-300 ${
-              //     item.id === 4
-              //       ? "bg-white text-neutral-900 hover:bg-gray-200"
-              //       : "border-gray-300 text-gray-800 hover:bg-gray-100"
-              //   }`}
-              // >
-              //   Shop Now
-              // </Button>
               <Button className="bg-transparent text-white px-8 py-3 rounded-full border border-white/40 hover:border-white hover:bg-white/10 transition-all duration-300 w-max mx-auto lg:mx-0">
-              Shop Now
-            </Button>
+                Shop Now
+              </Button>
             )}
           </div>
         </div>

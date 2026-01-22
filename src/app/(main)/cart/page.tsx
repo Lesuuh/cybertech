@@ -9,23 +9,22 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
 import { toast } from "sonner";
-import { deleteItem, fetchCart } from "@/services/useCart";
-import { useUserStore } from "@/store/userStore";
+import { deleteItem } from "@/services/useCart";
 import { useEffect, useState } from "react";
-// import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
 import { useRouter } from "next/navigation";
 import { products } from "@/app/data/data";
 
 const ShoppingCart = () => {
-  const user = useUserStore((state) => state.user);
-  // const { data: products } = useProducts();
   const removeItem = useCartStore((state) => state.removeItem);
   const userCart = useCartStore((state) => state.items);
-  const setCart = useCartStore((state) => state.setCart);
-  const [loading, setLoading] = useState(true);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
+
+  const [loading, setLoading] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
+  const [appliedCode, setAppliedCode] = useState("");
+  const [discountMessage, setDiscountMessage] = useState("");
+
   const discountCodes: Record<
     string,
     { type: "flat" | "percent"; value: number }
@@ -34,39 +33,18 @@ const ShoppingCart = () => {
     OFF20: { type: "percent", value: 20 },
   };
 
-  const [appliedCode, setAppliedCode] = useState("");
-  const [discountMessage, setDiscountMessage] = useState("");
-
   const router = useRouter();
 
-  useEffect(() => {
-    if (!user?.id) return;
-
-    const loadCart = async () => {
-      try {
-        const cart = await fetchCart(user.id);
-        console.log(cart.cart_items);
-        setCart(cart.cart_items);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCart();
-  }, [user?.id, setCart]);
-
-  const handleRemoveItem = (product) => {
+  const handleRemoveItem = (product: any) => {
     deleteItem(product.product_id);
     removeItem(product.product_id);
     toast.success(`${product?.productName} removed from cart`);
   };
 
-  if (!Array.isArray(userCart)) return <p>No cart found for this user</p>;
+  if (!Array.isArray(userCart)) return <p>No cart found</p>;
 
   const cartDetailedItems = userCart.map((cartItem) => {
-    const product = products?.find((p) => p.id === cartItem.product_id);
+    const product = products.find((p) => p.id === cartItem.product_id);
     return {
       ...cartItem,
       productName: product?.name || "Unknown Product",
@@ -76,15 +54,15 @@ const ShoppingCart = () => {
     };
   });
 
-  const handleQuantityChange = (product, action) => {
-    if (action === "increase") {
+  const handleQuantityChange = (
+    product: any,
+    action: "increase" | "decrease",
+  ) => {
+    if (action === "increase")
       updateQuantity(product.product_id, product.quantity + 1);
-    } else if (action === "decrease" && product.quantity > 1) {
+    else if (action === "decrease" && product.quantity > 1)
       updateQuantity(product.product_id, product.quantity - 1);
-    }
   };
-
-  console.log(cartDetailedItems);
 
   const calculateCheckout = (
     cartItems: any[],
@@ -92,10 +70,13 @@ const ShoppingCart = () => {
       taxRate = 0.05,
       shippingRate = 0.05,
       discountCode,
-    }: { taxRate?: number; shippingRate?: number; discountCode?: string | null }
+    }: {
+      taxRate?: number;
+      shippingRate?: number;
+      discountCode?: string | null;
+    },
   ) => {
     const subTotal = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
-
     const tax = subTotal * taxRate;
 
     let discount = 0;
@@ -105,7 +86,6 @@ const ShoppingCart = () => {
     }
 
     const shippingFee = subTotal * shippingRate;
-
     const grandTotal = subTotal + tax + shippingFee - discount;
 
     return { grandTotal, subTotal, tax, discount, shippingFee };
@@ -134,7 +114,7 @@ const ShoppingCart = () => {
   };
 
   if (loading) return <Spinner />;
-  if (!userCart) return <p>No cart found for this user</p>;
+  if (!userCart) return <p>No cart found</p>;
 
   return (
     <div className="min-h-screen bg-muted/30">
@@ -176,7 +156,7 @@ const ShoppingCart = () => {
                     <div className="relative flex-shrink-0">
                       <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg overflow-hidden bg-muted border">
                         <Image
-                          src={item.imageSrc || "/placeholder.svg"}
+                          src={item.imageSrc}
                           alt={item.productName}
                           width={112}
                           height={112}
@@ -251,11 +231,10 @@ const ShoppingCart = () => {
               <Card className="p-6 sticky top-4">
                 <h2 className="text-xl font-bold">Order Summary</h2>
 
-                {/* Discount Code Section */}
-                <div className="">
+                {/* Discount Code */}
+                <div className="mt-4">
                   <label className="text-sm font-medium mb-2 flex items-center gap-2">
-                    <Tag className="h-4 w-4" />
-                    Promo Code
+                    <Tag className="h-4 w-4" /> Promo Code
                   </label>
                   <div className="flex gap-2 mt-2">
                     <Input
@@ -290,7 +269,7 @@ const ShoppingCart = () => {
                   )}
                 </div>
 
-                <Separator className="" />
+                <Separator className="my-4" />
 
                 {/* Price Breakdown */}
                 <div className="space-y-3">
@@ -309,28 +288,23 @@ const ShoppingCart = () => {
                     <span className="font-medium">${tax.toFixed(2)}</span>
                   </div>
                   {discount > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-green-600 font-medium">
-                        Discount
-                      </span>
-                      <span className="text-green-600 font-medium">
-                        -${discount.toFixed(2)}
-                      </span>
+                    <div className="flex justify-between text-sm text-green-600 font-medium">
+                      <span>Discount</span>
+                      <span>- ${discount.toFixed(2)}</span>
                     </div>
                   )}
                 </div>
 
-                <Separator className="" />
+                <Separator className="my-4" />
 
                 {/* Total */}
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-bold">Total</span>
                   <span className="text-2xl font-bold">
                     ${grandTotal.toFixed(2)}
                   </span>
                 </div>
 
-                {/* Checkout Button */}
                 <Button
                   onClick={() => router.push("/checkout")}
                   className="w-full h-12 text-base font-semibold"
@@ -339,7 +313,7 @@ const ShoppingCart = () => {
                   Proceed to Checkout
                 </Button>
 
-                <p className="text-xs text-muted-foreground text-center ">
+                <p className="text-xs text-muted-foreground text-center mt-2">
                   Taxes and shipping calculated at checkout
                 </p>
               </Card>

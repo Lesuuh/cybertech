@@ -33,8 +33,8 @@ const BrowseCategory = () => {
   const updateScrollButtons = () => {
     const el = containerRef.current;
     if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
+    setCanScrollLeft(el.scrollLeft > 5);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 5);
   };
 
   useEffect(() => {
@@ -42,13 +42,17 @@ const BrowseCategory = () => {
     if (!el) return;
     updateScrollButtons();
     el.addEventListener("scroll", updateScrollButtons);
-    return () => el.removeEventListener("scroll", updateScrollButtons);
+    window.addEventListener("resize", updateScrollButtons);
+    return () => {
+      el.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
+    };
   }, []);
 
   const scrollByAmount = (dir: "left" | "right") => {
     const el = containerRef.current;
     if (!el) return;
-    const amount = el.offsetWidth * 0.7; // responsive scroll distance
+    const amount = el.offsetWidth * 0.7;
     el.scrollBy({
       left: dir === "left" ? -amount : amount,
       behavior: "smooth",
@@ -56,9 +60,9 @@ const BrowseCategory = () => {
   };
 
   return (
-    <section className="relative max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full flex-col items-center my-20">
+    <section className="relative max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto flex flex-col my-20">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-left text-xl font-semibold">Browse Category</h2>
+        <h2 className="text-xl md:text-2xl font-semibold">Browse Categories</h2>
         <div className="flex gap-2">
           <Button
             variant="ghost"
@@ -66,7 +70,7 @@ const BrowseCategory = () => {
             onClick={() => scrollByAmount("left")}
             aria-label="Scroll left"
             disabled={!canScrollLeft}
-            className="disabled:opacity-30"
+            className="disabled:opacity-40"
           >
             <ArrowLeft />
           </Button>
@@ -76,40 +80,48 @@ const BrowseCategory = () => {
             onClick={() => scrollByAmount("right")}
             aria-label="Scroll right"
             disabled={!canScrollRight}
-            className="disabled:opacity-30"
+            className="disabled:opacity-40"
           >
             <ArrowRight />
           </Button>
         </div>
       </div>
 
-      {/* Scroll container with fade indicators */}
+      {/* Scroll container */}
       <div className="relative">
         <div
           ref={containerRef}
-          className="flex gap-6 mt-6 overflow-x-auto scroll-smooth whitespace-nowrap no-scrollbar"
-          style={{ scrollBehavior: "smooth" }}
+          className="flex gap-6 overflow-x-auto scroll-smooth whitespace-nowrap no-scrollbar py-2"
         >
           {categories.map(({ name, icon: Icon, href }, idx) => (
             <Link
               href={href}
               key={idx}
-              className="flex flex-col items-center justify-center min-w-[140px] md:min-w-[180px] bg-[#ededed]
-                         rounded-lg p-8 transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg
-                         hover:bg-gray-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+              className="flex flex-col items-center justify-center min-w-[140px] md:min-w-[180px]
+                         bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8
+                         transition-transform duration-300 ease-in-out
+                         hover:scale-105 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
             >
-              <Icon className="w-10 h-10 text-gray-700 mb-2" />
-              <span className="text-sm font-medium text-gray-900">{name}</span>
+              <Icon className="w-10 h-10 text-gray-700 dark:text-gray-200 mb-2" />
+              <span className="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100 text-center">
+                {name}
+              </span>
             </Link>
           ))}
         </div>
 
         {/* Scroll gradient indicators */}
         {canScrollLeft && (
-          <div className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-white to-transparent pointer-events-none transition-opacity duration-300" />
+          <div
+            className="absolute top-0 left-0 h-full w-12 pointer-events-none
+                          bg-gradient-to-r from-white/90 via-white/0 to-transparent dark:from-gray-900/90"
+          />
         )}
         {canScrollRight && (
-          <div className="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-white to-transparent pointer-events-none transition-opacity duration-300" />
+          <div
+            className="absolute top-0 right-0 h-full w-12 pointer-events-none
+                          bg-gradient-to-l from-white/90 via-white/0 to-transparent dark:from-gray-900/90"
+          />
         )}
       </div>
     </section>

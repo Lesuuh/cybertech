@@ -23,7 +23,9 @@ const HomePage = () => {
       {/* Discounts */}
       <Discount />
       {/* Banner 3 */}
-      <Banner3 />
+      <div className="hidden md:flex">
+        <Banner3 />
+      </div>
     </main>
   );
 };
