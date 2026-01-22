@@ -8,7 +8,8 @@ import Reviews from "@/app/_components/products/Reviews";
 import Spinner from "@/components/ui/Spinner";
 
 import { getDiscountedPrice } from "@/lib/utils";
-import { useProducts } from "@/services/useProducts";
+// import { useProducts } from "@/services/useProducts";
+import { products } from "@/app/data/data";
 
 interface ProductPageProps {
   params: {
@@ -17,11 +18,14 @@ interface ProductPageProps {
 }
 
 const Product = ({ params }: ProductPageProps) => {
-  const { data: products, isLoading, error } = useProducts();
+  // const { data: products, isLoading, error } = useProducts();
 
   const { productId } = params;
   const product = products?.find((p) => p.id === Number(productId));
   console.log(product);
+
+  const isLoading = false;
+  const error = false;
 
   if (isLoading) {
     return <Spinner />;

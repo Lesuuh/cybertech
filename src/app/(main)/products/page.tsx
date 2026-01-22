@@ -8,11 +8,12 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { PaginationDemo } from "../../_components/products/Pagination";
 import Sidebar from "../../_components/products/Sidebar";
-import { useProducts } from "@/services/useProducts";
+// import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
+import { products } from "@/app/data/data";
 
 const Products = () => {
-  const { data: products, isLoading, error } = useProducts();
+  // const { data: products, isLoading, error } = useProducts();
   const filteredProducts = products;
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
@@ -22,6 +23,7 @@ const Products = () => {
   const endIndex = startIndex + itemsPerPage;
   const pageProduct = products?.slice(startIndex, endIndex);
 
+  const isLoading = false;
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/products" },

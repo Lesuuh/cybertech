@@ -42,8 +42,8 @@ const ProductCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      whileHover={{ scale: 1.03, boxShadow: "0 12px 20px rgba(0,0,0,0.15)" }}
-      className="group relative bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300"
+      // whileHover={{ scale: 1.03, boxShadow: "0 12px 20px rgba(0,0,0,0.15)" }}
+      className="group relative bg-white h-auto rounded-xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300"
     >
       {/* Save button */}
       <button
@@ -61,13 +61,7 @@ const ProductCard = ({
 
       {/* Image */}
       <motion.div
-        className="relative w-full h-[220px] bg-gray-50"
-        whileHover={{
-          rotate: [0, 2, -2, 1, 0], // small wobble rotation
-          skewX: [0, 2, -2, 1, 0], // subtle skew
-          skewY: [0, 1, -1, 0.5, 0], // subtle skew
-          scale: 1.05, // slight zoom
-        }}
+        className="relative w-full h-[200px] bg-gray-50"
         transition={{ duration: 0.5, ease: "easeInOut" }}
       >
         <Image
@@ -85,37 +79,33 @@ const ProductCard = ({
       </motion.div>
 
       {/* Content */}
-      <div className="flex flex-col flex-1 p-4">
-        <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug">
-          {hasMounted ? truncateText(name, maxLength) : name}
+      <div className="flex flex-col flex-1 p-4 ">
+        <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug line-clamp-2">
+          {name}
         </h3>
-        <div className="flex items-center gap-2 mb-4">
+
+        <div className="flex items-center gap-2 group-hover:hidden">
           <p className="text-lg md:text-xl font-semibold text-gray-900">
             ${price.toFixed(2)}
           </p>
+
           {discount > 0 && (
             <p className="text-xs text-gray-400 line-through">
               ${(price / (1 - discount / 100)).toFixed(2)}
             </p>
           )}
         </div>
-
-        <Link href={`/products/${id}`} passHref>
-          <Button
-            variant="outline"
-            className="w-full text-gray-700 border-gray-300 hover:bg-gray-100 transition-all duration-200 text-sm font-medium rounded-lg"
-          >
-            View Details
-          </Button>
-        </Link>
       </div>
 
-      {/* Featured / Best Seller subtle tag */}
-      {(isFeatured || isBestSeller) && (
-        <div className="absolute bottom-3 left-3 text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
-          {isFeatured ? "Featured" : isBestSeller ? "Best Seller" : ""}
-        </div>
-      )}
+      <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-150 ease-out">
+        <button
+          className="flex w-full cursor-pointer items-center justify-between bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
+          aria-label={`Add ${name} to cart for $${price.toFixed(2)}`}
+        >
+          <span>Add to cart</span>
+          <span className="text-white/80">${price.toFixed(2)}</span>
+        </button>
+      </div>
     </motion.div>
   );
 };

@@ -22,12 +22,12 @@ const Hero = () => {
               iPhone 14 <strong className="font-extrabold">Pro</strong>
             </h1>
 
-            <p className="text-lg md:text-2xl text-gray-300 max-w-xl leading-relaxed">
+            <p className=" text-gray-300 max-w-xl leading-relaxed">
               Designed to push boundaries and elevate everyday experiences.
               Powerful. Elegant. Essential.
             </p>
 
-            <Button className="bg-white text-black py-5 px-12 rounded-md font-semibold shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out w-max mx-auto lg:mx-0">
+            <Button className="bg-transparent text-white px-8 py-3 rounded-full border border-white/40 hover:border-white hover:bg-white/10 transition-all duration-300 w-max mx-auto lg:mx-0">
               Shop Now
             </Button>
           </div>

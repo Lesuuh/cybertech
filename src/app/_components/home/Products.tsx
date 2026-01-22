@@ -3,8 +3,9 @@
 import { useState } from "react";
 import ProductCard from "../products/ProductCard";
 import { Product } from "@/app/types";
-import { useProducts } from "@/services/useProducts";
+// import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
+import { products } from "@/app/data/data";
 
 const Products = () => {
   const tabs = [
@@ -16,7 +17,9 @@ const Products = () => {
 
   const [activeTab, setActiveTab] = useState("all");
 
-  const { data: products, isLoading, error } = useProducts();
+  // const { data: products, isLoading, error } = useProducts();
+
+  // Use the imported products directly
 
   // Filtering products
   const filteredProducts = products?.filter((product) => {
@@ -40,8 +43,8 @@ const Products = () => {
     setActiveTab(slug);
   };
 
-  if (isLoading) return <Spinner />;
-  if (error) return <p>Error loading products</p>;
+  // if (isLoading) return <Spinner />;
+  // if (error) return <p>Error loading products</p>;
 
   return (
     <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-20 ">

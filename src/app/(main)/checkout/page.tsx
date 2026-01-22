@@ -19,11 +19,12 @@ import {
   Mail,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useProducts } from "@/services/useProducts";
+// import { useProducts } from "@/services/useProducts";
 import { fetchCart } from "@/services/useCart";
 import { useUserStore } from "@/store/userStore";
 import Spinner from "@/components/ui/Spinner";
 import { useProfileStore } from "@/store/profileStore";
+import { products } from "@/app/data/data";
 
 export default function CheckoutPage() {
   const user = useUserStore((state) => state.user);
@@ -83,7 +84,7 @@ export default function CheckoutPage() {
     loadCart();
   }, [user?.id]);
 
-  const { data: products } = useProducts();
+  // const { data: products } = useProducts();
 
   const cartDetailedItems = useMemo(() => {
     if (!Array.isArray(localCart) || !products) return [];
@@ -103,7 +104,7 @@ export default function CheckoutPage() {
   const grandTotal = useMemo(() => {
     return cartDetailedItems.reduce(
       (acc, item) => acc + item.quantity * item.productPrice,
-      0
+      0,
     );
   }, [cartDetailedItems]);
 
@@ -128,7 +129,7 @@ export default function CheckoutPage() {
     const currentDate = new Date();
     const estimatedDelivery = new Date(
       currentDate.getTime() +
-        (paymentMethod === "cod" ? 3 : 5) * 24 * 60 * 60 * 1000
+        (paymentMethod === "cod" ? 3 : 5) * 24 * 60 * 60 * 1000,
     ).toLocaleDateString("en-US", {
       weekday: "long",
       year: "numeric",
@@ -498,7 +499,7 @@ export default function CheckoutPage() {
                             onClick={() =>
                               copyToClipboard(
                                 bankDetails.accountName,
-                                "accountName"
+                                "accountName",
                               )
                             }
                             className="h-6 w-6 p-0"
@@ -523,7 +524,7 @@ export default function CheckoutPage() {
                             onClick={() =>
                               copyToClipboard(
                                 bankDetails.accountNumber,
-                                "accountNumber"
+                                "accountNumber",
                               )
                             }
                             className="h-6 w-6 p-0"
@@ -548,7 +549,7 @@ export default function CheckoutPage() {
                             onClick={() =>
                               copyToClipboard(
                                 bankDetails.routingNumber,
-                                "routingNumber"
+                                "routingNumber",
                               )
                             }
                             className="h-6 w-6 p-0"
@@ -573,7 +574,7 @@ export default function CheckoutPage() {
                             onClick={() =>
                               copyToClipboard(
                                 bankDetails.reference,
-                                "reference"
+                                "reference",
                               )
                             }
                             className="h-6 w-6 p-0"
@@ -731,8 +732,8 @@ export default function CheckoutPage() {
                   ? paymentMethod === "cod"
                     ? "Place Order"
                     : paymentMethod === "bank"
-                    ? "Confirm Bank Transfer"
-                    : "Proceed to Payment"
+                      ? "Confirm Bank Transfer"
+                      : "Proceed to Payment"
                   : "Select Payment Method"}
               </Button>
             </div>

@@ -12,13 +12,14 @@ import { toast } from "sonner";
 import { deleteItem, fetchCart } from "@/services/useCart";
 import { useUserStore } from "@/store/userStore";
 import { useEffect, useState } from "react";
-import { useProducts } from "@/services/useProducts";
+// import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
 import { useRouter } from "next/navigation";
+import { products } from "@/app/data/data";
 
 const ShoppingCart = () => {
   const user = useUserStore((state) => state.user);
-  const { data: products } = useProducts();
+  // const { data: products } = useProducts();
   const removeItem = useCartStore((state) => state.removeItem);
   const userCart = useCartStore((state) => state.items);
   const setCart = useCartStore((state) => state.setCart);

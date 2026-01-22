@@ -7,15 +7,7 @@ import { useProfileStore } from "@/store/profileStore";
 export default function ProfilePage() {
   const { profile } = useProfileStore.getState();
   const addresses = profile?.addresses || [];
-
-  // Sample orders
-  const orders = profile?.orders || [
-    { id: 101, date: "2025-10-20", status: "Completed", amount: 120.5 },
-    { id: 102, date: "2025-10-22", status: "Pending", amount: 89.99 },
-    { id: 103, date: "2025-10-23", status: "Shipped", amount: 45.0 },
-    { id: 104, date: "2025-10-24", status: "Completed", amount: 210.75 },
-    { id: 105, date: "2025-10-25", status: "Cancelled", amount: 50.0 },
-  ];
+  // const orders = profile?.orders || [];
 
   const [activeTab, setActiveTab] = useState("profile");
   const [passwordForm, setPasswordForm] = useState({
@@ -268,11 +260,7 @@ export default function ProfilePage() {
                         className={`font-medium ${
                           order.status === "Completed"
                             ? "text-green-600"
-                            : order.status === "Pending"
-                            ? "text-yellow-600"
-                            : order.status === "Cancelled"
-                            ? "text-red-600"
-                            : "text-blue-600"
+                            : "text-yellow-600"
                         }`}
                       >
                         {order.status}

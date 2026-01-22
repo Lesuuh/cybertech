@@ -1,3 +1,4 @@
+import Banner3 from "@/app/_components/home/Banner3";
 import Banner2 from "../../_components/home/Banner2";
 import BannerCTA from "../../_components/home/BannerCTA";
 import BrowseCategory from "../../_components/home/BrowseCategory";
@@ -22,7 +23,7 @@ const HomePage = () => {
       {/* Discounts */}
       <Discount />
       {/* Banner 3 */}
-      {/* <Banner3 /> */}
+      <Banner3 />
     </main>
   );
 };
