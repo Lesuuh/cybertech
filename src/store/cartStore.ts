@@ -5,14 +5,12 @@ interface CartItem {
   id: string;
   product_id: number;
   quantity: number;
-  created_at: string;
-  updated_at: string;
 }
 
 interface CartState {
-  userId: number | null;
+  // userId: number | null;
   items: CartItem[];
-  setUserId: (id: number) => void;
+  // setUserId: (id: number) => void;
   setCart: (items: CartItem[]) => void;
   addItem: (item: CartItem) => void;
   removeItem: (product_id: number) => void;
@@ -23,17 +21,17 @@ interface CartState {
 export const useCartStore = create<CartState>()(
   persist(
     (set) => ({
-      userId: null,
+      // userId: null,
       items: [],
 
-      setUserId: (id: number) => set(() => ({ userId: id, items: [] })),
+      // setUserId: (id: number) => set(() => ({ userId: id, items: [] })),
 
       setCart: (items: CartItem[]) => set(() => ({ items })),
 
       addItem: (item: CartItem) =>
         set((state) => {
           const exists = state.items.some(
-            (i) => i.product_id === item.product_id
+            (i) => i.product_id === item.product_id,
           );
           if (exists) {
             // If item exists, update quantity
@@ -41,7 +39,7 @@ export const useCartStore = create<CartState>()(
               items: state.items.map((i) =>
                 i.product_id === item.product_id
                   ? { ...i, quantity: i.quantity + item.quantity }
-                  : i
+                  : i,
               ),
             };
           } else {
@@ -53,7 +51,7 @@ export const useCartStore = create<CartState>()(
       updateQuantity: (product_id: number, quantity: number) =>
         set((state) => ({
           items: state.items.map((item) =>
-            item.product_id === product_id ? { ...item, quantity } : item
+            item.product_id === product_id ? { ...item, quantity } : item,
           ),
         })),
 
@@ -66,6 +64,6 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "cart-storage",
-    }
-  )
+    },
+  ),
 );

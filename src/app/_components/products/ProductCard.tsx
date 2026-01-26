@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import { truncateText } from "@/lib/utils";
 import type { ProductCardProps } from "@/app/types";
 import { motion } from "framer-motion";
+import { useCartStore } from "@/store/cartStore";
+import { toast } from "sonner";
 
 const ProductCard = ({
   imageSrc,
@@ -15,8 +17,6 @@ const ProductCard = ({
   price,
   id,
   discount = 0,
-  isFeatured = false,
-  isBestSeller = false,
   onSave,
   save,
 }: ProductCardProps) => {
@@ -35,6 +35,18 @@ const ProductCard = ({
   if (windowWidth < 480) maxLength = 20;
   else if (windowWidth < 780) maxLength = 30;
   else if (windowWidth < 1020) maxLength = 40;
+
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAddtoCart = (id: number) => {
+    console.log(id + " " + "added to cart");
+    addItem({
+      id: crypto.randomUUID(),
+      product_id: id,
+      quantity: 1,
+    });
+    toast(name + " " + "added to cart");
+  };
 
   return (
     <motion.div
@@ -99,6 +111,7 @@ const ProductCard = ({
 
       <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-150 ease-out">
         <button
+          onClick={() => handleAddtoCart(id)}
           className="flex w-full cursor-pointer items-center justify-between bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
           aria-label={`Add ${name} to cart for $${price.toFixed(2)}`}
         >

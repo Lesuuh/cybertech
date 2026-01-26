@@ -16,11 +16,11 @@ const Footer = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* About + social on desktop */}
         <div className="col-span-2">
-          <h2 className="text-2xl font-bold mb-4">Cyber</h2>
+          <h2 className="text-2xl font-bold mb-4">CyberTech</h2>
           <p className="mb-6 max-w-md leading-relaxed text-[#cfcfcf]">
-            We are a residential interior design firm located in Portland. Our
-            boutique studio offers more than just design — we deliver tailored
-            solutions for your space.
+            CyberTech is a trusted online retailer offering the latest
+            electronics, gadgets, and accessories. Shop with confidence, enjoy
+            fast shipping, and excellent customer support.
           </p>
 
           {/* Social icons desktop */}
@@ -40,30 +40,27 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Services */}
+        {/* Shop */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">Services</h3>
-          <ul className="space-y-8 text-sm text-[#cfcfcf]">
-            <li>Interior Design Consultation</li>
-            <li>Space Planning & Layout</li>
-            <li>Furniture Selection</li>
-            <li>Lighting Design</li>
-            <li>Custom Decor Solutions</li>
+          <h3 className="text-xl font-semibold mb-4">Shop</h3>
+          <ul className="space-y-3 text-sm text-[#cfcfcf]">
+            <li>New Arrivals</li>
+            <li>Best Sellers</li>
+            <li>Electronics</li>
+            <li>Accessories</li>
+            <li>Gift Cards</li>
           </ul>
         </div>
 
-        {/* Assistance */}
+        {/* Customer Support */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">
-            Assistance to the Buyer
-          </h3>
-          <ul className="space-y-8 text-sm text-[#cfcfcf]">
-            <li>Product Warranty Info</li>
-            <li>Order Tracking</li>
-            <li>Return Policy</li>
+          <h3 className="text-xl font-semibold mb-4">Customer Support</h3>
+          <ul className="space-y-3 text-sm text-[#cfcfcf]">
+            <li>Track Your Order</li>
+            <li>Returns & Exchanges</li>
             <li>Payment Methods</li>
-            <li>Customer Support</li>
             <li>FAQs</li>
+            <li>Contact Us</li>
           </ul>
         </div>
       </div>
