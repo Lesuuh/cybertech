@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
 import ProductDetailsClient from "@/app/_components/products/ProductDetailsClient";
@@ -22,7 +23,6 @@ const Product = ({ params }: ProductPageProps) => {
 
   const { productId } = params;
   const product = products?.find((p) => p.id === Number(productId));
-  console.log(product);
 
   const isLoading = false;
   const error = false;
@@ -119,8 +119,6 @@ const Product = ({ params }: ProductPageProps) => {
   const filteredImportantDetails = importantDetails
     .filter((detail) => detail.value !== null && detail.value !== undefined)
     .slice(0, 6);
-
-  console.log(filteredImportantDetails);
 
   return (
     <section className="max-w-[1500px] bg-white mx-auto px-4 my-10">

@@ -91,11 +91,14 @@ export default function CheckoutPage() {
       orderNumber,
       paymentMethod,
       estimatedDelivery,
+      cartItems,
     });
 
     // Show the order confirmation modal
     setShowOrderModal(true);
   };
+
+  console.log(orderDetails);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

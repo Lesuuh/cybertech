@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { truncateText } from "@/lib/utils";
+
 import type { ProductCardProps } from "@/app/types";
 import { motion } from "framer-motion";
 import { useCartStore } from "@/store/cartStore";
@@ -20,21 +20,21 @@ const ProductCard = ({
   onSave,
   save,
 }: ProductCardProps) => {
-  const [windowWidth, setWindowWidth] = useState(0);
-  const [hasMounted, setHasMounted] = useState(false);
+  // const [windowWidth, setWindowWidth] = useState(0);
+  // const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
-    setHasMounted(true);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  // setHasMounted(true);
+  // const handleResize = () => setWindowWidth(window.innerWidth);
+  //   handleResize();
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
-  let maxLength = 50;
-  if (windowWidth < 480) maxLength = 20;
-  else if (windowWidth < 780) maxLength = 30;
-  else if (windowWidth < 1020) maxLength = 40;
+  // let maxLength = 50;
+  // if (windowWidth < 480) maxLength = 20;
+  // else if (windowWidth < 780) maxLength = 30;
+  // else if (windowWidth < 1020) maxLength = 40;
 
   const addItem = useCartStore((state) => state.addItem);
 
@@ -70,44 +70,45 @@ const ProductCard = ({
           } transition-all duration-200`}
         />
       </button>
-
-      {/* Image */}
-      <motion.div
-        className="relative w-full h-[200px] bg-gray-50"
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-      >
-        <Image
-          src={imageSrc || "/placeholder.svg"}
-          alt={name}
-          fill
-          className="object-contain p-6"
-          priority
-        />
-        {discount > 0 && (
-          <span className="absolute top-3 left-3 text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-md">
-            -{discount}%
-          </span>
-        )}
-      </motion.div>
-
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-4 ">
-        <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug line-clamp-2">
-          {name}
-        </h3>
-
-        <div className="flex items-center gap-2 group-hover:hidden">
-          <p className="text-lg md:text-xl font-semibold text-gray-900">
-            ${price.toFixed(2)}
-          </p>
-
+      <Link href={`/products/${id}`} className="block">
+        {/* Image */}
+        <motion.div
+          className="relative w-full h-[200px] bg-gray-50"
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+          <Image
+            src={imageSrc || "/placeholder.svg"}
+            alt={name}
+            fill
+            className="object-contain p-6"
+            priority
+          />
           {discount > 0 && (
-            <p className="text-xs text-gray-400 line-through">
-              ${(price / (1 - discount / 100)).toFixed(2)}
-            </p>
+            <span className="absolute top-3 left-3 text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-md">
+              -{discount}%
+            </span>
           )}
+        </motion.div>
+
+        {/* Content */}
+        <div className="flex flex-col flex-1 p-4 ">
+          <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug line-clamp-2">
+            {name}
+          </h3>
+
+          <div className="flex items-center gap-2 group-hover:hidden">
+            <p className="text-lg md:text-xl font-semibold text-gray-900">
+              ${price.toFixed(2)}
+            </p>
+
+            {discount > 0 && (
+              <p className="text-xs text-gray-400 line-through">
+                ${(price / (1 - discount / 100)).toFixed(2)}
+              </p>
+            )}
+          </div>
         </div>
-      </div>
+      </Link>
 
       <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-150 ease-out">
         <button

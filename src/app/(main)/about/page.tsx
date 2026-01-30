@@ -40,7 +40,7 @@ const About = () => {
               returns, and provide round-the-clock customer support.
             </p>
             <p className="text-gray-600 text-lg">
-              Whether you're looking for the newest gadgets or timeless
+              Whether you&apos;re looking for the newest gadgets or timeless
               electronics, we make sure you get exactly what you need.
             </p>
           </div>

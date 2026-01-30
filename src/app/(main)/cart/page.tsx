@@ -269,7 +269,7 @@ const ShoppingCart = () => {
                   )}
                 </div>
 
-                <Separator className="my-4" />
+                <Separator className="my-2" />
 
                 {/* Price Breakdown */}
                 <div className="space-y-3">
@@ -295,7 +295,7 @@ const ShoppingCart = () => {
                   )}
                 </div>
 
-                <Separator className="my-4" />
+                <Separator className="my-2" />
 
                 {/* Total */}
                 <div className="flex justify-between items-center mb-4">

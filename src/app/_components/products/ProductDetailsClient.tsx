@@ -13,8 +13,7 @@ import {
   Droplet,
   Wifi,
 } from "lucide-react";
-import { addToCart } from "@/services/useCart";
-import { useUserStore } from "@/store/userStore";
+import Image from "next/image";
 
 const iconMap = {
   BatteryCharging,
@@ -37,23 +36,27 @@ const ProductDetailsClient = ({
   importantDetails,
 }) => {
   const addItem = useCartStore((state) => state.addItem);
-  const user = useUserStore((state) => state.user);
 
-  const handleAddToCart = (product) => {
-    if (!product?.name) return;
-    addToCart(product.id, 1, user.id);
-    addItem(product.id, 1);
-    toast.success(`${product.name} added to cart`);
+  const handleAddToCart = (id: number) => {
+    addItem({
+      id: crypto.randomUUID(),
+      product_id: id,
+      quantity: 1,
+    });
+    toast(product.name + " " + "added to cart");
   };
 
+  console.log(product);
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 lg:p-16 bg-white">
       {/* Product Image */}
       <div className="flex justify-center items-center">
-        <img
+        <Image
           src={product.imageSrc}
-          alt={product.name}
-          className="w-full max-w-md rounded-xl object-contain shadow-md hover:scale-105 transition-transform duration-300"
+          alt="MacBook Pro"
+          width={600} // <-- required
+          height={400} // <-- required
+          className="w-full max-w-md rounded-xl object-contain hover:scale-105 transition-transform duration-300"
         />
       </div>
 

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import Spinner from "@/components/ui/Spinner";
+import Image from "next/image";
 
 export default function OrderSummary({
   cartItems,
@@ -29,9 +30,10 @@ export default function OrderSummary({
               {cartItems.map((item) => (
                 <div key={item.id} className="flex items-center space-x-4">
                   <div className="relative inline-block">
-                    <img
+                    <Image
                       src={item.imageSrc || "/placeholder.svg"}
                       alt={item.productName}
+                      fill
                       className="w-16 h-16 object-cover rounded-md"
                     />
                     <span className="absolute -top-2 -right-2 bg-black text-white text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full">
