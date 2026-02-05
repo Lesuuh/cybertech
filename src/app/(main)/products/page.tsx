@@ -5,15 +5,14 @@ import { Breadcrumbs } from "../../_components/products/Breadcrumbs";
 import ProductCard from "../../_components/products/ProductCard";
 import { Product } from "../../types";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, X } from "lucide-react"; // Added X for closing
+import { SlidersHorizontal, X} from "lucide-react";
 import { PaginationDemo } from "../../_components/products/Pagination";
 import Sidebar from "../../_components/products/Sidebar";
-import Spinner from "@/components/ui/Spinner";
 import { products } from "@/app/data/data";
 
 const Products = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const filteredProducts =
     selectedIds.length > 0
@@ -31,7 +30,7 @@ const Products = () => {
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Shop", href: "/products" },
+    { label: "Inventory", href: "/products" },
   ];
 
   const [save, setSave] = useState<{ [key: number]: boolean }>(() => {
@@ -52,79 +51,70 @@ const Products = () => {
 
   return (
     <main className="min-h-screen bg-white">
-      <section className="max-w-[1500px] px-4 md:px-8 lg:px-12 mx-auto w-full my-6 md:my-10">
-        {/* Breadcrumbs - Hidden on small mobile to save space */}
-        <div className="hidden sm:flex mb-6">
-          <Breadcrumbs items={breadcrumbItems} />
+      <section className="max-w-[1600px] px-6 md:px-12 mx-auto w-full my-10">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 pb-10 border-b border-gray-50 gap-6">
+          <div className="space-y-4">
+            <Breadcrumbs items={breadcrumbItems} />
+            <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-gray-900 uppercase">
+              Hardware Archive
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <p className="hidden md:block text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium">
+              Registry // {filteredProducts.length} Units Found
+            </p>
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden flex items-center gap-2 px-5 py-3 border border-gray-100 rounded-2xl hover:border-gray-900 transition-all"
+            >
+              <SlidersHorizontal size={14} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                Filter
+              </span>
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Filter Trigger & Result Count */}
-        <div className="flex items-center justify-between py-4 border-b border-slate-100 lg:hidden">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsSidebarOpen(true)}
-            className="flex items-center gap-2 rounded-xl font-bold border-slate-200"
-          >
-            <SlidersHorizontal size={16} />
-            Filters
-          </Button>
-          <p className="text-sm text-slate-500 font-medium">
-            Results:{" "}
-            <span className="text-black font-bold">
-              {filteredProducts?.length}
-            </span>
-          </p>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-10 mt-6 lg:mt-10">
-          {/* Desktop Sidebar / Mobile Drawer Overlay */}
+        <div className="flex flex-col lg:flex-row gap-16">
+          {/* Sidebar / Filter Module */}
           <aside
             className={`
-            fixed inset-0 z-50 bg-white p-6 transition-transform duration-300 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:translate-x-0 lg:w-64 lg:block
+            fixed inset-0 z-50 bg-white p-8 transition-transform duration-500 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:translate-x-0 lg:w-64 lg:block
             ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
           `}
           >
-            {/* Mobile Header for Sidebar */}
-            <div className="flex items-center justify-between mb-8 lg:hidden">
-              <h2 className="text-xl font-black uppercase tracking-tighter">
-                Filters
-              </h2>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <X />
-              </Button>
+            {/* Mobile Sidebar Header */}
+            <div className="flex items-center justify-between mb-12 lg:hidden">
+              <p className="text-[10px] tracking-[0.3em] text-gray-400 uppercase font-bold">
+                Adjust_Parameters
+              </p>
+              <button onClick={() => setIsSidebarOpen(false)} className="p-2">
+                <X size={20} strokeWidth={1.5} />
+              </button>
             </div>
 
-            <Sidebar
-              selectedIds={selectedIds}
-              setSelectedIds={setSelectedIds}
-            />
+            <div className="space-y-10">
+              <Sidebar
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
+              />
+            </div>
 
-            {/* Mobile Apply Button */}
+            {/* Mobile Footer Button */}
             <Button
-              className="w-full mt-8 lg:hidden rounded-xl bg-black py-6"
+              className="w-full mt-12 lg:hidden rounded-2xl bg-gray-900 py-7 text-[10px] uppercase tracking-[0.2em] font-bold"
               onClick={() => setIsSidebarOpen(false)}
             >
-              Apply Filters
+              Apply Changes
             </Button>
           </aside>
 
           {/* Product Feed */}
           <div className="flex-1">
-            <div className="hidden lg:flex justify-end pb-6">
-              <p className="text-slate-500 font-medium">
-                Product result:{" "}
-                <strong className="text-black font-black">
-                  {filteredProducts?.length}
-                </strong>
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-8">
+            {/* Displaying Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-12">
               {pageProduct.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -139,8 +129,11 @@ const Products = () => {
               ))}
             </div>
 
-            {/* Pagination Container */}
-            <div className="mt-16 flex justify-center border-t border-slate-100 pt-10">
+            {/* Clean Pagination */}
+            <div className="mt-24 pt-12 border-t border-gray-50 flex flex-col items-center gap-8">
+              <p className="text-[10px] tracking-widest text-gray-400 uppercase">
+                Page {page} of {totalPages}
+              </p>
               <PaginationDemo
                 currentPage={page}
                 totalPages={totalPages}

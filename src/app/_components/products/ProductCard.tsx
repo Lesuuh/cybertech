@@ -1,11 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Heart } from "lucide-react";
-
+import { Heart, Plus } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-
 import type { ProductCardProps } from "@/app/types";
 import { motion } from "framer-motion";
 import { useCartStore } from "@/store/cartStore";
@@ -20,104 +17,88 @@ const ProductCard = ({
   onSave,
   save,
 }: ProductCardProps) => {
-  // const [windowWidth, setWindowWidth] = useState(0);
-  // const [hasMounted, setHasMounted] = useState(false);
-
-  // useEffect(() => {
-  // setHasMounted(true);
-  // const handleResize = () => setWindowWidth(window.innerWidth);
-  //   handleResize();
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
-  // let maxLength = 50;
-  // if (windowWidth < 480) maxLength = 20;
-  // else if (windowWidth < 780) maxLength = 30;
-  // else if (windowWidth < 1020) maxLength = 40;
-
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddtoCart = (id: number) => {
-    console.log(id + " " + "added to cart");
     addItem({
       id: crypto.randomUUID(),
       product_id: id,
       quantity: 1,
     });
-    toast(name + " " + "added to cart");
+    toast.success(`${name} added to cart`);
   };
+
+  const originalPrice = discount > 0 ? price / (1 - discount / 100) : price;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      // whileHover={{ scale: 1.03, boxShadow: "0 12px 20px rgba(0,0,0,0.15)" }}
-      className="group relative bg-white h-auto rounded-xl border border-gray-200 flex flex-col overflow-hidden transition-all duration-300"
+      className="group relative bg-white border border-gray-100 flex flex-col overflow-hidden transition-all duration-500 hover:border-gray-900 rounded-[32px]"
     >
-      {/* Save button */}
+      {/* Action Buttons */}
       <button
         onClick={onSave}
-        aria-label="Add to favorites"
-        className="absolute top-3 right-3 z-20 p-1.5 rounded-full bg-white/80 backdrop-blur-sm shadow-sm hover:bg-white transition-all duration-200"
+        className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 opacity-0 group-hover:opacity-100 transition-all duration-300"
       >
         <Heart
-          size={18}
-          className={`${
-            save ? "text-red-500 fill-red-500" : "text-gray-500"
-          } transition-all duration-200`}
+          size={16}
+          className={`${save ? "text-red-500 fill-red-500" : "text-gray-400"}`}
         />
       </button>
-      <Link href={`/products/${id}`} className="block">
-        {/* Image */}
-        <motion.div
-          className="relative w-full h-[200px] bg-gray-50"
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-        >
+
+      <Link href={`/products/${id}`} className="flex-1 flex flex-col">
+        {/* Image Display */}
+        <div className="relative w-full aspect-square overflow-hidden">
           <Image
             src={imageSrc || "/placeholder.svg"}
             alt={name}
             fill
-            className="object-contain p-6"
-            priority
+            className="object-contain p-8  group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 ease-in-out"
           />
+
           {discount > 0 && (
-            <span className="absolute top-3 left-3 text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-md">
-              -{discount}%
-            </span>
+            <div className="absolute top-4 left-4">
+              <span className="text-[10px] font-bold tracking-widest text-gray-900 bg-white px-2 py-1 border border-gray-100 rounded-md">
+                -{discount}%
+              </span>
+            </div>
           )}
-        </motion.div>
+        </div>
 
-        {/* Content */}
-        <div className="flex flex-col flex-1 p-4 ">
-          <h3 className="text-sm md:text-base font-medium text-gray-900 mb-1 leading-snug line-clamp-2">
-            {name}
-          </h3>
+        {/* Info Area */}
+        <div className="p-6 flex flex-col gap-2">
+          <div className="space-y-1">
+            <p className="text-[9px] tracking-[0.2em] text-gray-400 uppercase font-medium">
+              Ref_ID: {id}
+            </p>
+            <h3 className="text-sm font-medium text-gray-900 leading-tight line-clamp-1 uppercase tracking-tight">
+              {name}
+            </h3>
+          </div>
 
-          <div className="flex items-center gap-2 group-hover:hidden">
-            <p className="text-lg md:text-xl font-semibold text-gray-900">
+          <div className="flex items-baseline gap-2 mt-2">
+            <p className="text-lg font-medium tracking-tighter text-gray-900">
               ${price.toFixed(2)}
             </p>
-
             {discount > 0 && (
-              <p className="text-xs text-gray-400 line-through">
-                ${(price / (1 - discount / 100)).toFixed(2)}
+              <p className="text-[10px] text-gray-300 line-through tracking-tighter">
+                ${originalPrice.toFixed(2)}
               </p>
             )}
           </div>
         </div>
       </Link>
 
-      <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-150 ease-out">
+      {/* Slide-up Add to Cart */}
+      <div className="absolute bottom-0 left-0 w-full translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-30">
         <button
           onClick={() => handleAddtoCart(id)}
-          className="flex w-full cursor-pointer items-center justify-between bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
-          aria-label={`Add ${name} to cart for $${price.toFixed(2)}`}
+          className="flex w-full items-center justify-between bg-gray-900 px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] text-white hover:bg-black transition-colors"
         >
-          <span>Add to cart</span>
-          <span className="text-white/80">${price.toFixed(2)}</span>
+          <span>Add to Cart</span>
+          <Plus size={14} />
         </button>
       </div>
     </motion.div>

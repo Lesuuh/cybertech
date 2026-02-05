@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const navbarItems = [
   { label: "Home", href: "/" },
@@ -19,12 +20,30 @@ const Navbar = () => {
 
   const cartItems = useCartStore((state) => state.items);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
+
   // Handle glassmorphism on scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+    }
+  };
+
+  const handleSearchMobile = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+    }
+    setOpen(false);
+  };
 
   return (
     <header
@@ -69,10 +88,16 @@ const Navbar = () => {
           {/* Enhanced Search - Desktop */}
           <div className="hidden md:flex items-center relative group">
             <Search className="absolute left-3 w-4 h-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
-            <input
-              placeholder="Search hardware..."
-              className="bg-slate-100 border-transparent border focus:border-indigo-200 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 pl-10 pr-4 py-2 rounded-xl text-sm outline-none w-48 lg:w-64 transition-all"
-            />
+
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search Hardware..."
+                className="bg-slate-100 border-transparent border focus:border-indigo-200 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 pl-10 pr-4 py-2 rounded-xl text-sm outline-none w-48 lg:w-64 transition-all"
+              />
+            </form>
           </div>
 
           <div className="flex items-center gap-1">
@@ -134,10 +159,17 @@ const Navbar = () => {
             >
               <div className="relative mb-2">
                 <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
-                <input
-                  placeholder="Search products..."
-                  className="w-full bg-slate-100 pl-10 pr-4 py-3 rounded-2xl outline-none"
-                />
+
+                <form onSubmit={handleSearchMobile}>
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search Hardware..."
+                    className="w-full bg-slate-100 pl-10 pr-4 py-3 rounded-2xl outline-none"
+                    // className="bg-slate-100 border-transparent border focus:border-indigo-200 focus:bg-white focus:ring-4 focus:ring-indigo-500/5 pl-10 pr-4 py-2 rounded-xl text-sm outline-none w-48 lg:w-64 transition-all"
+                  />
+                </form>
               </div>
               {navbarItems.map((item) => (
                 <Link
