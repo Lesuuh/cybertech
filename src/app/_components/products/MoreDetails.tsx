@@ -1,103 +1,78 @@
-const MoreDetails = ({ product }) => {
-  return (
-    <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-16 md:my-20">
-      <h1 className="text-xl md:text-xl font-semibold text-gray-900 tracking-tight">
-        Details
-      </h1>
-      <div className="rounded-xl ">
-        <p className="text-gray-600 leading-relaxed text-sm md:text-lg">
-          {product.metadata.details}
-        </p>
-      </div>
+"use client";
 
-      {/* Detailed Specs */}
-      <h2 className="text-sm md:text-xl font-medium text-gray-900 mt-10 tracking-tight border-l-4 border-gray-900 pl-3">
-        More Details
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-800 font-medium bg-white/80 backdrop-blur-sm p-6 rounded-xl">
-        {product.metadata.cpuCores && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">CPU Cores:</span>{" "}
-            {product.metadata.cpuCores}
+import React from "react";
+
+const MoreDetails = ({ product }) => {
+  // Helper to filter out empty metadata values
+  const specList = [
+    { label: "CPU_CORES", value: product.metadata.cpuCores },
+    { label: "CPU_TYPE", value: product?.cpuType },
+    { label: "FRONT_CAMERA", value: product.metadata.cameraFront },
+    { label: "BACK_CAMERA", value: product.metadata.cameraBack },
+    { label: "BATTERY_UNIT", value: product.metadata.batteryCapacity },
+    { label: "SCREEN_DIMENSIONS", value: product.metadata.screenSize },
+    { label: "RESOLUTION", value: product.metadata.screenResolution },
+    { label: "REFRESH_RATE", value: product.metadata.screenRefreshRate },
+    { label: "PANEL_TYPE", value: product.metadata.screenType },
+    { label: "PIXEL_DENSITY", value: product.metadata.pixelDensity },
+    {
+      label: "LOGISTICS_ESTIMATE",
+      value: product.metadata.deliveryDays
+        ? `${product.metadata.deliveryDays} DAYS`
+        : null,
+    },
+    { label: "INVENTORY_STATUS", value: product.metadata.inStock },
+    {
+      label: "WARRANTY_POLICY",
+      value: product.metadata.guarantee
+        ? `${product.metadata.guarantee} YEAR(S)`
+        : null,
+    },
+  ].filter((spec) => spec.value !== undefined && spec.value !== null);
+
+  return (
+    <section className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        {/* Left Column: Narrative Description */}
+        <div className="lg:col-span-4">
+          <h2 className="text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium mb-6">
+            Product_Description
+          </h2>
+          <p className="text-gray-600 leading-relaxed text-sm font-light">
+            {product.metadata.details}
+          </p>
+        </div>
+
+        {/* Right Column: Technical Grid */}
+        <div className="lg:col-span-8">
+          <h2 className="text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium mb-6">
+            Full_Technical_Specifications
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 border-t border-gray-100">
+            {specList.map((spec, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center py-5 border-b border-gray-50 group hover:bg-gray-50/50 transition-colors px-2"
+              >
+                <span className="text-[10px] tracking-widest text-gray-400 uppercase font-medium">
+                  {spec.label}
+                </span>
+                <span className="text-sm font-medium text-gray-900 tracking-tight">
+                  {spec.value}
+                </span>
+              </div>
+            ))}
           </div>
-        )}
-        {product?.cpuType && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">CPU Type:</span>{" "}
-            {product?.cpuType}
+
+          {/* Footer Metadata */}
+          <div className="mt-8 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gray-100"></div>
+            <span className="text-[9px] tracking-[0.3em] text-gray-300 uppercase font-medium">
+              End_Of_Spec_Sheet
+            </span>
           </div>
-        )}
-        {product.metadata.cameraFront && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Front Camera:</span>{" "}
-            {product.metadata.cameraFront}
-          </div>
-        )}
-        {product.metadata.cameraBack && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Back Camera:</span>{" "}
-            {product.metadata.cameraBack}
-          </div>
-        )}
-        {product.metadata.batteryCapacity && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">
-              Battery Capacity:
-            </span>{" "}
-            {product.metadata.batteryCapacity}
-          </div>
-        )}
-        {product.metadata.screenSize && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Screen Size:</span>{" "}
-            {product.metadata.screenSize}
-          </div>
-        )}
-        {product.metadata.screenResolution && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">
-              Screen Resolution:
-            </span>{" "}
-            {product.metadata.screenResolution}
-          </div>
-        )}
-        {product.metadata.screenRefreshRate && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Refresh Rate:</span>{" "}
-            {product.metadata.screenRefreshRate}
-          </div>
-        )}
-        {product.metadata.screenType && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Screen Type:</span>{" "}
-            {product.metadata.screenType}
-          </div>
-        )}
-        {product.metadata.pixelDensity && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Pixel Density:</span>{" "}
-            {product.metadata.pixelDensity}
-          </div>
-        )}
-        {product.metadata.deliveryDays && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Delivery Days:</span>{" "}
-            {product.metadata.deliveryDays} days
-          </div>
-        )}
-        {typeof product.metadata.inStock === "number" && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">In Stock:</span>{" "}
-            {product.metadata.inStock}
-          </div>
-        )}
-        {product.metadata.guarantee && (
-          <div className="hover:bg-gray-50 p-3 rounded-lg transition-all duration-200">
-            <span className="font-semibold text-gray-900">Guarantee:</span>{" "}
-            {product.metadata.guarantee} year
-            {product.metadata.guarantee > 1 ? "s" : ""}
-          </div>
-        )}
+        </div>
       </div>
     </section>
   );

@@ -6,7 +6,7 @@ export type ProductCardProps = {
   discount?: number;
   isFeatured?: boolean;
   isBestSeller?: boolean;
-  onBuy: () => void;
+  // onBuy: () => void;
   onSave: () => void;
   save: boolean;
 };

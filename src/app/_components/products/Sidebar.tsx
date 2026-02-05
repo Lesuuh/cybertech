@@ -1,11 +1,27 @@
-import SiderbarOptions from "./SidebarOptions";
+import SidebarOptions from "./SidebarOptions";
 
 import { categories } from "@/app/data/data";
 
-const Sidebar = () => {
+const Sidebar = ({ selectedIds, setSelectedIds }) => {
   return (
     <div>
-      <SiderbarOptions options={categories} />
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">
+        <SidebarOptions
+          options={categories}
+          selectedIds={selectedIds}
+          setSelectedIds={setSelectedIds}
+        />
+      </div>
+
+      {/* Mobile Dropdown */}
+      <div className="block md:hidden z-[999] w-full">
+        <SidebarOptions
+          options={categories}
+          selectedIds={selectedIds}
+          setSelectedIds={setSelectedIds}
+        />
+      </div>
     </div>
   );
 };

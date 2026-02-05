@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const bannerItems = [
   {
@@ -61,9 +62,11 @@ const Banner2 = () => {
               {item.desc}
             </p>
             {item.id === 4 && (
-              <Button className="bg-transparent text-white px-8 py-3 rounded-full border border-white/40 hover:border-white hover:bg-white/10 transition-all duration-300 w-max mx-auto lg:mx-0">
-                Shop Now
-              </Button>
+              <Link href={"/products/21"}>
+                <Button className="bg-white text-black hover:text-white hover:border cursor-pointer duration-300 transition rounded-full lg:px-8 lg:py-6 text-sm group transition-transform active:scale-95">
+                  Shop Now
+                </Button>
+              </Link>
             )}
           </div>
         </div>

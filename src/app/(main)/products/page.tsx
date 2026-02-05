@@ -5,25 +5,30 @@ import { Breadcrumbs } from "../../_components/products/Breadcrumbs";
 import ProductCard from "../../_components/products/ProductCard";
 import { Product } from "../../types";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react"; // Added X for closing
 import { PaginationDemo } from "../../_components/products/Pagination";
 import Sidebar from "../../_components/products/Sidebar";
-// import { useProducts } from "@/services/useProducts";
 import Spinner from "@/components/ui/Spinner";
 import { products } from "@/app/data/data";
 
 const Products = () => {
-  // const { data: products, isLoading, error } = useProducts();
-  const filteredProducts = products;
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
+
+  const filteredProducts =
+    selectedIds.length > 0
+      ? products.filter((item) => selectedIds.includes(item.categoryId))
+      : products;
+
   const [page, setPage] = useState(1);
   const itemsPerPage = 8;
-  const totalPages = Math.ceil(products?.length / itemsPerPage);
-
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const pageProduct = products?.slice(startIndex, endIndex);
+  const pageProduct = filteredProducts.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
-  const isLoading = false;
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Shop", href: "/products" },
@@ -42,79 +47,109 @@ const Products = () => {
   }, [save]);
 
   const onSave = (product: Product) => {
-    setSave((prev) => ({
-      ...prev,
-      [product.id]: !prev[product.id],
-    }));
-    console.log(`${product.name} saved?`, !save[product.id]);
+    setSave((prev) => ({ ...prev, [product.id]: !prev[product.id] }));
   };
 
   return (
-    <main>
-      <section className="max-w-[1500px]  px-4  mx-auto w-full my-10 ">
-        <div className="hidden lg:flex">
+    <main className="min-h-screen bg-white">
+      <section className="max-w-[1500px] px-4 md:px-8 lg:px-12 mx-auto w-full my-6 md:my-10">
+        {/* Breadcrumbs - Hidden on small mobile to save space */}
+        <div className="hidden sm:flex mb-6">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
-        <div className="flex lg:hidden w-full items-center gap-6">
-          <Button variant="outline" className="py-6 flex-1 rounded-sm">
-            Filters <SlidersHorizontal />
+        {/* Mobile Filter Trigger & Result Count */}
+        <div className="flex items-center justify-between py-4 border-b border-slate-100 lg:hidden">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSidebarOpen(true)}
+            className="flex items-center gap-2 rounded-xl font-bold border-slate-200"
+          >
+            <SlidersHorizontal size={16} />
+            Filters
           </Button>
-          <Button variant="outline" className="py-6 flex-1 rounded-sm">
-            By ratings <ChevronDown />
-          </Button>
+          <p className="text-sm text-slate-500 font-medium">
+            Results:{" "}
+            <span className="text-black font-bold">
+              {filteredProducts?.length}
+            </span>
+          </p>
         </div>
 
-        <div className="mt-10">
-          <div className="grid lg:grid-cols-4 mt-10 gap-8">
-            {/* side bar */}
-            <div>
-              <Sidebar />
+        <div className="flex flex-col lg:flex-row gap-10 mt-6 lg:mt-10">
+          {/* Desktop Sidebar / Mobile Drawer Overlay */}
+          <aside
+            className={`
+            fixed inset-0 z-50 bg-white p-6 transition-transform duration-300 lg:relative lg:inset-auto lg:z-0 lg:p-0 lg:translate-x-0 lg:w-64 lg:block
+            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          `}
+          >
+            {/* Mobile Header for Sidebar */}
+            <div className="flex items-center justify-between mb-8 lg:hidden">
+              <h2 className="text-xl font-black uppercase tracking-tighter">
+                Filters
+              </h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSidebarOpen(false)}
+              >
+                <X />
+              </Button>
             </div>
-            <div className="col-span-3">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="text-sm">
-                  Product result: <strong>{filteredProducts?.length}</strong>
-                </div>
-                <Button
-                  variant="outline"
-                  className="py-6 rounded-sm min-w-[120px]"
-                >
-                  By ratings <ChevronDown />
-                </Button>
-              </div>
 
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                <>
-                  <div className="grid  w-full  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {pageProduct?.slice(0, 8).map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        id={product.id}
-                        imageSrc={product.imageSrc}
-                        name={product.name}
-                        price={product.price}
-                        discount={product.discount || 0}
-                        isFeatured={product.isFeatured || false}
-                        isBestSeller={product.isBestSeller || false}
-                        onBuy={() => alert(`Purchased ${product.name}!`)}
-                        onSave={() => onSave(product)}
-                        save={!!save[product.id]}
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-10 flex justify-center">
-                    <PaginationDemo
-                      currentPage={page}
-                      totalPages={totalPages}
-                      onPageChange={(newPage) => setPage(newPage)}
-                    />
-                  </div>
-                </>
-              )}
-            </div>{" "}
+            <Sidebar
+              selectedIds={selectedIds}
+              setSelectedIds={setSelectedIds}
+            />
+
+            {/* Mobile Apply Button */}
+            <Button
+              className="w-full mt-8 lg:hidden rounded-xl bg-black py-6"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              Apply Filters
+            </Button>
+          </aside>
+
+          {/* Product Feed */}
+          <div className="flex-1">
+            <div className="hidden lg:flex justify-end pb-6">
+              <p className="text-slate-500 font-medium">
+                Product result:{" "}
+                <strong className="text-black font-black">
+                  {filteredProducts?.length}
+                </strong>
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-8">
+              {pageProduct.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  imageSrc={product.imageSrc}
+                  name={product.name}
+                  price={product.price}
+                  discount={product.discount || 0}
+                  onSave={() => onSave(product)}
+                  save={!!save[product.id]}
+                />
+              ))}
+            </div>
+
+            {/* Pagination Container */}
+            <div className="mt-16 flex justify-center border-t border-slate-100 pt-10">
+              <PaginationDemo
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => {
+                  setPage(newPage);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>

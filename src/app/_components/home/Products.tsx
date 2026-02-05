@@ -3,25 +3,21 @@
 import { useState } from "react";
 import ProductCard from "../products/ProductCard";
 import { Product } from "@/app/types";
-// import { useProducts } from "@/services/useProducts";
-import Spinner from "@/components/ui/Spinner";
 import { products } from "@/app/data/data";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const Products = () => {
   const tabs = [
-    { slug: "all", label: "Products" },
+    { slug: "all", label: "All Products" },
     { slug: "new", label: "New Arrivals" },
-    { slug: "bestseller", label: "Best Seller" },
+    { slug: "bestseller", label: "Best Sellers" },
     { slug: "featured", label: "Featured" },
   ];
 
   const [activeTab, setActiveTab] = useState("all");
+  const [save, setSave] = useState<{ [key: number]: boolean }>({});
 
-  // const { data: products, isLoading, error } = useProducts();
-
-  // Use the imported products directly
-
-  // Filtering products
   const filteredProducts = products?.filter((product) => {
     if (activeTab === "new") return product.isNewArrival;
     if (activeTab === "featured") return product.isFeatured;
@@ -29,56 +25,95 @@ const Products = () => {
     return true;
   });
 
-  const [save, setSave] = useState<{ [key: number]: boolean }>({});
-
   const onSave = (product: Product) => {
-    setSave((prev) => ({
-      ...prev,
-      [product.id]: !prev[product.id],
-    }));
-    console.log(`${product.name} saved?`, !save[product.id]);
+    setSave((prev) => ({ ...prev, [product.id]: !prev[product.id] }));
   };
-
-  const setTab = (slug: string) => {
-    setActiveTab(slug);
-  };
-
-  // if (isLoading) return <Spinner />;
-  // if (error) return <p>Error loading products</p>;
 
   return (
-    <section className="max-w-[1500px] px-4 md:px-16 lg:px-28 mx-auto w-full my-20 ">
-      <div className="space-x-5">
-        {tabs.map((tab, idx) => (
-          <button
-            onClick={() => setTab(tab.slug)}
-            key={idx}
-            className={`cursor-pointer  text-sm ${
-              activeTab === tab.slug
-                ? "text-gray-900 underline"
-                : "text-gray-500"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <section className="max-w-[1400px] mx-auto px-4 md:px-6 py-12 md:py-20 w-full">
+      {/* Tab Navigation - Fully Responsive */}
+      <div className="flex flex-col gap-6 mb-8 md:mb-12 md:flex-row md:items-center md:justify-between">
+        {/* Tab List: Scrollable on Mobile, Fixed on Desktop */}
+        <div className="w-full md:w-auto overflow-hidden">
+          <div className="flex p-1 bg-slate-100 rounded-2xl overflow-x-auto no-scrollbar scroll-smooth">
+            <div className="flex gap-1 min-w-full md:min-w-0">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.slug}
+                  onClick={() => setActiveTab(tab.slug)}
+                  className={`relative flex-1 md:flex-none px-5 py-2.5 text-xs md:text-sm font-bold transition-all duration-300 rounded-xl whitespace-nowrap ${
+                    activeTab === tab.slug
+                      ? "text-indigo-600"
+                      : "text-slate-500 hover:text-slate-900"
+                  }`}
+                >
+                  {activeTab === tab.slug && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-white shadow-sm border border-slate-200 rounded-xl"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Item Counter: Aligned to the bottom-right on mobile */}
+        <p className="text-slate-400 text-sm font-medium self-end md:self-auto">
+          Showing{" "}
+          <span className="text-slate-900 font-bold">
+            {filteredProducts?.length}
+          </span>{" "}
+          items
+        </p>
       </div>
-      <div className="grid mt-10  w-full  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts?.slice(0, 8).map((product) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            imageSrc={product.imageSrc}
-            name={product.name}
-            price={product.price}
-            discount={product.discount || 0}
-            isFeatured={product.isFeatured || false}
-            isBestSeller={product.isBestSeller || false}
-            onBuy={() => alert(`Purchased ${product.name}!`)}
-            onSave={() => onSave(product)}
-            save={!!save[product.id]}
-          />
-        ))}
+
+      {/* Animated Grid */}
+      <motion.div
+        layout
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProducts?.slice(0, 8).map((product, idx) => (
+            <motion.div
+              key={product.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3, delay: idx * 0.05 }}
+            >
+              <ProductCard
+                id={product.id}
+                imageSrc={product.imageSrc}
+                name={product.name}
+                price={product.price}
+                discount={product.discount || 0}
+                isFeatured={product.isFeatured || false}
+                isBestSeller={product.isBestSeller || false}
+                onSave={() => onSave(product)}
+                save={!!save[product.id]}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Bottom Action */}
+      <div className="mt-12 md:mt-20 flex justify-center">
+        <Link
+          href={"/products"}
+          className="w-full md:w-auto px-10 py-4 border-2 border-slate-200 rounded-2xl font-bold text-slate-600 hover:border-indigo-600 hover:text-indigo-600 transition-all active:scale-95"
+        >
+          View All Products
+        </Link>
       </div>
     </section>
   );

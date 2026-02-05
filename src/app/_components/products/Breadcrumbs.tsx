@@ -1,17 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-
+import React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import React from "react";
 
 type BreadcrumbData = {
   label: string;
@@ -24,8 +21,8 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items }: BreadcrumbsProps) {
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
+    <Breadcrumb className="mb-8">
+      <BreadcrumbList className="gap-0">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
 
@@ -33,18 +30,28 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
             <React.Fragment key={item.label}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                  <BreadcrumbPage className="text-[10px] tracking-[0.2em] uppercase font-medium text-gray-900">
+                    {item.label}
+                  </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
-                    <Link href={item.href || "#"}>{item.label}</Link>
+                  <BreadcrumbLink
+                    asChild
+                    className="hover:text-gray-900 transition-colors"
+                  >
+                    <Link
+                      href={item.href || "#"}
+                      className="text-[10px] tracking-[0.2em] uppercase font-medium text-gray-400"
+                    >
+                      {item.label}
+                    </Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
 
               {!isLast && (
-                <BreadcrumbSeparator>
-                  <ArrowRight className="mx-2 h-4 w-4 text-muted-foreground" />
-                </BreadcrumbSeparator>
+                <span className="text-[10px] text-gray-300 mx-3 select-none">
+                  /
+                </span>
               )}
             </React.Fragment>
           );

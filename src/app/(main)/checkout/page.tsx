@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCheckoutData } from "@/hooks/useCheckoutData";
 import ShippingSection from "@/app/_components/checkout/ShippingSection";
@@ -11,32 +10,22 @@ import OrderConfirmationModal from "@/app/_components/checkout/OrderConfirmation
 
 export default function CheckoutPage() {
   const didMount = useRef(false);
-  // State for payment method selection
   const [paymentMethod, setPaymentMethod] = useState("");
-  // State for all addresses (array of address objects)
   const [addresses, setAddresses] = useState([]);
-  // State for the currently selected address (address id)
   const [selectedAddress, setSelectedAddress] = useState("");
-  // State to control the order confirmation modal visibility
   const [showOrderModal, setShowOrderModal] = useState(false);
-  // State to hold order details for the confirmation modal
   const [orderDetails, setOrderDetails] = useState(null);
 
-  // Custom hook to get cart items, grand total, and loading state
   const { cartItems, grandTotal, loading } = useCheckoutData();
 
-  // Handler to add a new address
   const handleAddAddress = (address) => {
     const newAddress = {
-      id: crypto.randomUUID(), // Generate a unique id for the address
+      id: crypto.randomUUID(),
       ...address,
     };
-
-    setAddresses((prev) => [...prev, newAddress]); // Add new address to state
-    setSelectedAddress(newAddress.id); // Select the newly added address
+    setAddresses((prev) => [...prev, newAddress]);
+    setSelectedAddress(newAddress.id);
   };
-
-  console.log(addresses);
 
   useEffect(() => {
     if (didMount.current) {
@@ -46,47 +35,29 @@ export default function CheckoutPage() {
     }
   }, [addresses]);
 
-  // On mount, load addresses from localStorage (if any)
   useEffect(() => {
     const savedAddresses = localStorage.getItem("checkout-addresses");
-
     if (savedAddresses) {
       const parsed = JSON.parse(savedAddresses);
       setAddresses(parsed);
-
-      // If there are addresses, select the first one by default
-      if (parsed.length > 0) {
-        setSelectedAddress(parsed[0].id);
-      }
+      if (parsed.length > 0) setSelectedAddress(parsed[0].id);
     }
   }, []);
 
-  // Handler for clicking "Continue" (placing the order)
   const handleContinue = () => {
-    if (!paymentMethod) {
-      alert("Please select a payment method.");
-      return;
-    }
+    if (!paymentMethod || !selectedAddress) return;
 
-    if (!selectedAddress) {
-      alert("Please select a delivery address.");
-      return;
-    }
-
-    // Generate order number and estimated delivery date
     const orderNumber = `ORD-${Date.now()}`;
     const currentDate = new Date();
     const estimatedDelivery = new Date(
       currentDate.getTime() +
         (paymentMethod === "cod" ? 3 : 5) * 24 * 60 * 60 * 1000,
     ).toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
+      weekday: "short",
+      month: "short",
       day: "numeric",
     });
 
-    // Set order details for the confirmation modal
     setOrderDetails({
       orderNumber,
       paymentMethod,
@@ -94,27 +65,25 @@ export default function CheckoutPage() {
       cartItems,
     });
 
-    // Show the order confirmation modal
     setShowOrderModal(true);
   };
 
-  console.log(orderDetails);
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-16 lg:px-20">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <p className="text-gray-600 mt-2">
-            Review your order and complete your purchase
+    <main className="min-h-screen bg-white">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12">
+        {/* Page Header - Clean & Architectural */}
+        <header className="mb-12">
+          <h1 className="text-3xl font-medium tracking-tight text-gray-900">
+            Checkout
+          </h1>
+          <p className="text-[10px] tracking-[0.2em] text-gray-400 uppercase mt-2">
+            Secure_Transaction_Protocol // Step 02 of 02
           </p>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Shipping & Payment */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Shipping address selection/creation */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* Left Column - Main Forms (8 Columns) */}
+          <div className="lg:col-span-8 space-y-10">
             <ShippingSection
               addresses={addresses}
               selectedAddress={selectedAddress}
@@ -122,7 +91,6 @@ export default function CheckoutPage() {
               onAddAddress={handleAddAddress}
             />
 
-            {/* Payment method selection */}
             <PaymentSection
               paymentMethod={paymentMethod}
               onPaymentChange={setPaymentMethod}
@@ -130,8 +98,8 @@ export default function CheckoutPage() {
             />
           </div>
 
-          {/* Right Column - Order Summary */}
-          <div className="space-y-6">
+          {/* Right Column - Summary (4 Columns) */}
+          <div className="lg:col-span-4">
             <OrderSummary
               cartItems={cartItems}
               grandTotal={grandTotal}
@@ -142,9 +110,9 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {/* Order Confirmation Modal */}
+        {/* Order Confirmation Modal - Clean Design */}
         <Dialog open={showOrderModal} onOpenChange={setShowOrderModal}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[550px] rounded-[40px] border-none p-10 shadow-2xl">
             <OrderConfirmationModal
               orderDetails={orderDetails}
               grandTotal={grandTotal}
@@ -153,6 +121,6 @@ export default function CheckoutPage() {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
+    </main>
   );
 }

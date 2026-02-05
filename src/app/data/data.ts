@@ -155,7 +155,7 @@ export const products = [
   },
   {
     id: 5,
-    categoryId: 1,
+    categoryId: 8,
     imageSrc: "/images/earbuds.png",
     name: "Galaxy Buds FE Graphite",
     price: 79.0,
@@ -294,7 +294,7 @@ export const products = [
   },
   {
     id: 9,
-    categoryId: 7,
+    categoryId: 9,
     imageSrc: "/images/apple-vision-pro.png",
     name: 'Apple Vision Pro"',
     price: 899.0,
@@ -361,17 +361,374 @@ export const products = [
       ],
     },
   },
+  {
+    id: 11,
+    categoryId: 2,
+    imageSrc: "/images/dell-xps.png",
+    name: "Dell XPS 15",
+    price: 1899.0,
+    discount: 5,
+    isNewArrival: false,
+    isFeatured: true,
+    isBestSeller: false,
+    stock: 15,
+    description:
+      "The ultimate Windows laptop with a stunning 4K OLED InfinityEdge display.",
+    deliveryDays: 4,
+    warrantyYears: 1,
+    metadata: {
+      cpuCores: 14,
+      batteryCapacity: "86Whr",
+      screenSize: 15.6,
+      memorySpace: "32GB RAM, 1TB SSD",
+      cameraFront: "720p HD",
+      screenType: "OLED Touch",
+      details: [
+        "13th Gen Intel Core i9",
+        "NVIDIA GeForce RTX 4070",
+        "CNC machined aluminum",
+      ],
+    },
+  },
+  {
+    id: 12,
+    categoryId: 7,
+    imageSrc: "/images/s24-ultra.png",
+    name: "Samsung Galaxy S24 Ultra",
+    price: 1299.0,
+    discount: 0,
+    isNewArrival: true,
+    isFeatured: true,
+    isBestSeller: true,
+    stock: 20,
+    description: "Titanium built flagship with Galaxy AI and built-in S Pen.",
+    deliveryDays: 2,
+    warrantyYears: 2,
+    metadata: {
+      cpuCores: 8,
+      batteryCapacity: "5000 mAh",
+      screenSize: 6.8,
+      memorySpace: "12GB RAM, 256GB storage",
+      cameraBack: "200MP + 50MP + 12MP + 10MP",
+      screenType: "Dynamic AMOLED 2X",
+      details: [
+        "Snapdragon 8 Gen 3",
+        "Titanium frame",
+        "Real-time AI translation",
+      ],
+    },
+  },
+  {
+    id: 13,
+    categoryId: 3,
+    imageSrc: "/images/xbox-series-x.png",
+    name: "Xbox Series X",
+    price: 499.0,
+    discount: 0,
+    isNewArrival: false,
+    isFeatured: false,
+    isBestSeller: true,
+    stock: 12,
+    description:
+      "The fastest, most powerful Xbox ever with 12 teraflops of processing power.",
+    deliveryDays: 5,
+    warrantyYears: 1,
+    metadata: {
+      cpuCores: 8,
+      storageSpace: "1 TB SSD",
+      memorySpace: "16GB GDDR6",
+      screenResolution: "4K @ 120fps",
+      details: [
+        "Velocity Architecture",
+        "Quick Resume for multiple games",
+        "True 4K Gaming",
+      ],
+    },
+  },
+  {
+    id: 14,
+    categoryId: 1,
+    imageSrc: "/images/sony-xm5.png",
+    name: "Sony WH-1000XM5",
+    price: 399.0,
+    discount: 15,
+    isNewArrival: false,
+    isFeatured: true,
+    isBestSeller: true,
+    stock: 50,
+    description:
+      "Industry-leading noise cancellation and magnificent sound quality.",
+    deliveryDays: 3,
+    warrantyYears: 1,
+    metadata: {
+      batteryCapacity: "30 hours",
+      connectivity: "Bluetooth 5.2, Multipoint",
+      noiseCancellation: "Industry Leading ANC",
+      details: [
+        "Auto NC Optimizer",
+        "Speak-to-chat technology",
+        "Crystal clear hands-free calling",
+      ],
+    },
+  },
+  {
+    id: 15,
+    categoryId: 5,
+    imageSrc: "/images/ipad-pro.png",
+    name: "iPad Pro 12.9 M2",
+    price: 1099.0,
+    discount: 0,
+    isNewArrival: false,
+    isFeatured: true,
+    isBestSeller: false,
+    stock: 14,
+    description:
+      "A premium tablet experience with the M2 chip and Liquid Retina XDR.",
+    deliveryDays: 3,
+    warrantyYears: 1,
+    metadata: {
+      cpuCores: 8,
+      screenSize: 12.9,
+      memorySpace: "8GB RAM, 256GB Storage",
+      screenType: "mini-LED",
+      details: [
+        "Apple M2 chip",
+        "Support for Apple Pencil (2nd gen)",
+        "Thunderbolt port",
+      ],
+    },
+  },
+  {
+    id: 16,
+    categoryId: 10,
+    imageSrc: "/images/mx-master.png",
+    name: "Logitech MX Master 3S",
+    price: 99.0,
+    discount: 0,
+    isNewArrival: false,
+    isFeatured: false,
+    isBestSeller: true,
+    stock: 100,
+    description:
+      "An iconic tool for programmers and creatives with quiet clicks.",
+    deliveryDays: 2,
+    warrantyYears: 2,
+    metadata: {
+      connectivity: "Logi Bolt, Bluetooth",
+      sensors: ["8K DPI Optical sensor"],
+      details: [
+        "MagSpeed Scrolling",
+        "USB-C Quick Charging",
+        "Multi-device flow",
+      ],
+    },
+  },
+  {
+    id: 17,
+    categoryId: 6,
+    imageSrc: "/images/sony-a7.png",
+    name: "Sony Alpha a7 IV",
+    price: 2499.0,
+    discount: 5,
+    isNewArrival: true,
+    isFeatured: true,
+    isBestSeller: false,
+    stock: 4,
+    description:
+      "Full-frame mirrorless camera for the next generation of creators.",
+    deliveryDays: 6,
+    warrantyYears: 2,
+    metadata: {
+      cameraBack: "33MP Full-Frame CMOS",
+      screenType: "Vari-angle Touchscreen",
+      connectivity: "Wi-Fi, Bluetooth, HDMI",
+      details: ["4K 60p video", "Real-time Eye AF", "Dual card slots"],
+    },
+  },
+  {
+    id: 18,
+    categoryId: 3,
+    imageSrc: "/images/switch-oled.png",
+    name: "Nintendo Switch OLED",
+    price: 349.0,
+    discount: 0,
+    isNewArrival: false,
+    isFeatured: false,
+    isBestSeller: true,
+    stock: 45,
+    description:
+      "Vibrant OLED screen to enjoy your favorite games anytime, anywhere.",
+    deliveryDays: 3,
+    warrantyYears: 1,
+    metadata: {
+      screenSize: 7.0,
+      storageSpace: "64 GB",
+      screenType: "OLED",
+      details: [
+        "Enhanced Audio",
+        "Wide adjustable stand",
+        "Wired LAN port in dock",
+      ],
+    },
+  },
+  {
+    id: 19,
+    categoryId: 10,
+    imageSrc: "/images/keychron-k2.png",
+    name: "Keychron K2 Wireless Keyboard",
+    price: 89.0,
+    discount: 10,
+    isNewArrival: true,
+    isFeatured: false,
+    isBestSeller: false,
+    stock: 60,
+    description: "Tactile mechanical keyboard for Mac and Windows users.",
+    deliveryDays: 4,
+    warrantyYears: 1,
+    metadata: {
+      connectivity: "Bluetooth / Wired",
+      batteryCapacity: "4000 mAh",
+      details: [
+        "Gateron G Pro Switches",
+        "RGB Backlight",
+        "Connects up to 3 devices",
+      ],
+    },
+  },
+  {
+    id: 20,
+    categoryId: 2,
+    imageSrc: "/images/rog-zephyrus.png",
+    name: "ASUS ROG Zephyrus G14",
+    price: 1599.0,
+    discount: 0,
+    isNewArrival: true,
+    isFeatured: true,
+    isBestSeller: false,
+    stock: 7,
+    description:
+      "The most powerful 14-inch gaming laptop with AniMe Matrix display.",
+    deliveryDays: 5,
+    warrantyYears: 1,
+    metadata: {
+      cpuCores: 8,
+      screenRefreshRate: "165 Hz",
+      memorySpace: "16GB RAM, 1TB SSD",
+      details: ["AMD Ryzen 9", "RTX 4060 GPU", "Lightweight magnesium alloy"],
+    },
+  },
+  {
+    id: 21, // Assuming unique ID
+    categoryId: 2, // Assuming Laptops category
+    imageSrc: "/images/macbook15.png",
+    name: "MacBook Air 15-inch (M3)",
+    price: 1299.0,
+    discount: 5,
+    isNewArrival: true,
+    isFeatured: true,
+    isBestSeller: true,
+    stock: 15,
+    description:
+      "Strikingly thin and fast, the MacBook Air 15-inch with M3 chip is built for work and play with a spacious Liquid Retina display.",
+    deliveryDays: 5,
+    warrantyYears: 1,
+    metadata: {
+      cpuCores: "8-core CPU (4 performance and 4 efficiency)",
+      batteryCapacity: "Up to 18 hours Apple TV app movie playback",
+      screenSize: "15.3-inch Liquid Retina display",
+      memorySpace: "8GB, 16GB, or 24GB Unified Memory",
+      cameraFront: "1080p FaceTime HD camera",
+      cameraBack: null,
+      microphone: "Three-mic array with directional beamforming",
+      connectivity:
+        "MagSafe 3, two Thunderbolt / USB 4 ports, Wi-Fi 6E, Bluetooth 5.3",
+      noiseCancellation: "Voice Isolation and Wide Spectrum microphone modes",
+      frequencyResponse: null,
+      relatedProducts: [10, 12],
+      details: [
+        "Apple M3 chip with 10-core GPU",
+        "Fanless design for silent operation",
+        "Six-speaker sound system with force-cancelling woofers",
+        "Support for up to two external displays (with laptop lid closed)",
+      ],
+    },
+  },
 ];
 
+import {
+  Headphones,
+  Laptop,
+  Gamepad2,
+  Watch,
+  Tablet,
+  Camera,
+  Smartphone,
+  Earbuds,
+  Glasses,
+  Cable,
+} from "lucide-react";
 
 export const categories = [
-  { id: 1, name: "Headphones", slug: "headphones" },
-  { id: 2, name: "Laptops", slug: "laptops" },
-  { id: 3, name: "Gaming Consoles", slug: "gaming-consoles" },
-  { id: 4, name: "Watches", slug: "watches" },
-  { id: 5, name: "Tablets", slug: "tablets" },
-  { id: 6, name: "Cameras", slug: "cameras" },
-  { id: 7, name: "Smartphones", slug: "smartphones" },
+  {
+    id: 1,
+    name: "Headphones",
+    slug: "headphones",
+    icon: Headphones,
+  },
+  {
+    id: 2,
+    name: "Laptops",
+    slug: "laptops",
+    icon: Laptop,
+  },
+  {
+    id: 3,
+    name: "Gaming Consoles",
+    slug: "gaming-consoles",
+    icon: Gamepad2,
+  },
+  {
+    id: 4,
+    name: "Watches",
+    slug: "watches",
+    icon: Watch,
+  },
+  {
+    id: 5,
+    name: "Tablets",
+    slug: "tablets",
+    icon: Tablet,
+  },
+  {
+    id: 6,
+    name: "Cameras",
+    slug: "cameras",
+    icon: Camera,
+  },
+  {
+    id: 7,
+    name: "Smartphones",
+    slug: "smartphones",
+    icon: Smartphone,
+  },
+  {
+    id: 8,
+    name: "Earbuds",
+    slug: "earbuds",
+    icon: Earbuds,
+  },
+  {
+    id: 9,
+    name: "Mixed Reality",
+    slug: "mixed-reality",
+    icon: Glasses,
+  },
+  {
+    id: 10,
+    name: "Accessories",
+    slug: "accessories",
+    icon: Cable,
+  },
 ];
 
 export const users = [
@@ -544,183 +901,274 @@ export const orders = [
 export const reviews = [
   {
     id: 1,
-    productId: 1,
+    productId: 1, // Apple AirPods Max
     userId: 1,
     rating: 5,
     comment:
-      "I was a bit nervous about buying a secondhand phone from Amazon, but I couldn’t be happier with my purchase! The phone arrived exactly as described, in excellent condition. Setting it up was super easy and the performance exceeded my expectations. The battery life is solid, and I had zero issues connecting to my prepaid data plan even though it doesn’t have a physical SIM tray anymore. Highly recommend this if you want a great phone at a good price!",
+      "The spatial audio on the AirPods Max is a game-changer for movies. The build quality feels incredibly premium, and the transparency mode is the best I've ever used. Pricey, but worth it for the ecosystem integration.",
     createdAt: "2025-07-30T08:00:00Z",
   },
   {
     id: 2,
-    productId: 10,
+    productId: 2, // MacBook Pro 14"
     userId: 2,
-    rating: 4,
+    rating: 5,
     comment:
-      "Overall a really great phone. The design is sleek and the display is vibrant and clear. I love the camera features, but the battery life leaves a bit to be desired — it doesn’t quite last me through the whole day when I use it heavily. Still, it’s a solid device for the price and works well for daily tasks.",
+      "The M2 Pro chip handles 4K video editing without the fans even kicking in. The Liquid Retina XDR display is breathtakingly sharp. Ideal for professional creative workflows.",
     createdAt: "2025-08-01T14:30:00Z",
   },
   {
     id: 3,
-    productId: 3,
+    productId: 3, // PlayStation 5
     userId: 3,
-    rating: 3,
+    rating: 5,
     comment:
-      "The phone has average performance for the price range. It handles basic apps well but struggles with more intensive tasks. The screen quality is okay but not as sharp or vibrant as I expected. If you’re looking for a budget phone, this could work, but don’t expect premium features.",
+      "Load times are virtually non-existent thanks to the SSD. The DualSense controller's haptic feedback adds a level of immersion I didn't know I was missing. Best console on the market.",
     createdAt: "2025-08-03T10:15:00Z",
   },
   {
     id: 4,
-    productId: 5,
+    productId: 11, // Dell XPS 15
     userId: 4,
-    rating: 5,
+    rating: 4,
     comment:
-      "The camera on this phone is absolutely amazing! It captures stunning photos even in low light conditions, and the colors come out vibrant and natural. I’ve been using it extensively for my photography hobby and I couldn’t be happier with the results. Definitely worth the investment if you care about picture quality.",
+      "The InfinityEdge display makes this 15-inch laptop feel much more compact. Performance is top-tier for a Windows machine, though it can run a bit warm during heavy gaming sessions.",
     createdAt: "2025-08-05T12:45:00Z",
   },
   {
     id: 5,
-    productId: 2,
+    productId: 17, // Sony Alpha a7 IV
     userId: 5,
-    rating: 2,
+    rating: 5,
     comment:
-      "I was really disappointed with the battery life on this phone. It drains way too fast, especially when using apps or browsing the web. For anyone who uses their phone heavily, this could be a dealbreaker. Other than that, the phone’s performance is okay but nothing special.",
+      "A massive upgrade for hybrid shooters. The autofocus is sticky and reliable even in low light. The new menu system is much more intuitive than previous Sony generations.",
     createdAt: "2025-08-06T09:00:00Z",
   },
   {
     id: 6,
-    productId: 1,
+    productId: 5, // Galaxy Buds FE
     userId: 6,
     rating: 4,
     comment:
-      "Good value for money. The phone runs fast and reliably, and I’ve had no major issues since buying it. The user interface is smooth and intuitive. The only downside is the somewhat average camera, but for the price, I’m very satisfied.",
+      "Great sound profile for the price. They fit securely during workouts, and the noise isolation is surprisingly effective for a non-Pro model. Connects instantly to my Galaxy devices.",
     createdAt: "2025-08-07T11:20:00Z",
   },
   {
     id: 7,
-    productId: 7,
+    productId: 9, // Apple Vision Pro
     userId: 7,
     rating: 5,
     comment:
-      "I absolutely love the design of this phone. It’s sleek, modern, and comfortable to hold. The user interface is very intuitive and easy to navigate. Battery life is great, and the overall performance is smooth. Highly recommend it if you want a stylish and functional device.",
+      "The pass-through technology is indistinguishable from reality. It’s early days for the software, but the potential for spatial computing is obvious the moment you put it on.",
     createdAt: "2025-08-08T13:35:00Z",
   },
   {
     id: 8,
-    productId: 6,
+    productId: 16, // Logitech MX Master 3S
     userId: 8,
-    rating: 1,
+    rating: 5,
     comment:
-      "Unfortunately, this phone stopped working after just a week of use. I experienced multiple issues including frequent crashes and the screen freezing. I tried troubleshooting but nothing helped. I’m very disappointed with the quality and would not recommend this model.",
+      "The silent clicks are a huge improvement over the previous version. The MagSpeed wheel is addictive to use, and the ergonomic shape prevents wrist fatigue during long coding sessions.",
     createdAt: "2025-08-09T16:50:00Z",
   },
   {
     id: 9,
-    productId: 4,
+    productId: 4, // Galaxy Watch 6
     userId: 9,
     rating: 4,
     comment:
-      "This is a good phone for the price. It offers decent features and solid build quality. I like the battery life, which easily lasts a full day of moderate use. However, it lacks some of the advanced features found in higher-end models, so it depends on what you’re looking for.",
+      "The sleep tracking is incredibly detailed and has helped me improve my routine. The bezel is smooth, and the display is bright enough to see clearly under direct sunlight.",
     createdAt: "2025-08-10T08:25:00Z",
   },
   {
     id: 10,
-    productId: 8,
+    productId: 13, // Xbox Series X
     userId: 10,
-    rating: 3,
+    rating: 5,
     comment:
-      "Performance is mediocre, but the battery life is decent. It’s a budget phone and feels like one in terms of speed and responsiveness. Great if you don’t want to spend too much and don’t need heavy multitasking.",
+      "Quick Resume is the best feature of this generation—switching between three different games in seconds is magic. Game Pass makes this the best value in gaming.",
     createdAt: "2025-08-11T15:00:00Z",
   },
+
   {
     id: 11,
-    productId: 9,
+    productId: 12, // Samsung Galaxy S24 Ultra
     userId: 11,
     rating: 5,
     comment:
-      "I’m really impressed with the screen resolution and color accuracy on this phone. Watching videos and playing games is a joy with such a crisp display. The device feels premium and performs smoothly with no lag.",
-    createdAt: "2025-08-12T17:40:00Z",
+      "The titanium build feels incredibly premium in hand. Galaxy AI features like Circle to Search have actually changed how I use my phone daily. The camera zoom is still unmatched.",
+    createdAt: "2025-08-12T10:00:00Z",
   },
   {
     id: 12,
-    productId: 10,
+    productId: 14, // Sony WH-1000XM5
     userId: 12,
-    rating: 4,
+    rating: 5,
     comment:
-      "A solid phone overall. It runs smoothly, and the battery lasts well. My only gripe is that it’s a bit heavier than I expected, which sometimes makes it uncomfortable to hold for long periods. Otherwise, it’s a great device.",
-    createdAt: "2025-08-13T10:10:00Z",
+      "The noise cancellation is eerie—it completely deletes the sound of my morning commute. They are much lighter than the XM4s, making them comfortable for all-day wear at the office.",
+    createdAt: "2025-08-13T09:15:00Z",
   },
   {
     id: 13,
-    productId: 3,
+    productId: 10, // iPhone 14 Pro
     userId: 13,
-    rating: 2,
+    rating: 4,
     comment:
-      "The software feels sluggish and unpolished. I faced occasional freezes and slow app launches. For the price, I expected better performance. If you’re patient and use basic apps, it might be okay, but I was left wanting more.",
-    createdAt: "2025-08-14T12:00:00Z",
+      "Dynamic Island is a neat UI touch. The 48MP ProRAW photos have so much detail for editing. Battery life is solid, though I wish it charged a bit faster compared to competitors.",
+    createdAt: "2025-08-14T14:20:00Z",
   },
   {
     id: 14,
-    productId: 1,
+    productId: 15, // iPad Pro 12.9 M2
     userId: 14,
     rating: 5,
     comment:
-      "Perfect phone for daily use. It’s fast, responsive, and the battery easily lasts all day. I use it for everything from streaming to gaming, and it handles it all without issues. Highly recommend for anyone looking for a reliable daily driver.",
-    createdAt: "2025-08-15T09:30:00Z",
+      "The Liquid Retina XDR screen is basically a portable OLED TV. Using the Apple Pencil for digital illustration feels completely natural with the high refresh rate.",
+    createdAt: "2025-08-15T11:45:00Z",
   },
   {
     id: 15,
-    productId: 4,
+    productId: 20, // ASUS ROG Zephyrus G14
     userId: 15,
-    rating: 3,
+    rating: 4,
     comment:
-      "The camera is average but the battery life is excellent. If you prioritize long battery life over camera performance, this phone is a good pick. It runs well and looks nice, but the photos could be sharper.",
-    createdAt: "2025-08-16T14:20:00Z",
+      "Unbelievable power for a 14-inch laptop. The AniMe Matrix lid is a fun gimmick, but the real star is the 165Hz display and the portability. It does get quite loud under load.",
+    createdAt: "2025-08-16T18:30:00Z",
   },
   {
     id: 16,
-    productId: 5,
+    productId: 19, // Keychron K2
     userId: 16,
-    rating: 4,
+    rating: 5,
     comment:
-      "Really like the build quality and features of this phone. It feels solid in the hand and performs well under multitasking. The screen is bright and easy to read outdoors. Definitely a good choice in its category.",
-    createdAt: "2025-08-17T11:55:00Z",
+      "The perfect entry point into mechanical keyboards. The tactile feedback is satisfying without being too loud for an office environment. Swapping between my Mac and PC is seamless.",
+    createdAt: "2025-08-17T12:10:00Z",
   },
   {
     id: 17,
-    productId: 6,
+    productId: 18, // Nintendo Switch OLED
     userId: 17,
-    rating: 1,
+    rating: 5,
     comment:
-      "Had multiple connectivity issues including dropping Wi-Fi and slow data speeds. Tried resetting but didn’t help. Very frustrating experience overall, would avoid buying this model if connectivity is important to you.",
-    createdAt: "2025-08-18T13:45:00Z",
+      "If you play mostly in handheld mode, the OLED upgrade is mandatory. Colors pop so much more, and the new kickstand is actually functional compared to the original model.",
+    createdAt: "2025-08-18T20:00:00Z",
   },
   {
     id: 18,
-    productId: 7,
+    productId: 6, // Blackmagic Pocket 6K
     userId: 18,
-    rating: 5,
+    rating: 4,
     comment:
-      "Excellent value for the price. The phone runs smoothly, has great battery life, and the display looks fantastic. Perfect for anyone who wants a reliable device without breaking the bank.",
-    createdAt: "2025-08-19T15:25:00Z",
+      "The image quality is indistinguishable from cameras triple its price. BRAW is a dream to grade. Just be prepared to spend extra on a cage and external batteries, as it eats power.",
+    createdAt: "2025-08-19T10:30:00Z",
   },
   {
     id: 19,
-    productId: 8,
+    productId: 7, // Android Tablet
     userId: 19,
-    rating: 4,
+    rating: 3,
     comment:
-      "Nice phone overall, though I wish the speakers were louder. The sound quality is clear but a bit soft. The performance and battery life are solid, and it looks great with a sleek design.",
-    createdAt: "2025-08-20T08:15:00Z",
+      "Decent for streaming Netflix and light browsing. It struggles a bit with heavy multitasking, but for the price point, it's a solid choice for a secondary media device.",
+    createdAt: "2025-08-20T15:55:00Z",
   },
   {
     id: 20,
-    productId: 9,
+    productId: 21, // MacBook Air 15-inch (M3)
+    userId: 20,
+    rating: 5,
+    comment:
+      "The perfect balance of screen real estate and portability. It's incredibly thin but feels sturdy. The fanless design means it's always silent, which I love for writing.",
+    createdAt: "2025-08-21T13:40:00Z",
+  },
+  {
+    id: 21,
+    productId: 1, // Apple AirPods Max
+    userId: 11,
+    rating: 4,
+    comment:
+      "The audio is 5-star, but the 'Smart Case' is ridiculous. It offers no protection for the headband. Still, for sitting at my desk, they are the most comfortable headphones I own.",
+    createdAt: "2025-08-22T10:00:00Z",
+  },
+  {
+    id: 22,
+    productId: 12, // Samsung Galaxy S24 Ultra
+    userId: 14,
+    rating: 5,
+    comment:
+      "The anti-reflective coating on the screen is the unsung hero of this phone. I can actually see my screen clearly at the beach! The S-Pen is great for signing PDFs on the fly.",
+    createdAt: "2025-08-23T14:15:00Z",
+  },
+  {
+    id: 23,
+    productId: 6, // Blackmagic Pocket Cinema Camera 6k
+    userId: 17,
+    rating: 2,
+    comment:
+      "The sensor is beautiful, but the battery life is abysmal. I get maybe 35 minutes of recording before it dies. It's more of a 'studio' camera than a 'pocket' camera.",
+    createdAt: "2025-08-24T09:45:00Z",
+  },
+  {
+    id: 24,
+    productId: 8, // Apple Series 6 Watch
+    userId: 3,
+    rating: 4,
+    comment:
+      "Oldie but a goodie. Even a few years later, this holds up well. The blood oxygen sensor is surprisingly accurate compared to my medical-grade pulse ox.",
+    createdAt: "2025-08-25T11:20:00Z",
+  },
+  {
+    id: 25,
+    productId: 16, // Logitech MX Master 3S
+    userId: 12,
+    rating: 5,
+    comment:
+      "I'm a spreadsheet warrior and the horizontal thumb wheel for side-scrolling is a life-saver. I've bought one for my home office and my work office now.",
+    createdAt: "2025-08-26T16:05:00Z",
+  },
+  {
+    id: 26,
+    productId: 13, // Xbox Series X
+    userId: 15,
+    rating: 4,
+    comment:
+      "Powerful hardware, but I wish there were more first-party exclusives at launch. However, playing my old 360 games with Auto-HDR makes them look brand new.",
+    createdAt: "2025-08-27T19:30:00Z",
+  },
+  {
+    id: 27,
+    productId: 19, // Keychron K2 Wireless Keyboard
+    userId: 10,
+    rating: 3,
+    comment:
+      "The keyboard is very thick. Without a wrist rest, my hands start to ache after an hour of typing. The switches feel great, but ergonomics could be better.",
+    createdAt: "2025-08-28T08:50:00Z",
+  },
+  {
+    id: 28,
+    productId: 21, // MacBook Air 15-inch (M3)
+    userId: 5,
+    rating: 5,
+    comment:
+      "As a college student, this is the perfect machine. It fits in my backpack easily, and I don't even bother carrying a charger to campus anymore because the battery lasts all day.",
+    createdAt: "2025-08-29T12:00:00Z",
+  },
+  {
+    id: 29,
+    productId: 17, // Sony Alpha a7 IV
+    userId: 19,
+    rating: 5,
+    comment:
+      "The 33MP sensor gives me just enough room to crop in without losing significant detail. The subject tracking for birds and animals is mind-blowing.",
+    createdAt: "2025-08-30T15:10:00Z",
+  },
+  {
+    id: 30,
+    productId: 4, // Samsung Galaxy Watch 6
     userId: 20,
     rating: 3,
     comment:
-      "Decent phone but sometimes lags when playing games or using heavy apps. The display is good and the battery lasts well enough for everyday use. Not the best choice for gamers, but okay otherwise.",
-    createdAt: "2025-08-21T10:05:00Z",
+      "I love the screen, but having to charge it every single night is annoying compared to my old fitness tracker that lasted a week. WearOS is great, but battery is the trade-off.",
+    createdAt: "2025-08-31T21:40:00Z",
   },
 ];
 

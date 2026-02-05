@@ -4,12 +4,10 @@ import React from "react";
 import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
 import ProductDetailsClient from "@/app/_components/products/ProductDetailsClient";
-// import RelatedProducts from "@/app/_components/products/RelatedProducts";
 import Reviews from "@/app/_components/products/Reviews";
 import Spinner from "@/components/ui/Spinner";
 
 import { getDiscountedPrice } from "@/lib/utils";
-// import { useProducts } from "@/services/useProducts";
 import { products } from "@/app/data/data";
 
 interface ProductPageProps {
@@ -19,98 +17,90 @@ interface ProductPageProps {
 }
 
 const Product = ({ params }: ProductPageProps) => {
-  // const { data: products, isLoading, error } = useProducts();
-
   const { productId } = params;
   const product = products?.find((p) => p.id === Number(productId));
 
+  // Placeholder states for your hook logic
   const isLoading = false;
   const error = false;
 
   if (isLoading) {
-    return <Spinner />;
-  }
-
-  if (!product) {
     return (
-      <div className="text-center mt-20 text-xl font-semibold">
-        Product not found.
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Spinner />
       </div>
     );
   }
 
-  if (error) {
-    return <p>Cannot fetch data</p>;
+  if (error || !product) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center bg-white space-y-4">
+        <h2 className="text-sm font-medium uppercase tracking-[0.2em] text-gray-400">
+          System Error // 404
+        </h2>
+        <p className="text-gray-900 font-light">Object Not Found In Registry</p>
+      </div>
+    );
   }
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Shop", href: "/products" },
-    { label: product?.name },
+    { label: "Inventory", href: "/products" },
+    { label: product.name },
   ];
 
   const discountPrice = getDiscountedPrice(product);
+
+  // Refined palette for CyberTech
   const colors = [
-    "#000000", // Black
-    "#6B21A8", // Purple
-    "#EF4444", // Red
-    "#14B8A6", // Accent teal
-    "#F3F4F6", // Light gray
+    "#000000", // Onyx
+    "#27272A", // Zinc
+    "#E4E4E7", // Platinum
+    "#3F3F46", // Steel
   ];
 
-  // Example memory options from data or fallback:
   const memoryOptions =
     product.metadata.memorySpace?.split(",").map((s) => s.trim()) || null;
 
+  // Technical Detail Mapping
   const importantDetails = [
     {
-      label: "Battery Capacity",
+      label: "Power Cell",
       value: product.metadata.batteryCapacity,
       iconName: "BatteryCharging",
     },
     {
-      label: "Back Camera",
+      label: "Primary Optic",
       value: product.metadata.cameraBack,
       iconName: "Camera",
     },
     {
-      label: "Front Camera",
+      label: "Front Optic",
       value: product.metadata.cameraFront,
       iconName: "Camera",
     },
     {
-      label: "Screen Size",
+      label: "Display Scale",
       value: product.metadata.screenSize,
       iconName: "Monitor",
     },
     {
-      label: "Storage Space",
+      label: "Data Volume",
       value: product.metadata.storageSpace,
       iconName: "Database",
     },
     {
-      label: "Operating System",
+      label: "Kernel OS",
       value: product.metadata.operatingSystem,
       iconName: "Cpu",
     },
     {
-      label: "Memory Space",
-      value: product.metadata.memorySpace,
-      iconName: "Database",
+      label: "Network Protocol",
+      value: product.metadata.network,
+      iconName: "Wifi",
     },
     {
-      label: "Water Resistance",
-      value: product.metadata.waterResistance,
-      iconName: "Droplet",
-    },
-    {
-      label: "Screen Type",
-      value: product.metadata.screenType,
-      iconName: "Monitor",
-    },
-    { label: "Network", value: product.metadata.network, iconName: "Wifi" },
-    {
-      label: "Screen Resolution",
+      label: "Resolution Native",
       value: product.metadata.screenResolution,
       iconName: "Monitor",
     },
@@ -121,28 +111,35 @@ const Product = ({ params }: ProductPageProps) => {
     .slice(0, 6);
 
   return (
-    <section className="max-w-[1500px] bg-white mx-auto px-4 my-10">
-      <div className="hidden lg:flex mb-10">
-        <Breadcrumbs items={breadcrumbItems} />
+    <main className="min-h-screen bg-white">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 ">
+        {/* Navigation Trace */}
+        <nav className="mb-12 mt-10">
+          <Breadcrumbs items={breadcrumbItems} />
+        </nav>
+
+        {/* Primary Viewport: Image & Core Configurator */}
+        <section className="">
+          <ProductDetailsClient
+            product={product}
+            discountPrice={discountPrice}
+            colors={colors}
+            memoryOptions={memoryOptions}
+            importantDetails={filteredImportantDetails}
+          />
+        </section>
+
+        {/* Detailed Manifest: Tech Specs */}
+        <section className="border-t border-gray-50 ">
+          <MoreDetails product={product} />
+        </section>
+
+        {/* Feedback Log: Reviews */}
+        <section className="border-t border-gray-50 py-10">
+          <Reviews productId={product.id} />
+        </section>
       </div>
-
-      <ProductDetailsClient
-        product={product}
-        discountPrice={discountPrice}
-        colors={colors}
-        memoryOptions={memoryOptions}
-        importantDetails={filteredImportantDetails}
-      />
-
-      {/* details */}
-      <MoreDetails product={product} />
-
-      {/* Reviews */}
-      <Reviews productId={product.id} />
-
-      {/* Related Products */}
-      {/* <RelatedProducts product={product} /> */}
-    </section>
+    </main>
   );
 };
 

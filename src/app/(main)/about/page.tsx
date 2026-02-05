@@ -2,133 +2,125 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, Truck, ShieldCheck, Zap } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative bg-white py-20 px-4 md:px-16 lg:px-28 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          About YourStore
-        </h1>
-        <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-10">
-          YourStore is your go-to online destination for the latest electronics,
-          gadgets, and accessories. We combine quality products, fast shipping,
-          and excellent customer service to give you the best shopping
-          experience.
-        </p>
-        <div className="relative w-full h-64 md:h-96 mx-auto">
+      <section className="py-20 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="max-w-3xl">
+          <p className="text-[10px] tracking-[0.3em] text-gray-400 uppercase mb-4">
+            About CyberTech // Established 2024
+          </p>
+          <h1 className="text-4xl md:text-6xl font-medium tracking-tight text-gray-900 mb-8">
+            Reliable electronics. No guesswork.
+          </h1>
+          <p className="text-gray-500 text-lg font-light leading-relaxed mb-12">
+            CyberTech is an online electronics store focused on selling quality,
+            reliable devices at fair prices. We make it easy to find, buy, and
+            receive the tech you need—without confusion or unnecessary stress.
+          </p>
+        </div>
+
+        <div className="relative w-full h-[400px] md:h-[600px] rounded-[40px] overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&q=80"
-            alt="YourStore Hero Banner"
+            src="/images/about-hero.png"
+            alt="Electronics workspace"
             fill
-            className="object-cover rounded-lg"
+            className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
           />
         </div>
       </section>
 
-      {/* Mission / Story Section */}
-      <section className="py-20 px-4 md:px-16 lg:px-28 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-3xl font-semibold text-gray-900 mb-4">
+      {/* Mission Section */}
+      <section className="py-24 bg-gray-50/50">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+          <div className="space-y-6">
+            <h2 className="text-3xl font-medium tracking-tight text-gray-900">
               Our Mission
             </h2>
-            <p className="text-gray-600 text-lg mb-4">
-              We believe shopping online should be simple, fast, and enjoyable.
-              That’s why we carefully select the best products, offer easy
-              returns, and provide round-the-clock customer support.
+            <p className="text-gray-600 text-lg font-light leading-relaxed">
+              Our goal is simple: help people buy electronics with confidence.
+              We work with trusted suppliers, focus on products with proven
+              reliability, and provide clear support before and after purchase.
             </p>
-            <p className="text-gray-600 text-lg">
-              Whether you&apos;re looking for the newest gadgets or timeless
-              electronics, we make sure you get exactly what you need.
-            </p>
+            <div className="pt-4">
+              <div className="h-px w-20 bg-gray-900" />
+            </div>
           </div>
-          <div className="relative w-full h-80 md:h-96">
+          <div className="relative aspect-square md:aspect-video rounded-[32px] overflow-hidden border border-gray-100">
             <Image
-              src="/images/mission.jpg" // Replace with a mission-related image
-              alt="Our Mission"
+              src="/images/about-mission.png"
+              alt="Team handling electronics"
               fill
-              className="object-cover rounded-lg"
+              className="object-cover"
             />
           </div>
         </div>
       </section>
 
-      {/* What We Offer Section */}
-      <section className="py-20 px-4 md:px-16 lg:px-28 bg-white">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-          <div className="space-y-4 flex flex-col items-center">
-            <div className="relative w-24 h-24">
-              <Image
-                src="/images/selection.jpg" // Replace with icon/image
-                alt="Wide Selection"
-                fill
-                className="object-cover rounded-full"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">Wide Selection</h3>
-            <p className="text-gray-600">
-              Browse hundreds of electronics, accessories, and gadgets. We keep
-              our catalog fresh with the latest trends.
-            </p>
-          </div>
-
-          <div className="space-y-4 flex flex-col items-center">
-            <div className="relative w-24 h-24">
-              <Image
-                src="/images/delivery.jpg" // Replace with delivery image
-                alt="Fast Delivery"
-                fill
-                className="object-cover rounded-full"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">
-              Fast & Secure Delivery
+      {/* Services Grid */}
+      <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+          <div className="space-y-4">
+            <Zap className="w-8 h-8 text-gray-900" strokeWidth={1.5} />
+            <h3 className="text-xl font-medium text-gray-900">
+              Carefully Selected Products
             </h3>
-            <p className="text-gray-600">
-              Get your orders delivered quickly and securely, right to your
-              doorstep, with reliable shipping options.
+            <p className="text-sm text-gray-500 font-light leading-relaxed">
+              We focus on electronics that offer real value—no overcrowded
+              listings, no low-quality knockoffs.
             </p>
           </div>
 
-          <div className="space-y-4 flex flex-col items-center">
-            <div className="relative w-24 h-24">
-              <Image
-                src="/images/support.jpg" // Replace with support image
-                alt="Customer Support"
-                fill
-                className="object-cover rounded-full"
-              />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">
+          <div className="space-y-4">
+            <Truck className="w-8 h-8 text-gray-900" strokeWidth={1.5} />
+            <h3 className="text-xl font-medium text-gray-900">
+              Fast Processing
+            </h3>
+            <p className="text-sm text-gray-500 font-light leading-relaxed">
+              Orders are processed quickly and shipped with tracking so you know
+              exactly where your item is.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <ShieldCheck className="w-8 h-8 text-gray-900" strokeWidth={1.5} />
+            <h3 className="text-xl font-medium text-gray-900">
               Customer Support
             </h3>
-            <p className="text-gray-600">
-              Our friendly support team is available 24/7 to help with orders,
-              returns, and any questions you may have.
+            <p className="text-sm text-gray-500 font-light leading-relaxed">
+              Need help choosing a product or resolving an issue? Our support
+              team is ready to assist you.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Call-to-action */}
-      <section className="py-16 px-4 md:px-16 lg:px-28 text-center bg-gray-50">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-4">
-          Ready to Shop?
-        </h2>
-        <p className="text-gray-600 mb-6">
-          Explore our catalog and discover the latest electronics at unbeatable
-          prices.
-        </p>
-        <a
-          href="/shop"
-          className="inline-block bg-blue-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-blue-700 transition"
-        >
-          Start Shopping
-        </a>
+      {/* Final CTA */}
+      <section className="py-32 px-6 md:px-12 text-center">
+        <div className="max-w-2xl mx-auto space-y-8">
+          <h2 className="text-4xl font-medium tracking-tight text-gray-900">
+            Shop electronics with confidence
+          </h2>
+          <p className="text-gray-500 font-light">
+            Browse our collection and get dependable tech delivered to your
+            doorstep.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-3 bg-gray-900 text-white py-4 px-10 rounded-2xl hover:bg-black transition-all group"
+          >
+            <span className="text-sm font-medium uppercase tracking-widest">
+              Shop Now
+            </span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
       </section>
-    </div>
+    </main>
   );
 };
 
