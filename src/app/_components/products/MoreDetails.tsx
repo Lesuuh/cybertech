@@ -1,32 +1,35 @@
 "use client";
 
+import { Product } from "@/app/types";
 import React from "react";
 
-const MoreDetails = ({ product }) => {
+const MoreDetails = ({ product }: { product: Product }) => {
   // Helper to filter out empty metadata values
   const specList = [
-    { label: "CPU_CORES", value: product.metadata.cpuCores },
-    { label: "CPU_TYPE", value: product?.cpuType },
-    { label: "FRONT_CAMERA", value: product.metadata.cameraFront },
-    { label: "BACK_CAMERA", value: product.metadata.cameraBack },
-    { label: "BATTERY_UNIT", value: product.metadata.batteryCapacity },
-    { label: "SCREEN_DIMENSIONS", value: product.metadata.screenSize },
-    { label: "RESOLUTION", value: product.metadata.screenResolution },
-    { label: "REFRESH_RATE", value: product.metadata.screenRefreshRate },
-    { label: "PANEL_TYPE", value: product.metadata.screenType },
-    { label: "PIXEL_DENSITY", value: product.metadata.pixelDensity },
+    { label: "CPU_CORES", value: product.cpuCores },
+    { label: "CPU_TYPE", value: product.operatingSystem },
+    { label: "FRONT_CAMERA", value: product.cameraFront },
+    { label: "BACK_CAMERA", value: product.cameraBack },
+    { label: "BATTERY_UNIT", value: product.batteryCapacity },
+    {
+      label: "SCREEN_DIMENSIONS",
+      value: product.screenSize ? `${product.screenSize}"` : null,
+    },
+    { label: "RESOLUTION", value: product.screenResolution },
+    { label: "REFRESH_RATE", value: product.screenRefreshRate },
+    { label: "PANEL_TYPE", value: product.screenType },
+    { label: "PIXEL_DENSITY", value: product.pixelDensity },
     {
       label: "LOGISTICS_ESTIMATE",
-      value: product.metadata.deliveryDays
-        ? `${product.metadata.deliveryDays} DAYS`
-        : null,
+      value: product.deliveryDays ? `${product.deliveryDays} DAYS` : null,
     },
-    { label: "INVENTORY_STATUS", value: product.metadata.inStock },
+    {
+      label: "INVENTORY_STATUS",
+      value: product.stock > 0 ? "IN_STOCK" : "OUT_OF_STOCK",
+    },
     {
       label: "WARRANTY_POLICY",
-      value: product.metadata.guarantee
-        ? `${product.metadata.guarantee} YEAR(S)`
-        : null,
+      value: product.warrantyYears ? `${product.warrantyYears} YEAR(S)` : null,
     },
   ].filter((spec) => spec.value !== undefined && spec.value !== null);
 
@@ -39,7 +42,7 @@ const MoreDetails = ({ product }) => {
             Product_Description
           </h2>
           <p className="text-gray-600 leading-relaxed text-sm font-light">
-            {product.metadata.details}
+            {product.details}
           </p>
         </div>
 

@@ -5,7 +5,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Send,
   MessageSquare,
   ShieldCheck,
   Globe,

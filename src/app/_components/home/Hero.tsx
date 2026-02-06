@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { ShoppingBag, Zap, ShieldCheck, Truck } from "lucide-react";
 import Link from "next/link";
 
 const Hero = () => {

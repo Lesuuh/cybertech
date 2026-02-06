@@ -1,13 +1,11 @@
 "use client";
 
-import { X, Minus, Plus, Tag, ShoppingBag, ArrowRight } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { X, Minus, Plus, ShoppingBag} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
-import { toast } from "sonner";
-import { deleteItem } from "@/services/useCart";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { products } from "@/app/data/data";

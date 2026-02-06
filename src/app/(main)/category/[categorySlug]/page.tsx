@@ -14,6 +14,7 @@ import { Product } from "@/app/types";
 const CategoryPage = () => {
   const params = useParams();
   const categorySlug = params.categorySlug as string;
+  const [save, setSave] = useState<{ [key: number]: boolean }>({});
 
   const category = categories.find((c) => c.slug === categorySlug);
 
@@ -33,7 +34,6 @@ const CategoryPage = () => {
     { label: categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1) },
   ];
 
-  const [save, setSave] = useState<{ [key: number]: boolean }>({});
   const onSave = (product: Product) => {
     setSave((prev) => ({ ...prev, [product.id]: !prev[product.id] }));
   };

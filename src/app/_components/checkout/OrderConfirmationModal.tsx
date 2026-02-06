@@ -3,13 +3,24 @@
 import { Button } from "@/components/ui/button";
 import { Check, Clock, Mail } from "lucide-react";
 
+type OrderConfirmationModalProps = {
+  orderDetails: {
+    orderNumber?: string;
+    paymentMethod?: string;
+    estimatedDelivery?: string;
+    // add other fields as needed
+  };
+  grandTotal: number;
+  onClose: () => void;
+};
+
 export default function OrderConfirmationModal({
   orderDetails,
   grandTotal,
   onClose,
-}) {
-  const getPaymentMethodName = (method) => {
-    const names = {
+}: OrderConfirmationModalProps) {
+  const getPaymentMethodName = (method: string) => {
+    const names: Record<string, string> = {
       cod: "CASH_ON_DELIVERY",
       bank: "BANK_TRANSFER",
       gateway: "ONLINE_PAYMENT",
@@ -49,7 +60,7 @@ export default function OrderConfirmationModal({
               Payment
             </span>
             <span className="text-xs font-medium text-gray-900">
-              {getPaymentMethodName(orderDetails?.paymentMethod)}
+              {getPaymentMethodName(orderDetails?.paymentMethod ?? "")}
             </span>
           </div>
 

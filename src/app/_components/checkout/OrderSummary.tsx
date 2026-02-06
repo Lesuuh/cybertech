@@ -4,15 +4,30 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Spinner from "@/components/ui/Spinner";
 import Image from "next/image";
-import { ShieldCheck, Truck, ArrowRight } from "lucide-react";
+import { ShieldCheck, Truck} from "lucide-react";
+
+type CartItem = {
+  id: string | number;
+  imageSrc?: string;
+  productName: string;
+  productPrice: number;
+  quantity: number;
+};
+
+interface OrderSummaryProps {
+  cartItems: CartItem[];
+  grandTotal: number;
+  paymentMethod: string | null;
+  onContinue: () => void;
+}
 
 export default function OrderSummary({
   cartItems,
   grandTotal,
-  loading,
   paymentMethod,
   onContinue,
-}) {
+}: OrderSummaryProps) {
+  const loading = false;
   return (
     <div className="bg-white border border-gray-100 rounded-3xl p-8 sticky top-10 shadow-sm">
       <div className="mb-8">

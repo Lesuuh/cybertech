@@ -44,7 +44,7 @@ const RelatedProducts = ({
               discount={product.discount || 0}
               isFeatured={product.isFeatured || false}
               isBestSeller={product.isBestSeller || false}
-              onBuy={() => alert(`Purchased ${product.name}!`)}
+              // onBuy={() => alert(`Purchased ${product.name}!`)}
               onSave={() => onSave(product)}
               save={!!save[product.id]}
             />

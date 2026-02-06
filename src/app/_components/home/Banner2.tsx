@@ -63,7 +63,7 @@ const Banner2 = () => {
             </p>
             {item.id === 4 && (
               <Link href={"/products/21"}>
-                <Button className="bg-white text-black hover:text-white hover:border cursor-pointer duration-300 transition rounded-full lg:px-8 lg:py-6 text-sm group transition-transform active:scale-95">
+                <Button className="bg-white text-black hover:text-white hover:border cursor-pointer duration-300  rounded-full lg:px-8 lg:py-6 text-sm group transition-transform active:scale-95">
                   Shop Now
                 </Button>
               </Link>

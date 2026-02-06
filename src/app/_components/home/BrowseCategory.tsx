@@ -2,17 +2,7 @@
 
 import { categories } from "@/app/data/data";
 import { Button } from "@/components/ui/button";
-import {
-  Smartphone,
-  Monitor,
-  Camera,
-  Tv,
-  Watch,
-  Gamepad,
-  Headphones,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState, useEffect } from "react";
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Plus, MapPin, X } from "lucide-react";
+import { Plus, MapPin, } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -13,12 +13,27 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+type Address = {
+  id: string | number;
+  label: string;
+  city: string;
+  state: string;
+  street: string;
+};
+
+interface ShippingSectionProps {
+  addresses: Address[];
+  selectedAddress: string | number;
+  onAddressChange: (addressId: string | number) => void;
+  onAddAddress: (address: Omit<Address, "id">) => void;
+}
+
 export default function ShippingSection({
   addresses,
   selectedAddress,
   onAddressChange,
   onAddAddress,
-}) {
+}: ShippingSectionProps) {
   const [showNewAddress, setShowNewAddress] = useState(false);
   const [newAddress, setNewAddress] = useState({
     label: "",
@@ -27,7 +42,7 @@ export default function ShippingSection({
     street: "",
   });
 
-  const handleNewAddressChange = (field, value) => {
+  const handleNewAddressChange = (field: string, value: string) => {
     setNewAddress((prev) => ({ ...prev, [field]: value }));
   };
 

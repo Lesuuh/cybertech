@@ -1,14 +1,19 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { CreditCard, Truck, Building2, Copy, Check, Info } from "lucide-react";
+
+type PaymentSectionProps = {
+  paymentMethod: string;
+  onPaymentChange: (value: string) => void;
+  grandTotal: number;
+};
 
 export default function PaymentSection({
   paymentMethod,
   onPaymentChange,
   grandTotal,
-}) {
+}: PaymentSectionProps) {
   const [copiedField, setCopiedField] = useState("");
 
   const bankReference = useMemo(
@@ -24,7 +29,7 @@ export default function PaymentSection({
     reference: bankReference,
   };
 
-  const copyToClipboard = (text, field) => {
+  const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
     setTimeout(() => setCopiedField(""), 2000);

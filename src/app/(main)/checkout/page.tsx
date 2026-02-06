@@ -8,17 +8,25 @@ import PaymentSection from "@/app/_components/checkout/PaymentSection";
 import OrderSummary from "@/app/_components/checkout/OrderSummary";
 import OrderConfirmationModal from "@/app/_components/checkout/OrderConfirmationModal";
 
+type Address = { id: string } & Record<string, string>;
 export default function CheckoutPage() {
   const didMount = useRef(false);
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [addresses, setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [showOrderModal, setShowOrderModal] = useState(false);
-  const [orderDetails, setOrderDetails] = useState(null);
+  type OrderDetails = {
+    orderNumber: string;
+    paymentMethod: string;
+    estimatedDelivery: string;
+    cartItems: typeof cartItems;
+  } | null;
 
-  const { cartItems, grandTotal, loading } = useCheckoutData();
+  const [orderDetails, setOrderDetails] = useState<OrderDetails>(null);
 
-  const handleAddAddress = (address) => {
+  const { cartItems, grandTotal } = useCheckoutData();
+
+  const handleAddAddress = (address: Record<string, string>) => {
     const newAddress = {
       id: crypto.randomUUID(),
       ...address,
@@ -85,9 +93,9 @@ export default function CheckoutPage() {
           {/* Left Column - Main Forms (8 Columns) */}
           <div className="lg:col-span-8 space-y-10">
             <ShippingSection
-              addresses={addresses}
+              addresses={addresses|| []}
               selectedAddress={selectedAddress}
-              onAddressChange={setSelectedAddress}
+              onAddressChange={setSelectedAddress }
               onAddAddress={handleAddAddress}
             />
 
@@ -103,7 +111,6 @@ export default function CheckoutPage() {
             <OrderSummary
               cartItems={cartItems}
               grandTotal={grandTotal}
-              loading={loading}
               paymentMethod={paymentMethod}
               onContinue={handleContinue}
             />
@@ -114,7 +121,7 @@ export default function CheckoutPage() {
         <Dialog open={showOrderModal} onOpenChange={setShowOrderModal}>
           <DialogContent className="sm:max-w-[550px] rounded-[40px] border-none p-10 shadow-2xl">
             <OrderConfirmationModal
-              orderDetails={orderDetails}
+              orderDetails={orderDetails ?? {}}
               grandTotal={grandTotal}
               onClose={() => setShowOrderModal(false)}
             />
