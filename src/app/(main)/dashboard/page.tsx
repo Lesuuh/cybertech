@@ -209,7 +209,7 @@
 import React from "react";
 
 const ProfilePage = () => {
-  return <div>ProfilePage</div>;
+  return <div>Coming Soon</div>;
 };
 
 export default ProfilePage;
