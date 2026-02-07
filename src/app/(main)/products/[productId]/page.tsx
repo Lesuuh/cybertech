@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
@@ -24,7 +22,7 @@ interface ProductPageProps {
   };
 }
 
-const Product = ({ params }: ProductPageProps) => {
+const Product = async ({ params }: ProductPageProps) => {
   const { productId } = params;
   const product = products?.find((p) => p.id === Number(productId));
 
