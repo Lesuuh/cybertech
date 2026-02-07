@@ -3,17 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useCheckoutData } from "@/hooks/useCheckoutData";
-import ShippingSection from "@/app/_components/checkout/ShippingSection";
+import ShippingSection, {
+  Address,
+} from "@/app/_components/checkout/ShippingSection";
 import PaymentSection from "@/app/_components/checkout/PaymentSection";
 import OrderSummary from "@/app/_components/checkout/OrderSummary";
 import OrderConfirmationModal from "@/app/_components/checkout/OrderConfirmationModal";
 
-type Address = { id: string } & Record<string, string>;
 export default function CheckoutPage() {
   const didMount = useRef(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState<string | number>("");
   const [showOrderModal, setShowOrderModal] = useState(false);
   type OrderDetails = {
     orderNumber: string;
@@ -26,13 +27,13 @@ export default function CheckoutPage() {
 
   const { cartItems, grandTotal } = useCheckoutData();
 
-  const handleAddAddress = (address: Record<string, string>) => {
-    const newAddress = {
-      id: crypto.randomUUID(),
+  const handleAddAddress = (address: Omit<Address, "id">) => {
+    const newAddress: Address = {
+      id: crypto.randomUUID(), // always string
       ...address,
     };
     setAddresses((prev) => [...prev, newAddress]);
-    setSelectedAddress(newAddress.id);
+    setSelectedAddress(newAddress.id); // string, compatible
   };
 
   useEffect(() => {
@@ -93,9 +94,9 @@ export default function CheckoutPage() {
           {/* Left Column - Main Forms (8 Columns) */}
           <div className="lg:col-span-8 space-y-10">
             <ShippingSection
-              addresses={addresses|| []}
+              addresses={addresses}
               selectedAddress={selectedAddress}
-              onAddressChange={setSelectedAddress }
+              onAddressChange={setSelectedAddress}
               onAddAddress={handleAddAddress}
             />
 

@@ -40,7 +40,7 @@ const bannerItems = [
 
 const Banner2 = () => {
   return (
-    <section className="grid w-full max-w-[2000px] mx-auto my-20 grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+    <section className="grid w-full max-w-[2000px] mx-auto my-20 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
       {bannerItems.map((item) => (
         <div
           key={item.id}

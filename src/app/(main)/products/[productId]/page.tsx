@@ -7,6 +7,14 @@ import ProductDetailsClient from "@/app/_components/products/ProductDetailsClien
 import Reviews from "@/app/_components/products/Reviews";
 import Spinner from "@/components/ui/Spinner";
 
+import type { IconName } from "@/app/_components/products/ProductDetailsClient";
+
+interface ImportantDetail {
+  label: string;
+  value: string | number | null | undefined;
+  iconName: IconName;
+}
+
 import { getDiscountedPrice } from "@/lib/utils";
 import { products } from "@/app/data/data";
 
@@ -52,18 +60,18 @@ const Product = ({ params }: ProductPageProps) => {
   const discountPrice = getDiscountedPrice(product);
 
   // Refined palette for CyberTech
-  const colors = [
+  const colors: string[] = [
     "#000000", // Onyx
     "#27272A", // Zinc
     "#E4E4E7", // Platinum
     "#3F3F46", // Steel
   ];
 
-  const memoryOptions =
+  const memoryOptions: string[] | null =
     product.metadata.memorySpace?.split(",").map((s) => s.trim()) || null;
 
   // Technical Detail Mapping
-  const importantDetails = [
+  const importantDetails: ImportantDetail[] = [
     {
       label: "Power Cell",
       value: product.metadata.batteryCapacity,

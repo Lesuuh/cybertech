@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Plus, MapPin, } from "lucide-react";
+import { Plus, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-type Address = {
+export type Address = {
   id: string | number;
   label: string;
   city: string;
@@ -24,7 +24,7 @@ type Address = {
 interface ShippingSectionProps {
   addresses: Address[];
   selectedAddress: string | number;
-  onAddressChange: (addressId: string | number) => void;
+  onAddressChange: (addressId: string) => void;
   onAddAddress: (address: Omit<Address, "id">) => void;
 }
 

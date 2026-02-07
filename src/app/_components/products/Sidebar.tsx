@@ -1,8 +1,14 @@
+import { Dispatch, SetStateAction } from "react";
 import SidebarOptions from "./SidebarOptions";
 
 import { categories } from "@/app/data/data";
 
-const Sidebar = ({ selectedIds, setSelectedIds }) => {
+interface SidebarProps {
+  selectedIds: number[];
+  setSelectedIds: Dispatch<SetStateAction<number[]>>;
+}
+
+const Sidebar = ({ selectedIds, setSelectedIds }: SidebarProps) => {
   return (
     <div>
       {/* Desktop Sidebar */}

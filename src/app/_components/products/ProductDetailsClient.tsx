@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cartStore";
-import { Heart, Plus, Truck, Box, ShieldCheck, Check } from "lucide-react";
+import { Heart, Plus, Truck, Box, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import {
   BatteryCharging,
@@ -14,6 +14,7 @@ import {
   Wifi,
 } from "lucide-react";
 import Image from "next/image";
+import { Product } from "@/app/types";
 
 const iconMap = {
   BatteryCharging,
@@ -26,7 +27,23 @@ const iconMap = {
   Truck,
   Box,
   ShieldCheck,
-};
+} as const;
+
+export type IconName = keyof typeof iconMap;
+
+interface ImportantDetail {
+  label: string;
+  value: string | number | null | undefined;
+  iconName: IconName;
+}
+
+interface ProductDetailsClientProps {
+  product: Product;
+  discountPrice: number;
+  colors: string[];
+  memoryOptions: string[] | null;
+  importantDetails: ImportantDetail[];
+}
 
 const ProductDetailsClient = ({
   product,
@@ -34,7 +51,7 @@ const ProductDetailsClient = ({
   colors,
   memoryOptions,
   importantDetails,
-}) => {
+}: ProductDetailsClientProps) => {
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = (id: number) => {
@@ -108,7 +125,7 @@ const ProductDetailsClient = ({
             </div>
           )}
 
-          {memoryOptions?.length > 0 && (
+          {memoryOptions && memoryOptions?.length > 0 && (
             <div className="space-y-4">
               <p className="text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium">
                 Storage Size
