@@ -663,7 +663,7 @@ import {
   Tablet,
   Camera,
   Smartphone,
-  Earbuds,
+  Headset,
   Glasses,
   Cable,
 } from "lucide-react";
@@ -715,7 +715,7 @@ export const categories = [
     id: 8,
     name: "Earbuds",
     slug: "earbuds",
-    icon: Earbuds,
+    icon: Headset,
   },
   {
     id: 9,
