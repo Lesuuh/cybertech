@@ -3,10 +3,9 @@ import { Breadcrumbs } from "@/app/_components/products/Breadcrumbs";
 import MoreDetails from "@/app/_components/products/MoreDetails";
 import ProductDetailsClient from "@/app/_components/products/ProductDetailsClient";
 import Reviews from "@/app/_components/products/Reviews";
-
-import type { IconName } from "@/app/_components/products/ProductDetailsClient";
 import { getDiscountedPrice } from "@/lib/utils";
 import { products } from "@/app/data/data";
+import type { IconName } from "@/app/_components/products/ProductDetailsClient";
 
 interface ImportantDetail {
   label: string;
@@ -14,15 +13,10 @@ interface ImportantDetail {
   iconName: IconName;
 }
 
-interface ProductPageProps {
-  params: {
-    productId: string;
-  };
-}
-
-const Product = async ({ params }: ProductPageProps) => {
-  const { productId } = await params;
-  const product = products.find((p) => p.id === Number(productId));
+// ✅ No explicit PageProps typing
+const Product = async ({ params }: { params: { productId: string } }) => {
+  const productId = Number(params.productId);
+  const product = products.find((p) => p.id === productId);
 
   if (!product) {
     return (
@@ -42,9 +36,7 @@ const Product = async ({ params }: ProductPageProps) => {
   ];
 
   const discountPrice = getDiscountedPrice(product);
-
   const colors: string[] = ["#000000", "#27272A", "#E4E4E7", "#3F3F46"];
-
   const memoryOptions: string[] | null =
     product.metadata.memorySpace?.split(",").map((s) => s.trim()) || null;
 
