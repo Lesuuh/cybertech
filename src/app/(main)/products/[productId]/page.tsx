@@ -13,9 +13,16 @@ interface ImportantDetail {
   iconName: IconName;
 }
 
-// ✅ No explicit PageProps typing
-const Product = async ({ params }: { params: { productId: string } }) => {
-  const productId = Number(params.productId);
+// ✅ Updated to handle Promise params
+const Product = async ({
+  params,
+}: {
+  params: Promise<{ productId: string }>;
+}) => {
+  // ✅ Await params before using it
+  const { productId: productIdParam } = await params;
+  const productId = Number(productIdParam);
+
   const product = products.find((p) => p.id === productId);
 
   if (!product) {
