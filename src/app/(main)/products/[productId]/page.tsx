@@ -96,8 +96,8 @@ const Product = async ({
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <nav className="mb-12 mt-10">
+      <div className="max-w-350 mx-auto ">
+        <nav className="mb-12 mt-10  px-6">
           <Breadcrumbs items={breadcrumbItems} />
         </nav>
 
