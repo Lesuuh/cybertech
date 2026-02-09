@@ -144,33 +144,38 @@ const ProductDetailsClient = ({
           )}
         </div>
 
-        {/* Specs Table */}
-        <div className="grid grid-cols-2 gap-px bg-gray-100 border border-gray-100 rounded-3xl overflow-hidden">
-          {importantDetails
-            ?.slice(0, 4)
-            .map(({ label, value, iconName }, idx) => {
-              const Icon = iconMap[iconName];
-              return (
-                <div
-                  key={idx}
-                  className="bg-white p-8 flex items-start gap-4 hover:bg-gray-50/50 transition-colors"
-                >
-                  {Icon && (
-                    <Icon
-                      className="w-4 h-4 text-gray-300 mt-1"
-                      strokeWidth={1.5}
-                    />
-                  )}
-                  <div>
-                    <p className="text-[9px] tracking-widest text-gray-400 uppercase mb-1">
-                      {label}
-                    </p>
-                    <p className="text-sm font-medium text-gray-900">{value}</p>
-                  </div>
-                </div>
-              );
-            })}
+        {/* Technical Specs - Desktop Bar / Mobile List */}
+<div className="w-full">
+  <div className="flex flex-col md:flex-row border-y border-gray-100 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+    {importantDetails?.slice(0, 4).map(({ label, value, iconName }, idx) => {
+      const Icon = iconMap[iconName];
+      return (
+        <div 
+          key={idx} 
+          className="flex-1 flex md:flex-col items-center md:items-start justify-between md:justify-start gap-3 py-5 md:py-8 px-2 md:px-8 group hover:bg-gray-50/50 transition-colors"
+        >
+          {/* Header: Icon + Label */}
+          <div className="flex items-center gap-2.5">
+            {Icon && (
+              <Icon
+                className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-900 transition-colors"
+                strokeWidth={2}
+              />
+            )}
+            <span className="text-[10px] tracking-[0.2em] text-gray-400 uppercase font-bold">
+              {label}
+            </span>
+          </div>
+          
+          {/* Value: Large and wrap-ready */}
+          <p className="text-sm font-medium text-gray-900 md:text-base leading-tight break-words">
+            {value}
+          </p>
         </div>
+      );
+    })}
+  </div>
+</div>
 
         {/* Description */}
         <div className="space-y-4">
@@ -183,23 +188,26 @@ const ProductDetailsClient = ({
         </div>
 
         {/* Add to Cart Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-gray-50">
+        <div className="flex flex-col sm:flex-row items-stretch gap-4 pt-10 border-t border-gray-50">
+          {/* Add to Cart Button */}
           <Button
             onClick={() => handleAddToCart(product.id)}
-            className="h-16 flex-[2] bg-gray-900 hover:bg-black text-white rounded-2xl flex items-center justify-center gap-3 transition-all"
+            className="h-16 min-h-[64px] flex-[2] shrink-0 bg-gray-900 hover:bg-black text-white rounded-2xl flex items-center justify-center gap-3 transition-all"
           >
-            <span className="text-xs font-medium uppercase tracking-[0.2em]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
               Add to Cart
             </span>
             <Plus size={16} />
           </Button>
+
+          {/* Save Button */}
           <Button
             variant="outline"
-            className="h-16 flex-1 rounded-2xl border-gray-100 hover:border-gray-900 flex items-center justify-center gap-2 group transition-all"
+            className="h-16 min-h-[64px] flex-1 shrink-0 rounded-2xl border-gray-200 hover:border-gray-900 flex items-center justify-center gap-2 group transition-all"
           >
-            <Heart className="w-4 h-4 group-hover:fill-red-500 group-hover:text-red-500 transition-colors" />
-            <span className="text-[10px] uppercase tracking-widest font-medium">
-              Save to list
+            <Heart className="w-4 h-4 text-gray-400 group-hover:fill-red-500 group-hover:text-red-500 transition-colors" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 group-hover:text-gray-900">
+              Save
             </span>
           </Button>
         </div>
